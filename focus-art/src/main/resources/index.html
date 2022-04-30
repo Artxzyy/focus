@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <title>FOCUS - Educação mais acessível</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://kit.fontawesome.com/37e4898af2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles/style-login-cadastro.css">
+</head>
+
+<body>
+    <script src="js/scriptsCadastroLogin.js" defer></script>
+    <header class="container header">
+        <nav
+            class="navtop">
+            <a href="#" id="registerNav">Register</a>
+        </nav>
+        <section class="section-info">
+            <div class="div-info">
+                <h1>
+                    FOCUS
+                </h1>
+                <p>
+                    <!-- Introduction of the project -->
+                    FOCUS é um projeto web-educativo originalmente criado como parte 
+                    do currículo de Ciência da Computação da PUC Minas. Neste caso, 
+                    temos como alvo os alunos mais novos com dificuldades de aprendizagem 
+                    em qualquer disciplina escolar. Com o próprio professor auxiliando a 
+                    qualquer momento no problema exato que o aluno tem, ele pode ter melhores 
+                    resultados do que se estudar sem toda a atenção necessária.
+                </p>
+            </div>
+        </section>
+            <article id="registerModalId" class="modal-vertical">
+            <!-- begin register modal -->
+            <div class="div-modal">
+                <header class="header-modal">
+                    <!-- title and close icon -->
+                    <span class="close span">
+                        <!-- close icon -->
+                        <i class="fa-solid fa-xmark"></i>
+                    </span>
+                    <h1>
+                        Register
+                    </h1>
+                </header>
+                <main class="main-register">
+                    <div class="div-input">
+                        <label for="usernameRegisterId"><i class="fa-solid fa-user"></i></label>
+                        <input type="text" placeholder="Your username" id="usernameRegisterId">
+                    </div>
+                    <div class="div-input">
+                        <label for="emailRegisterId"><i class="fa-solid fa-at"></i></label>
+                        <input type="e-mail" placeholder="Your e-mail" id="emailRegisterId">
+                    </div>
+                    <div class="div-input">
+                        <label for="password1RegisterId"><i class="fa-solid fa-lock"></i></label>
+                        <input type="password" placeholder="Your password" id="password1RegisterId">
+                    </div>
+                    <div class="div-input">
+                        <label for="password2RegisterId"><i class="fa-solid fa-lock"></i></label>
+                        <input type="password" placeholder="Repeat password" id="password2RegisterId">
+                    </div>
+                    <div class="p">
+                        <div class="last">
+                            <span class="bold">Are you a professor?</span>
+                            <label for="isProfessor">Yes</label>
+                            <input type="radio" name="isProfessor" id="isProfessor">
+                            <label for="isProfessor">No</label>
+                            <input type="radio" name="isProfessor" id="isNotProfessor" checked>
+                        </div>
+                        <div class="float">
+                            <input id="registerBtn" type="submit" value="Create account" class="submit-button-reg">
+                        </div>
+                    </div>
+                    <div class="p" id="registerValidationId">
+                        <span class="block text-error" id="spanUsernameRegister"><i
+                                class="fa-solid fa-circle-xmark" id="iconUsernameRegister"></i>Username must have at
+                            least 3 chars.</span>
+                        <span class="block text-error" id="spanEmailRegister"><i
+                                class="fa-solid fa-circle-xmark" id="iconEmailRegister"></i>E-mail must be
+                            valid.</span>
+                        <span class="block text-error" id="spanPasswordRegister"><i
+                                class="fa-solid fa-circle-xmark" id="iconPasswordRegister"></i>Both passwords must be
+                            equal and bigger than 5 chars.</span>
+                    </div>
+                </main>
+                <footer class="register-footer">
+                    <p>
+                        A professor will have permission to create new content on the website.
+                    </p>
+                </footer>
+            </div>
+        </article> <!-- end register modal -->
+        <article id="forgetPasswordModalId" class="modal-vertical">
+        <!-- begin forget password modal -->
+        <!-- the CSS class "modal" is reusable -->
+        <div>
+            <header class="header-forget">
+                <span class="close"><i class="fa-solid fa-xmark"></i></span>
+                <h1 class="text-center">Change your password</h1>
+            </header>
+            <main class="main-register">
+                <div class="div-input">
+                    <label for="forgetPasswordEmailId"><i class="fa-solid fa-at"></i></label>
+                    <input type="email" id="forgetPasswordEmailId" placeholder="Your e-mail account">
+                </div>
+
+                <div class="div-input">
+                    <label for="forgetPasswordNewPassword1Id"><i class="fa-solid fa-lock"></i></label>
+                    <input type="password" id="forgetPasswordNewPassword1Id" placeholder="Your new password">
+                </div>
+                <div class="div-input">
+                    <label for="forgetPasswordNewPassword2Id"><i class="fa-solid fa-lock"></i></label>
+                    <input type="password" id="forgetPasswordNewPassword2Id" placeholder="Confirm new password">
+                </div>
+                <div>
+                    <input type="submit" id="changePasswordSubmitId" value="Change" class="submit-button-non">
+                </div>
+                <div class="error error-pos">
+                    <span class="text-error none" id="spanEmailForget"><i
+                            class="fa-solid fa-circle-xmark" id="iconEmailForget"></i>This e-mail wasn't found.</span>
+                    <span class="text-error none" id="spanPasswordBefore"><i
+                            class="fa-solid fa-circle-xmark" id="iconPasswordBefore"></i>The new password must be different than the old one</span>
+                    <span class="text-error none" id="spanPasswordNow"><i
+                            class="fa-solid fa-circle-xmark" id="iconPasswordNow"></i>The passwords must match.</span>
+                </div>
+            </main>
+        </div>
+
+    </article> <!-- end forget password modal -->
+    </header>
+    <main>
+        <form id="loginFormId" action="http://localhost:4567/main" method="post" autocomplete="off">
+            <div class="mx-2">
+                <article
+                    class="article-form">
+                    <!-- Login form -->
+                    <h1>Login</h1>
+                    <div class="div-input">
+                        <label for="usernameInputId"><i class="fa-solid fa-user"></i></label>
+                        <input type="text" placeholder="Your username" name="login" id="usernameInputId">
+                    </div>
+                    <div class="div-input">
+                        <label for="passwordInputId"><i class="fa-solid fa-lock"></i></label>
+                        <input type="password" placeholder="Your password" name="password" id="passwordInputId">
+                    </div>
+                    <div class="div-error" id="submitErrorId">
+                    </div>
+                    <div class="div-remember">
+                        <input type="checkbox" id="rememberId" class="mr-2">
+                        <label for="rememberId">Remember me</label>
+                    </div>
+                    <div class="div-forget-enter">
+                        <a href="#" id="forgetPasswordLinkId">Forget
+                            password</a> <!-- forget password -->
+                        <input type="submit" id="submitId"
+                            class="submit-button"
+                            value="Enter">
+                    </div>
+                    <div class="flex">
+                        <a href="#" id="registerLink" class="register">Don't have an account?</a>
+                    </div>
+                </article>
+            </div>
+        </form>
+
+    </main>
+    <footer class="footer-grid footer">
+        <section class="copyright">
+            <h1>
+                Infos
+            </h1>
+            <ul class="footer-ul">
+                <li><a href="#" class="li1">About the project</a></li>
+                <li><a href="#" class="li2">Contact us</a></li>
+            </ul>
+            <p class="copyright">
+                Copyright <i class="fa-regular fa-copyright"></i> 2022. Arthur Rodrigues S. Quadros.
+            </p>
+        </section>
+
+        <img src="img/logo_puc.png">
+    </footer>
+</body>
+</html>
+
+
+
+<!--  static login
+
+<html>
+<head>
+	<title>Teste CRUD student</title>
+</head>
+<body>
+	<script type="text/javascript">
+		function addIdToPath(form_name, base_url){
+		    var your_form = document.getElementById(form_name);
+			var id = your_form.elements.namedItem("id").value;
+			action_src = base_url + school_id;
+			your_form.action = action_src;
+		}
+	</script>
+	<article>
+		<h1>Register</h1>
+		<form action="http://localhost:4567/user" method="post">
+			<input type="text" name="school_id" placeholder="School id"><br>
+			<input type="text" name="professor_id" placeholder="Professor id"><br>
+			<input type="text" name="name" placeholder="Name"><br>
+			<input type="text" name="surname" placeholder="Surname"><br>
+			<input type="email" name="login" placeholder="E-mail"><br>
+			<input type="password" name="password" placeholder="Password"><br>
+			<input type="submit" value="Create account">
+		</form>
+	</article>
+	<article>
+		<h1>Login</h1>
+		<form action="http://localhost:4567/main" method="post">
+			<input type="email" name="login" placeholder="E-mail login"><br>
+			<input type="password" name="password" placeholder="Password login"><br>
+			<input type="submit" value="Login">
+		</form>
+	</article>
+</body>
+</html>
+
+-->
