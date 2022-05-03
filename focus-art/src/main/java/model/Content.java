@@ -8,25 +8,36 @@ public class Content {
 	private int id;
 	private String title;
 	private String subject;
+	private String theme;
 	private String text;
 	
 	public Content() {
-		this(0, 0, "", "", "");
+		this(0, 0, "", "", "", "");
 	}
-	public Content(int school_id, int professor_id, int id, String title, String subject, String text) {
+	public Content(int school_id, int professor_id, int id, String title, String subject, String theme, String text) {
 		this.id = id;
 		this.school_id = school_id;
 		this.professor_id = professor_id;
 		this.title = title;
 		this.subject = subject;
+		this.theme = theme;
 		this.text = text;
 	}
-	public Content(int school_id, int professor_id, String title, String subject, String text) {
+	public Content(int professor_id, String title, String subject, String theme, String text) {
 		this.id = count++;
-		this.school_id = school_id;
 		this.professor_id = professor_id;
 		this.title = title;
 		this.subject = subject;
+		this.theme = theme;
+		this.text = text;
+		max_id = this.id;
+	}
+	public Content(int professor_id, int id, String title, String subject, String theme, String text) {
+		this.id = id;
+		this.professor_id = professor_id;
+		this.title = title;
+		this.subject = subject;
+		this.theme = theme;
 		this.text = text;
 		max_id = this.id;
 	}
@@ -54,6 +65,12 @@ public class Content {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
+	public String getTheme() {
+		return theme;
+	}
+	public void setTheme(String theme) {
+		this.theme = theme;
+	}
 	public String getText() {
 		return text;
 	}
@@ -67,7 +84,7 @@ public class Content {
 		return id;
 	}
 	public Content clone() {
-		Content copy = new Content(school_id, professor_id, id, title, subject, text);
+		Content copy = new Content(professor_id, id, title, subject, theme, text);
 		return copy;
 	}
 }

@@ -1,15 +1,16 @@
 package dao;
 
-import model.Content;
+import model.Student;
+import model.Person;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-public class ContentDAO {
+public class ProfessorDAO {
 	private Connection conexao;
 	
-	public ContentDAO() {
+	public ProfessorDAO() {
 		conexao = null;
 	}
 	
@@ -47,33 +48,40 @@ public class ContentDAO {
 		}
 		return status;
 	}
-	public Content get(int id) {
-		Content content = null;
-		try {
-			conectar();
-			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT * FROM content WHERE id = "+ id);
-			if(rs.first()) content = new Content(rs.getInt("professor_id"), rs.getInt("id"), rs.getString("title"), rs.getString("subject"), rs.getString("theme"), rs.getString("text"));
-			close();
+	
+	public boolean add(Person professor) {
+		boolean status = false;
+		try {  
+			Statement st = conexao.createStatement();
+			st.executeUpdate("INSERT INTO person (school_id, id, first_name, surname, login, password) "
+					       + "VALUES (" + professor.getSchool_id() + ", "
+					       +(Person.getMaxId() + 1)+ ", '"
+					       + professor.getFirst_name() + "', '"  
+					       + professor.getSurname() + "', '"
+					       + professor.getLogin() + "', '"
+					       + professor.getPassword() + "');");
+			st.executeUpdate("INSERT INTO professor VALUES (" + professor.getId() + ");");
 			st.close();
-		}catch(Exception e) {
-			System.err.println("ERROR:"+ e.getMessage());
+			status = true;
+		} catch (SQLException u) {  
+			throw new RuntimeException(u);
 		}
-		return content;
+		return status;
 	}
-	public Content[] getContents() {
-		Content[] content = null;
+	
+	public Person[] getProfessors() {
+		Person[] students = null;
 		try {
 			conectar();
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT * FROM content INNER JOIN person ON content.professor_id"
+			ResultSet rs = st.executeQuery("SELECT * FROM professor INNER JOIN person ON professor.person_id"
 					+ " = person.id");
 	         if(rs.next()){
 	             rs.last();
-	             content = new Content[rs.getRow()];
+	             students = new Person[rs.getRow()];
 	             rs.beforeFirst();
 	             for(int i = 0; rs.next(); i++) {
-	            	 content[i] = new Content(rs.getInt("professor_id"), rs.getInt("id"), rs.getString("title"), rs.getString("subject"), rs.getString("theme"), rs.getString("text"));
+	                students[i] = new Person(rs.getInt("school_id"), rs.getInt("person_id"), rs.getString("first_name"), rs.getString("surname"), rs.getString("login"), rs.getString("password"));
 	             }
 	          }
 	          close();
@@ -81,6 +89,6 @@ public class ContentDAO {
 		} catch (Exception e) {
 			System.err.println("ERROR: "+ e.getMessage());
 		}
-		return content;
+		return students;
 	}
 }

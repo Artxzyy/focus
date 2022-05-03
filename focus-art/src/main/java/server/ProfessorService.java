@@ -1,27 +1,19 @@
 package server;
-import dao.StudentDAO;
 import dao.ProfessorDAO;
 import model.Person;
+import model.Professor;
 import dao.ContentDAO;
 import model.Student;
 import model.Content;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.KeySpec;
-
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 
 import spark.Request;
 import spark.Response;
-public class StudentService {
-	StudentDAO studentDAO = new StudentDAO();
+public class ProfessorService {
 	ProfessorDAO professorDAO = new ProfessorDAO();
 	ContentDAO contentDAO = new ContentDAO();
 	
 	public Object add(Request req, Response res) {
-		studentDAO.conectar();
+		professorDAO.conectar();
 		int school_id = Integer.parseInt(req.queryParams("school_id"));
 		int professor_id = Integer.parseInt(req.queryParams("professor_id"));
 		String name = req.queryParams("name");
@@ -35,8 +27,8 @@ public class StudentService {
 			//random.nextBytes(salt);
 			//KeySpec spec = new PBEKeySpec(req.queryParams("password").toCharArray(), salt, 200, 128);
 			//String hash = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1").generateSecret(spec).getEncoded().toString();
-			Student student = new Student(school_id, professor_id, name, surname, login, password);
-			if(studentDAO.add(student)) {
+			Person professor = new Person(school_id, professor_id, name, surname, login, password);
+			if(professorDAO.add(professor)) {
 				res.status(201);
 				res.body("Account successfully created. STATUS: "+ res.status() + ".");
 			}
@@ -48,7 +40,7 @@ public class StudentService {
 			res.status(400);
 			res.body("Could not create account. "+ e.getMessage() + " | STATUS: "+ res.status() +".");
 		}
-		studentDAO.close();
+		professorDAO.close();
 		return res.body();
 	}
 }

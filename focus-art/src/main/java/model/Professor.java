@@ -68,7 +68,9 @@ public class Professor {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+	public static int getMaxId() {
+		return max_id;
+	}
 	public int getId() {
 		return id;
 	}

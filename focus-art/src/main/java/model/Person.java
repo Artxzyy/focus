@@ -2,6 +2,7 @@ package model;
 
 // import java.security.MessageDigest;
 public class Person {
+	public static int count = 1;
 	public static int max_id = 1;
 	private int school_id; // fk
 	private int id; // pk
@@ -15,7 +16,7 @@ public class Person {
 	}
 	
 	public Person(int school_id, String first_name, String surname, String login, String password) {
-		this.id = max_id++;
+		this.id = count++;
 		this.school_id = school_id;
 		this.first_name = first_name;
 		this.surname = surname;
@@ -23,6 +24,7 @@ public class Person {
 			if (login.length() < 3) throw new Exception("Login is too short.");
 			this.login = login;
 			this.password = password;
+			max_id = this.id;
 			// this.password = MessageDigest.getInstance("MD5").digest(password.getBytes("UTF-8")).toString();
 		}catch(Exception e) {
 			System.err.println("ERROR: "+ e.getMessage());
@@ -82,7 +84,9 @@ public class Person {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+	public static int getMaxId() {
+		return max_id;
+	}
 	public int getId() {
 		return id;
 	}
