@@ -66,7 +66,8 @@ public class ContentDAO {
 		try {
 			conectar();
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT * FROM content");
+			ResultSet rs = st.executeQuery("SELECT * FROM content INNER JOIN person ON content.professor_id"
+					+ " = person.id");
 	         if(rs.next()){
 	             rs.last();
 	             content = new Content[rs.getRow()];

@@ -25,7 +25,7 @@ public class ContentService {
 					"    <meta charset=\"utf-8\">\n" + 
 					"    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" + 
 					"    <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" + 
-					"    <link rel=\"stylesheet\" href=\"css/style-main.css\">\n" + 
+					"    <link rel=\"stylesheet\" href=\"style/style-main.css\">\n" + 
 					"</head>\n" + 
 					"\n" + 
 					"<body>\n" + 

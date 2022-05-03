@@ -1,6 +1,7 @@
 package dao;
 
 import model.Student;
+import model.Person;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -68,18 +69,19 @@ public class StudentDAO {
 		return status;
 	}
 	
-	public Student[] getStudents() {
-		Student[] students = null;
+	public Person[] getStudents() {
+		Person[] students = null;
 		try {
 			conectar();
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT * FROM student");
+			ResultSet rs = st.executeQuery("SELECT * FROM student INNER JOIN person ON student.person_id"
+					+ " = person.id");
 	         if(rs.next()){
 	             rs.last();
-	             students = new Student[rs.getRow()];
+	             students = new Person[rs.getRow()];
 	             rs.beforeFirst();
 	             for(int i = 0; rs.next(); i++) {
-	                students[i] = new Student(rs.getInt("school_id"), rs.getInt("professor_id"), rs.getInt("id"), rs.getString("first_name"), rs.getString("surname"), rs.getString("login"), rs.getString("password"));
+	                students[i] = new Person(rs.getInt("school_id"), rs.getInt("person_id"), rs.getString("first_name"), rs.getString("surname"), rs.getString("login"), rs.getString("password"));
 	             }
 	          }
 	          close();

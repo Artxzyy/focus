@@ -8,7 +8,7 @@ public class Activity {
 	private int professor_id;
 	private int id;
 	private String title;
-	private String statement;
+	private String statement; // enunciado + pergunta
 	private String subject;
 	
 	public Activity() {
