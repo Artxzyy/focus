@@ -23,10 +23,10 @@ public class PersonService {
 			String password = req.queryParams("password"); // tmp
 			Person[] students = studentDAO.getStudents();
 			Person[] professors = professorDAO.getProfessors();
-			Person correct_student = null;
+			Person correct_user = null;
 			for(int i = 0; i < students.length; i++) {
 				if(login.equals(students[i].getLogin()) && password.equals(students[i].getPassword())) {
-					correct_student = students[i];
+					correct_user = students[i];
 					valid = true;
 					break;
 				}
@@ -34,7 +34,7 @@ public class PersonService {
 			if (!valid) {
 				for(int i = 0; i < professors.length; i++) {
 					if(login.equals(professors[i].getLogin()) && password.equals(professors[i].getPassword())) {
-						correct_student = professors[i];
+						correct_user = professors[i];
 						valid = true;
 						break;
 					}
@@ -50,13 +50,14 @@ public class PersonService {
 						""
 						+ "<div class=\"card-ex\">\n" + 
 						"      <div class=\"card-title\">\n" + 
-						"         <h1 class=\"card-title\">Atividade -" +c.getSubject()+"</h1>\n" + 
+						"         <h1 class=\"card-title\">Atividade - " +c.getSubject()+"</h1>\n" + 
 						"      </div>\n" + 
 						"      <div class=\"card-body\">\n" + 
 						"         <strong><p class=\"card-text\"> " +c.getTitle() + "</p></strong>\n" + 
 						"            <p class=\"card-text\">Professor ID (tmp): "+ c.getProfessor_id() + "</p>\n" +
 						"            <form id=\"form-content"+c.getId()+"\" onsubmit=\"addIdToPath('form-content"+c.getId() +"', 'http://localhost:4567/content/see/')\" method=\"get\">" +
-						"            <input type=\"text\" name=\"id\" value=\""+c.getId()+"\" style=\"visibility: hidden\">"
+						"            <input type=\"text\" name=\"id\" value=\""+c.getId()+"\" style=\"display: none\">"
+								+ "  <input type=\"text\" name=\"person_id\" value=\""+correct_user.getId()+"\" style=\"display: none\">"
 						+ "		     <button type=\"submit\">Ver Atividade</button>\n" + 
 						"            </form>"+
 						"      </div>\n" + 
