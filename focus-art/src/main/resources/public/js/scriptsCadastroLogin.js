@@ -400,34 +400,6 @@ function validateUsernameAndPassword(){
     }
 }
 
-function validateSubmitLogin(){
-    submitErrorDiv.innerHTML = "";
-    if(localStorage.getItem("db")){ // if localStorage was created
-        let parser = localStorage.getItem("db");
-        let ls_users = JSON.parse(parser);
-        let user_correct = false;
-        for(let i = 0; i < ls_users.users.length; i = i + 1){
-            if(inputUsername.value === ls_users.users[i].username && inputPassword.value === ls_users.users[i].password){
-                user_correct = true;
-                sessionStorage.setItem("focus.ss.user", JSON.stringify({username: inputUsername.value, password: inputPassword.value}));
-            }
-        }
-        if(user_correct){ // if the user did everything right, go to the next page
-            window.location = "main.html";
-            alert("");
-        }else{ // if not, show an error message
-            let errorMsg = document.createElement("span");
-            let errorIcon = document.createElement("i");
-            errorIcon.classList.add("fa-solid", "fa-circle-xmark"); // <i class="fa-solid fa-circle-xmark"></i>
-            errorMsg.textContent = "The username or the password is wrong.";
-            submitErrorDiv.append(errorIcon, errorMsg);
-            if(sessionStorage.getItem("focus.ss.user")){
-                sessionStorage.removeItem("focus.ss.user");
-            }
-        }
-    }
-}
-
 function validateInputUsernameRegister(){
     let username = inputUsernameRegister.value; // username
     let validUsernameIcon = document.createElement("i")

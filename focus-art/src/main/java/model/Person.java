@@ -44,7 +44,12 @@ public class Person {
 			System.err.println("ERROR: "+ e.getMessage());
 		}
 	}
-
+	public Person(int school_id, int id, String first_name, String surname) {
+		this.id = id;
+		this.school_id = school_id;
+		this.first_name = first_name;
+		this.surname = surname;
+	}
 	public int getSchool_id() {
 		return school_id;
 	}

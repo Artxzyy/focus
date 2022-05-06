@@ -1,27 +1,41 @@
 package model;
 
 public class Option {
-	public static int max_id = 1;
+	public static int count = 33;
+	public static int max_id;
 	private int school_id;
 	private int professor_id;
 	private int activity_id;
 	private int id;
-	private String option_text;
+	private String text;
 	private boolean is_correct;
 	
 	public Option() {
 		this(0, 0, 0, "", false);
 	}
 	
-	public Option(int school_id, int professor_id, int activity_id, String option_text, boolean is_correct){
-		this.id = max_id++;
+	public Option(int school_id, int professor_id, int activity_id, String text, boolean is_correct){
+		this.id = count++;
 		this.school_id = school_id;
 		this.professor_id = professor_id;
 		this.activity_id = activity_id;
-		this.option_text = option_text;
+		this.text = text;
+		this.is_correct = is_correct;
+		max_id = this.id;
+	}
+	public Option(int activity_id, int id, String text, boolean is_correct){
+		this.activity_id = activity_id;
+		this.id = id;
+		this.text = text;
 		this.is_correct = is_correct;
 	}
-
+	public Option(int activity_id, String text, boolean is_correct){
+		this.activity_id = activity_id;
+		this.id = count++;
+		this.text = text;
+		this.is_correct = is_correct;
+		max_id = this.id;
+	}
 	public int getSchool_id() {
 		return school_id;
 	}
@@ -47,11 +61,11 @@ public class Option {
 	}
 
 	public String getOption_text() {
-		return option_text;
+		return text;
 	}
 
-	public void setOption_text(String option_text) {
-		this.option_text = option_text;
+	public void setOption_text(String text) {
+		this.text = text;
 	}
 
 	public boolean isIs_correct() {

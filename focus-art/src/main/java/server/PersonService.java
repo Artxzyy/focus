@@ -42,7 +42,6 @@ public class PersonService {
 			}
 			if(!valid) throw new Exception("Invalid username or password.");
 			res.status(200);
-			// html code for main page with css
 			Content[] cont = contentDAO.getContents();
 			String contents = "";
 			for(Content c : cont) {
@@ -58,7 +57,7 @@ public class PersonService {
 						"            <form id=\"form-content"+c.getId()+"\" onsubmit=\"addIdToPath('form-content"+c.getId() +"', 'http://localhost:4567/content/see/')\" method=\"get\">" +
 						"            <input type=\"text\" name=\"id\" value=\""+c.getId()+"\" style=\"display: none\">"
 								+ "  <input type=\"text\" name=\"person_id\" value=\""+correct_user.getId()+"\" style=\"display: none\">"
-						+ "		     <button type=\"submit\">Ver Atividade</button>\n" + 
+						+ "		     <button type=\"submit\">Ver conteúdo</button>\n" + 
 						"            </form>"+
 						"      </div>\n" + 
 						" </div>";
@@ -112,7 +111,13 @@ public class PersonService {
 					"			action_src = base_url + id;\n" + 
 					"			your_form.action = action_src;\n" + 
 					"		}"
-					+ ""+
+					+ "function create_path(path, param, form_id){"
+					+ "let final_path;"
+					+ "let id = document.getElementById(form_id).elements.namedItem(param).value;"
+					+ " final_path = path + id;"
+					+ "document.getElementById(form_id).action = final_path;"
+					+ "document.getElementById(form_id).submit();"
+					+ "}"+
 					"</script>"+
 					"  <header>\n" + 
 					"    <nav class=\"nav-top\">\n" + 
@@ -132,12 +137,15 @@ public class PersonService {
 					"\n" + 
 					"  <main class=\"main\">\n" + 
 					"      <aside class=\"aside-bar\">\n" + 
-					"            <a href=\"main.html\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" + 
-					"            <a href=\"conteudo.html\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" + 
-					"            <a href=\"atividade.html\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" + 
-					"            <a href=\"mensagem.html\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" + 
+					"            <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" + 
+					"            <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" + 
+					"            <form id=\"form-activity\" action=\"http://localhost:4567/activity/\"method=\"get\">"
+					+ "				<input type=\"text\" name=\"id\" value=\""+ correct_user.getId() +"\" style=\"display: none\">"
+							+ "			<a onclick=\"create_path('http://localhost:4567/activity/', 'id', 'form-activity')\">"
+							+ "				<div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a></form>\n" + 
+					"            <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" + 
 					"      </aside>\n" + 
-					"      <article id=\"tela\" class=\"content\">"
+					"      <article id=\"tela\" class=\"content center\">"
 					+ contents
 					+ "</article>\n" + 
 					"  </main>\n" + 

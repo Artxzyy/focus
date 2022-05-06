@@ -235,7 +235,9 @@ html, body{
     width: 100%;
 }
 #aparecerAtividadeDiv{
-    width: 100%;
+    position: relative;
+    top: 10%;
+    width: calc(100% - 1rem - 200px);
 }
 .dropdown-toggle{
     background-color: var(--medium-m-gray);
@@ -491,6 +493,12 @@ button{
     color: #fff;
     font-weight: 700;
 }
+.act{
+    margin: 1rem;
+    position: relative;
+    left: 200px;
+    width: calc(100vw - 200px - 2rem);
+}
 .content{
     display: flex;
     flex-direction: row;
@@ -622,6 +630,7 @@ button{
     background-color: var(--medium-m-gray);
     margin-bottom: 2rem;
 }
+
 .div-title{
     border-bottom: 2px solid var(--dark-gray-color);
     border-radius: 1rem;

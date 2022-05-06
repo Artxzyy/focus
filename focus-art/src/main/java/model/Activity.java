@@ -1,59 +1,70 @@
 package model;
 
 public class Activity {
-	public static final String[] SUBJECTS_LIST = {"CHEMISTRY", "MATH", "PHYSICS"};
-	
-	public static int max_id = 1;
-	private int school_id;
+	public static int count = 13;
+	public static int max_id;
 	private int professor_id;
 	private int id;
 	private String title;
-	private String statement; // enunciado + pergunta
 	private String subject;
-	
+	private String theme;
+	private String statement;
 	public Activity() {
-		this(0, 0, "", "", "");
+		this(0, 0, "", "", "", "");
 	}
-	public Activity(int school_id, int professor_id, String title, String statement, String subject) {
-		this.id = max_id++;
-		this.school_id = school_id;
+	public Activity(int professor_id, int id, String title, String subject, String theme, String statement) {
 		this.professor_id = professor_id;
+		this.id = id;
 		this.title = title;
-		this.statement = statement;
 		this.subject = subject;
+		this.theme = theme;
+		this.statement = statement;
 	}
-	public int getSchool_id() {
-		return school_id;
+	public Activity(int professor_id, String title, String subject, String theme, String statement) {
+		this.professor_id = professor_id;
+		this.id = count++;
+		this.title = title;
+		this.subject = subject;
+		this.theme = theme;
+		this.statement = statement;
+		max_id = this.id;
 	}
-	public void setSchool_id(int school_id) {
-		this.school_id = school_id;
+	public static int getMax_id() {
+		return max_id;
 	}
 	public int getProfessor_id() {
 		return professor_id;
 	}
-	public void setProfessor_id(int professor_id) {
-		this.professor_id = professor_id;
+	public int getId() {
+		return id;
 	}
 	public String getTitle() {
 		return title;
 	}
-	public void setTitle(String title) {
-		this.title = title;
+	public String getSubject() {
+		return subject;
+	}
+	public String getTheme() {
+		return theme;
 	}
 	public String getStatement() {
 		return statement;
 	}
-	public void setStatement(String statement) {
-		this.statement = statement;
+	public void setProfessor_id(int professor_id) {
+		this.professor_id = professor_id;
 	}
-	public String getSubject() {
-		return subject;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	public int getId() {
-		return id;
+	public void setTheme(String theme) {
+		this.theme = theme;
 	}
+	public void setStatement(String statement) {
+		this.statement = statement;
+	}
+	
 	
 }
