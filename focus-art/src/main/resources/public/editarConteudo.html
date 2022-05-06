@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <title>FOCUS - Educação mais acessível</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://kit.fontawesome.com/37e4898af2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="http://localhost:4567/styles/style-main.css">
+    <link rel="stylesheet" href="http://localhost:4567/styles/style-conteudo.css">
+
+</head>
+
+<body>
+    <header>
+        <nav class="nav-top">
+            <div>
+                <div class="nav-top-expand">
+                    <button id="openSideBar"><i class="fa-solid fa-bars"></i></button>
+                    <input type="checkbox" class="none">
+                </div>
+                <h1 class="nav-top-logo">FOCUS</h1>
+            </div>
+            <div>
+                <input type="text" class="nav-top-input" placeholder="Search for a keyword" id="searchInputId">
+                <a href="http://localhost:4567"><i class="fa-solid fa-arrow-right-from-bracket icon-l"></i></a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="main">
+        <aside class="aside-bar">
+            <a href="main.html">
+                <div><i class="fa-solid fa-stopwatch icon"></i>
+                    <h1 class="aside-option">Pendências</h1>
+                </div>
+            </a>
+            <a href="http://localhost:4567/content/see">
+                <div><i class="fa-solid fa-file-alt icon"></i>
+                    <h1 class="aside-option">Conteúdos</h1>
+                </div>
+            </a>
+            <a href="atividade.html">
+                <div><i class="fa-solid fa-pencil-alt icon"></i>
+                    <h1 class="aside-option">Atividades</h1>
+                </div>
+            </a>
+            <a href="mensagem.html">
+                <div><i class="fa-solid fa-envelope icon"></i>
+                    <h1 class="aside-option">Mensagens</h1>
+                </div>
+            </a>
+        </aside>
+
+        <article id="tela" class="content">
+            <section class="main conteudo" style="left: 0% !important;">
+                <input type="number" value="content-ID" id="id" hidden>
+                <input type="number" value="teacher-ID" id="professor_id" hidden>
+                <div class="content-div conteudoColocado" id="conteudoColocado">
+                    <label for="disciplinaTexto">Disciplina deste conteúdo:</label>
+                    <div class="input-group">
+                        <input type="text" id="disciplinaTexto" name="disciplinaTexto" class="input form-control" value="DISCIPLINA"></div>
+                    <label for="materiaTexto">Matéria deste conteúdo:</label>
+                    <div class="input-group">
+                        <input type="text" id="materiaTexto" name="materiaTexto" class="input form-control" value="MATERIA"></div>
+                    <label for="tituloTexto">Título para seu texto:</label>
+                    <div class="input-group">
+                        <input type="text" id="tituloTexto" name="tituloTexto" class="input form-control" value="TITULO"></div>
+                    <label for="corpoTexto">Coloque abaixo o texto principal:</label>
+                    <div class="input-group">
+                        <textarea type="text" id="corpoTexto" class="input form-control" rows="20" cols="45" classname="corpoTexto"><TEXTO></textarea>
+                    </div><br>
+                    <button type="submit" id="atualizarConteudo" class="btn btn-success">Atualizar</button><br><br>
+                </div>
+            </section>
+
+        </article>
+    </main>
+</body>
+<script src="http://localhost:4567/js/scriptsConteudo.js"></script>
+<script src="http://localhost:4567/js/scriptsMain.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function() {
+        // get user id to check whether it's a student or a teacher
+        let searchParams = new URLSearchParams(window.location.search);
+        if (searchParams.has('person_id')) {
+            let userID = searchParams.get('person_id');
+            let url = "http://localhost:4567/content/check_user_type/" + userID;
+
+            $.ajax({
+                type: "POST",
+                url: url,
+
+                success: function(response) {
+                    if (response == "professor") {
+                        $('#novoConteudo').prop('hidden', false);
+                        $('#editarConteudo').prop('hidden', false);
+                    }
+                }
+            })
+        }
+
+        $('#atualizarConteudo').click(function() {
+            let conteudoID = $('#id').val();
+            let professorID = $('#professor_id').val();
+            let disciplina = $('#disciplinaTexto').val();
+            let materia = $('#materiaTexto').val();
+            let titulo = $('#tituloTexto').val();
+            let texto = $('#corpoTexto').val();
+            let url = "http://localhost:4567/content/update";
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: {
+                    conteudoID: conteudoID,
+                    professorID: professorID,
+                    disciplina: disciplina,
+                    materia: materia,
+                    titulo: titulo,
+                    texto: texto
+                },
+                success: function(response) {
+                    window.location = "http://localhost:4567/content/see/" + conteudoID + "?id=" + conteudoID + "&person_id=" + professorID;
+                }
+            })
+        });
+
+    });
+</script>
+
+</html>
