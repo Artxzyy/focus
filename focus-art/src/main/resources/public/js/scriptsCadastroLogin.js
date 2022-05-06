@@ -365,41 +365,32 @@ function validatePassword(string){ // validate password
     return (string.length > 5);
 }
 
-/**
- * Change the style of the username and the password input in the login form when the user do something wrong
- */
 function validateUsernameAndPassword(){
     submitLoginBtn.disabled = true;
     if(validateUsername(inputUsername.value)){
-        inputUsername.classList.remove("border-error", "placeholder-red-400");
-        inputUsername.classList.add("ring-gray-300");
-        if(!validatePassword(inputPassword.value)){
-            inputPassword.classList.add("border-error", "placeholder-red-400");
-            inputPassword.classList.remove("ring-gray-300");
-        }
-        else{
-            inputPassword.classList.remove("border-error", "placeholder-red-400");
-            inputPassword.classList.add("ring-gray-300");
+        if(validatePassword(inputPassword.value)){
             submitLoginBtn.disabled = false;
         }
-        
     }
     else{
-        inputUsername.classList.add("border-error", "placeholder-red-400");
-        inputUsername.classList.remove("ring-gray-300");
-        if(!validatePassword(inputPassword.value)){
-            inputPassword.classList.add("border-error", "placeholder-red-400");
-            inputPassword.classList.remove("ring-gray-300");
-        }
-        else{
-            inputPassword.classList.remove("border-error", "placeholder-red-400");
-            inputPassword.classList.add("ring-gray-300");
-            
-        }
         submitLoginBtn.disabled = true;
     }
 }
 
+function validateSubmitLogin(){
+    submitErrorDiv.innerHTML = "";
+    if(localStorage.getItem("db")){ // if localStorage was created
+        let parser = localStorage.getItem("db");
+        let ls_users = JSON.parse(parser);
+        let user_correct = false;
+        for(let i = 0; i < ls_users.users.length; i = i + 1){
+            if(inputUsername.value === ls_users.users[i].username && inputPassword.value === ls_users.users[i].password){
+                user_correct = true;
+                sessionStorage.setItem("focus.ss.user", JSON.stringify({username: inputUsername.value, password: inputPassword.value}));
+            }
+        }
+    }
+}
 function validateInputUsernameRegister(){
     let username = inputUsernameRegister.value; // username
     let validUsernameIcon = document.createElement("i")

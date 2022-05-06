@@ -1,8 +1,8 @@
 package model;
 
 public class Student {
-	public static int count = 1;
-	public static int max_id = 1;
+	public static int count = 20;
+	public static int max_id;
 	private int school_id;
 	private int professor_id;
 	private int id;

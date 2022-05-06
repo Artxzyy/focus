@@ -1,7 +1,7 @@
 package model;
 
 public class Activity {
-	public static int count = 13;
+	public static int count = 20;
 	public static int max_id;
 	private int professor_id;
 	private int id;

@@ -145,8 +145,8 @@ public class ActivityService {
 					"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" + 
 					"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" + 
 					"      </aside>\n" + 
-					"      <article id=\"tela\" class=\"content\">\n" + 
-					"        <div id=\"aparecerAtividadeDiv\" class=\"content center\">\n" + 
+					"      <article class=\"content\">\n" + 
+					"        <div id=\"aparecerAtividadeDiv\" class=\"flex center\">\n" + 
 								contents + 
 					"        </div>\n" + 
 					"      </article>\n" + 

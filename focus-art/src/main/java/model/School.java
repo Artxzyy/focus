@@ -1,7 +1,7 @@
 package model;
 
 public class School {
-	public static int max_id = 1;
+	public static int max_id = 20;
 	private int id;
 	private String name;
 	private int max_students;

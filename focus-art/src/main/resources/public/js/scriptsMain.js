@@ -127,8 +127,3 @@ function toggleAside(){
 }
 
 asideButton.addEventListener("click", toggleAside);
-
-<<<<<<< HEAD
-
-=======
->>>>>>> branch 'main' of git@github.com:Artxzyy/focus.git

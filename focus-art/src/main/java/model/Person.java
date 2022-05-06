@@ -2,8 +2,8 @@ package model;
 
 // import java.security.MessageDigest;
 public class Person {
-	public static int count = 1;
-	public static int max_id = 1;
+	public static int count = 20;
+	public static int max_id;
 	private int school_id; // fk
 	private int id; // pk
 	private String first_name;

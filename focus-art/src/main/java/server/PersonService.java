@@ -71,7 +71,7 @@ public class PersonService {
 					"  <meta charset=\"utf-8\">\n" + 
 					"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" + 
 					"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" + 
-					"  <link rel=\"stylesheet\" href=\"styles/style-main.css\">\n" + 
+					"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" + 
 					"\n" + 
 					"</head>\n" + 
 					"\n" + 

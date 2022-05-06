@@ -26,5 +26,6 @@ public class App {
         get("/content/update/:id", (req, res) -> cs.update(req, res));
         post("/content/update", (req, res) -> cs.updateSave(req, res));
         get("/content/delete/:id", (req, res) -> cs.delete(req, res));
+        post("/main", (req, res) -> ps.login(req, res));
     }
 }

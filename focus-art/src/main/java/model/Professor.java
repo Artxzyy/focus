@@ -2,7 +2,7 @@ package model;
 
 // import java.security.MessageDigest;
 public class Professor {
-	public static int max_id = 1;
+	public static int max_id = 20;
 	private int school_id; // fk
 	private int id; // pk
 	private String first_name;

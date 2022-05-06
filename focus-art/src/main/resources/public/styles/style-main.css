@@ -265,16 +265,15 @@ body {
 .select {
     width: 100%;
 }
-<<<<<<< HEAD
+
 #aparecerAtividadeDiv{
     position: relative;
     top: 10%;
     width: calc(100% - 1rem - 200px);
-=======
+}
 
 #aparecerAtividadeDiv {
     width: 100%;
->>>>>>> branch 'main' of git@github.com:Artxzyy/focus.git
 }
 
 .dropdown-toggle {
@@ -574,18 +573,13 @@ button {
     color: #fff;
     font-weight: 700;
 }
-<<<<<<< HEAD
 .act{
     margin: 1rem;
     position: relative;
     left: 200px;
     width: calc(100vw - 200px - 2rem);
 }
-.content{
-=======
-
 .content {
->>>>>>> branch 'main' of git@github.com:Artxzyy/focus.git
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -733,11 +727,7 @@ button {
     margin-bottom: 2rem;
 }
 
-<<<<<<< HEAD
 .div-title{
-=======
-.div-title {
->>>>>>> branch 'main' of git@github.com:Artxzyy/focus.git
     border-bottom: 2px solid var(--dark-gray-color);
     border-radius: 1rem;
 }

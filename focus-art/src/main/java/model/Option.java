@@ -1,7 +1,7 @@
 package model;
 
 public class Option {
-	public static int count = 33;
+	public static int count = 80;
 	public static int max_id;
 	private int school_id;
 	private int professor_id;
