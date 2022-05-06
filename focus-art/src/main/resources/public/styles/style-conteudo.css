@@ -1,0 +1,24 @@
+.edicaoConteudo input,
+.edicaoConteudo textarea {
+    display: block;
+}
+
+.conteudoColocado {
+    width: 100%;
+}
+
+.conteudoColocado label,
+.conteudoColocado div,
+.conteudoColocado input,
+.conteudoColocado textarea {
+    width: 100%;
+    margin: 10px;
+    border-radius: 3px;
+}
+
+.conteudoColocado button {
+    float: right;
+    background-color: green;
+    color: white;
+    width: 20%;
+}

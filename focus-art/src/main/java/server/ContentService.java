@@ -1,97 +1,180 @@
 package server;
-import dao.StudentDAO;
+
+import java.io.File;
+import java.util.Scanner;
 import dao.ContentDAO;
-import model.Student;
+import dao.StudentDAO;
 import spark.Request;
 import spark.Response;
 import model.Content;
+
 public class ContentService {
 	StudentDAO studentDAO = new StudentDAO();
 	ContentDAO contentDAO = new ContentDAO();
 	
-	public Object see(Request req, Response res) {
-		Content content = null;
+	private String page;
+	private String dropdown;
+	
+	public void showPage() {
+		page = "";
 		try {
-			int id = Integer.parseInt(req.params(":id"));
-			content = contentDAO.get(id);
-			if(content == null) throw new NullPointerException();
-			String body = "";
-			body += ""
-					+ "<!DOCTYPE html>\n" + 
-					"<html lang=\"pt-br\">\n" + 
-					"\n" + 
-					"<head>\n" + 
-					"    <title>FOCUS - Educação mais acessível</title>\n" + 
-					"    <meta charset=\"utf-8\">\n" + 
-					"    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" + 
-					"    <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" + 
-					"    <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" + 
-					"</head>\n" + 
-					"\n" + 
-					"<body>\n" + 
-					"    <header>\n" + 
-					"        <nav class=\"nav-top\">\n" + 
-					"          <div>\n" + 
-					"            <div class=\"nav-top-expand\">\n" + 
-					"              <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" + 
-					"              <input type=\"checkbox\" class=\"none\">\n" + 
-					"            </div>\n" + 
-					"            <h1 class=\"nav-top-logo\">FOCUS</h1>\n" + 
-					"          </div>\n" + 
-					"          <div>\n" + 
-					"            <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" + 
-					"            <a href=\"index.html\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" + 
-					"          </div>\n" + 
-					"        </nav>\n" + 
-					"      </header>\n" + 
-					"    \n" + 
-					"      <main class=\"main\">\n" + 
-					"          <aside class=\"aside-bar\">\n" + 
-					"                <a href=\"main.html\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" + 
-					"                <a href=\"conteudo.html\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" + 
-					"                <a href=\"atividade.html\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" + 
-					"                <a href=\"mensagem.html\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" + 
-					"          </aside>\n" + 
-					"          \n" + 
-					"          <article id=\"tela\" class=\"content\">\n" + 
-					"            <section class=\"main conteudo\">\n" + 
-					"                    <div id=\"professorApenas\">\n" + 
-					"                        <h2>\n" + 
-					"                            Escolha o tipo de conteúdo desejado\n" + 
-					"                        </h2>\n" + 
-					"        \n" + 
-					"                        <select id=\"tipoMaterial\" class=\"dropdown-toggle\">\n" + 
-					"                            <option hidden selected disabled>Selecione o tipo:</option>\n" + 
-					"                            <option value=\"texto\">Texto</option>\n" + 
-					"                            <option value=\"imagem\">Imagem</option>\n" + 
-					"                            <option value=\"video\">Video</option>\n" + 
-					"                        </select>\n" + 
-					"                        <button id=\"btnConteudo\">Ok</button>\n" + 
-					"                    </div>\n" + 
-					"                    <div class=\"content-div\" id=\"conteudoColocado\">\n" + 
-					"                        <!--Aqui fica a parte de colocar novo conteudo,criada dinamicamente-->\n" + 
-					"                    </div>\n" + 
-					"                    <div class=\"d-block\">\n" + 
-					"                        <select id=\"conteudoVer\" class=\"dropdown-toggle\">\n" + 
-					"                            <option value=3 hidden selected disabled>Selecione o conteúdo a ver:</option>\n" + 
-					"                        </select>\n" + 
-					"                        <button id=\"btnConteudoMostrar\" class=\"btn btn-secondary\">Visualizar conteúdo</button>\n" + 
-					"                    </div>\n" + 
-					"                    <div id=\"conteudoPostado\">\n" + 
-					"                        <!--Vou jogar os conteudos criados aqui dentro-->\n" + 
-					"                    </div>\n" + 
-					"            </section>\n" + 
-					"\n" + 
-					"          </article>\n" + 
-					"      </main>\n" + 
-					"    <script src=\"js/scriptsConteudo.js\"></script>\n" + 
-					"</body>\n" + 
-					"\n" + 
-					"</html>";
-			res.body(body);
-		}catch(Exception e) {
-			System.err.print("ERROR: "+ e);
+			Scanner entrada = new Scanner(new File("src/main/resources/public/conteudo.html"));
+			while(entrada.hasNext()) {
+				page += (entrada.nextLine() + "\n");
+			}
+			entrada.close();
+		} catch (Exception e) {System.out.println(e.getMessage());}
+	}
+	
+	public void showEditPage() {
+		page = "";
+		try {
+			Scanner entrada = new Scanner(new File("src/main/resources/public/editarConteudo.html"));
+			while(entrada.hasNext()) {
+				page += (entrada.nextLine() + "\n");
+			}
+			entrada.close();
+		} catch (Exception e) {System.out.println(e.getMessage());}
+	}
+	
+	public void showContentByID(Content content) {
+		String titulo = content.getTitle();
+		String disciplina = content.getSubject();
+		String materia = content.getTheme();
+		String texto = content.getText();
+		
+		page = page.replace("<TITULO>", titulo);
+		page = page.replace("<DISCIPLINA>", disciplina);
+		page = page.replace("<MATERIA>", materia);
+		page = page.replace("<TEXTO>", texto);
+	}
+	
+	public void showContentToEdit(Content content) {
+		String id = Integer.toString(content.getId());
+		String professor_id = Integer.toString(content.getProfessor_id());
+		String titulo = content.getTitle();
+		String disciplina = content.getSubject();
+		String materia = content.getTheme();
+		String texto = content.getText();
+		
+		page = page.replace("content-ID", id);
+		page = page.replace("teacher-ID", professor_id);
+		page = page.replace("TITULO", titulo);
+		page = page.replace("DISCIPLINA", disciplina);
+		page = page.replace("MATERIA", materia);
+		page = page.replace("<TEXTO>", texto);
+	}
+	
+	public void getDropdown() {
+		Content[] content = contentDAO.getContents();
+		
+		if(content != null) {
+			dropdown = "";
+			for(Content c : content) 
+			{
+				dropdown += "" + "<option value=" + c.getId() + ">" + c.getTitle() + "</option>" + "</a>\n";
+			}
+			page = page.replace("<OPCOES>", dropdown);
 		}
-		return res.body();
+		
+	}
+	
+	public Object see(Request request, Response response) {
+		int id = Integer.parseInt(request.params(":id"));
+		Content content = contentDAO.get(id);
+		
+		if(content != null) {
+			response.status(200);
+			showPage();
+			getDropdown();
+			showContentByID(content);
+		} else {
+			response.status(404);
+		}
+		
+		return page;
+	}
+	
+	public Object insert(Request request, Response response) {
+		String resp = "";
+		int professorID = Integer.parseInt(request.queryParams("professorID"));
+		String disciplina = request.queryParams("disciplina");
+		String materia = request.queryParams("materia");
+		String titulo = request.queryParams("titulo");
+		String texto = request.queryParams("texto");
+		
+		Content content = new Content(professorID, titulo, disciplina, materia, texto);
+		
+		if (disciplina.isEmpty() || materia.isEmpty() || titulo.isEmpty() || texto.isEmpty()) {
+			resp = "Por favor, preencha todos os campos";
+		} else {
+			if(contentDAO.insert(content) == true) {
+				resp = "Conteudo (" + titulo + ") inserido!";
+				response.status(201);
+			} else if(contentDAO.insert(content) == false) {
+				resp = "Conteudo (" + titulo + ") não inserido!";
+				response.status(404);
+			}			
+		}
+		
+		return resp;
+	}
+	
+	public Object update(Request request, Response response) {
+		int id = Integer.parseInt(request.params(":id"));
+		Content content = contentDAO.get(id);
+		showEditPage();
+		showContentToEdit(content);
+		return page;
+	}
+	
+	public Object updateSave(Request request, Response response) {
+		String resp = "";
+		int conteudoID = Integer.parseInt(request.queryParams("conteudoID"));
+		int professorID = Integer.parseInt(request.queryParams("professorID"));
+		String disciplina = request.queryParams("disciplina");
+		String materia = request.queryParams("materia");
+		String titulo = request.queryParams("titulo");
+		String texto = request.queryParams("texto");		
+		
+		if (disciplina.isEmpty() || materia.isEmpty() || titulo.isEmpty() || texto.isEmpty()) {
+			resp = "Por favor, preencha todos os campos";
+		} else {
+			Content content = new Content(professorID, conteudoID, titulo, disciplina, materia,texto);
+			if(contentDAO.update(content) == true) {
+				resp = "Conteudo (" + titulo + ") atualizado com sucesso!";
+				response.status(201);
+			} else if(contentDAO.insert(content) == false) {
+				resp = "Houve um erro ao tentar atualizar o conteúdo " + titulo + ".";
+				response.status(404);
+			}			
+		}
+		
+		return resp;
+	}
+	
+	// tratar redirecionamento da página futuramente
+	public Object delete(Request request, Response response) {
+		 int id = Integer.parseInt(request.params(":id"));
+		 String resp = "";
+		 Content content = contentDAO.get(id);
+		 
+		 if(content != null) {
+			 contentDAO.delete(id);
+			 response.status(200);
+			 resp = "Conteúdo excluído com sucesso!";
+		 } else {
+			 response.status(404);
+			 resp = "Houve um erro ao tentar excluir este conteúdo. Tente novamente, mais tarde";
+		 }
+		 
+		 return resp;
+	}
+	
+	public String checkUserType(Request request, Response response) {
+		String resp = "";
+		int userID = Integer.parseInt(request.params(":id"));
+		resp = contentDAO.checkUserType(userID);		
+		return resp;
 	}
 }

@@ -12,19 +12,11 @@ public class Content {
 	private String text;
 	
 	public Content() {
+		
 		this(0, 0, "", "", "", "");
 	}
-	public Content(int school_id, int professor_id, int id, String title, String subject, String theme, String text) {
-		this.id = id;
-		this.school_id = school_id;
-		this.professor_id = professor_id;
-		this.title = title;
-		this.subject = subject;
-		this.theme = theme;
-		this.text = text;
-	}
 	public Content(int professor_id, String title, String subject, String theme, String text) {
-		this.id = count++;
+		this.id = id + 10;
 		this.professor_id = professor_id;
 		this.title = title;
 		this.subject = subject;
@@ -40,6 +32,13 @@ public class Content {
 		this.theme = theme;
 		this.text = text;
 		max_id = this.id;
+	}
+	public Content(String title, int id, String subject, String theme, String text) {
+		this.id = id;
+		this.title = title;
+		this.subject = subject;
+		this.theme = theme;
+		this.text = text;
 	}
 	public int getSchool_id() {
 		return school_id;
