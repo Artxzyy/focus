@@ -57,7 +57,7 @@ public class ActivityDAO {
 		try {
 			conectar();
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT activity.id, activity.title, activity.subject, activity.theme, "
+			ResultSet rs = st.executeQuery("SELECT activity.professor_id, activity.id, activity.title, activity.subject, activity.theme, "
 					+ "activity.statement "
 					+ "FROM activity INNER JOIN student ON activity."
 					+ "professor_id = student.professor_id AND student.person_id = "+student_id);
@@ -66,7 +66,31 @@ public class ActivityDAO {
 				activities = new Activity[rs.getRow()];
 				rs.beforeFirst();
 				for(int i = 0; rs.next(); i++) {
-					activities[i] = new Activity(rs.getInt("id"), rs.getString("title"), rs.getString("subject"),
+					activities[i] = new Activity(rs.getInt("professor_id"), rs.getInt("id"), rs.getString("title"), rs.getString("subject"),
+							rs.getString("theme"), rs.getString("statement"));
+				}
+			}
+			close();
+		}catch(Exception e) {
+			System.err.println("ERROR: " + e);
+		}
+		return activities;
+	}
+	public Activity[] get_professor_activities(int professor_id) {
+		Activity[] activities = null;
+		try {
+			conectar();
+			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = st.executeQuery("SELECT activity.professor_id, activity.id, activity.title, activity.subject, activity.theme, "
+					+ "activity.statement "
+					+ "FROM activity WHERE activity."
+					+ "professor_id = "+professor_id);
+			if(rs.next()) {
+				rs.last();
+				activities = new Activity[rs.getRow()];
+				rs.beforeFirst();
+				for(int i = 0; rs.next(); i++) {
+					activities[i] = new Activity(rs.getInt("professor_id"), rs.getInt("id"), rs.getString("title"), rs.getString("subject"),
 							rs.getString("theme"), rs.getString("statement"));
 				}
 			}
@@ -106,8 +130,8 @@ public class ActivityDAO {
 		try {
 			conectar();
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT id, title, subject, theme, statement FROM activity WHERE id = "+id);
-			if(rs.first()) a = new Activity(rs.getInt("id"), rs.getString("title"), rs.getString("subject")
+			ResultSet rs = st.executeQuery("SELECT professor_id, id, title, subject, theme, statement FROM activity WHERE id = "+id);
+			if(rs.first()) a = new Activity(rs.getInt("professor_id"), rs.getInt("id"), rs.getString("title"), rs.getString("subject")
 					, rs.getString("theme"), rs.getString("statement"));
 			else throw new Exception("Something went wrong.");
 			close();
@@ -123,7 +147,7 @@ public class ActivityDAO {
 			conectar();
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 			ResultSet rs = st.executeQuery("SELECT option.id, option.text, option.is_correct FROM option"
-					+ " INNER JOIN activity ON option.activity_id = "+a.getId());
+					+ " WHERE option.activity_id = "+a.getId());
 			if(rs.first()) {
 				rs.last();
 				options = new Option[rs.getRow()];
@@ -137,6 +161,20 @@ public class ActivityDAO {
 			System.err.println("ERROR: "+ e);
 		}
 		return options;
+	}
+	public Option get_correct_option_by_activity_id(int id) {
+		Option result = null;
+		try {
+			conectar();
+			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = st.executeQuery("SELECT option.activity_id, option.id, option.text FROM option"
+					+ " WHERE option.activity_id = "+ id +" AND option.is_correct = TRUE");
+			rs.first();
+			result = new Option(rs.getInt("activity_id"), rs.getInt("id"), rs.getString("text"), true);
+		}catch(Exception e) {
+			System.err.println("ERROR:"+ e.getMessage());
+		}
+		return result;
 	}
 	public boolean add(Activity activity, Option[] options) {
 		boolean result = false;
@@ -160,6 +198,20 @@ public class ActivityDAO {
 			close();
 		}catch(Exception e) {
 			System.err.println("ERROR: "+ e);
+		}
+		return result;
+	}
+	public boolean delete(int id) {
+		boolean result = false;
+		try {
+			conectar();
+			Statement st = conexao.createStatement();
+			st.executeUpdate("DELETE FROM option WHERE activity_id = "+id);
+			st.executeUpdate("DELETE FROM activity WHERE id = "+id);
+			close();
+			result = true;
+		}catch(Exception e) {
+			System.err.println("ERROR: "+e.getMessage());
 		}
 		return result;
 	}

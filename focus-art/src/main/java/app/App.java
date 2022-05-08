@@ -15,10 +15,13 @@ public class App {
     	port(4567);
     	get("/content/see/:id", (req, res) -> cs.see(req, res));
     	get("/activity/see/:id", (req, res) -> as.see(req, res));
+    	post("/activity/see/validate", (req, res) -> as.validate(req, res));
     	get("/activity/:id", (req, res) -> as.see_all(req, res));
     	get("/activity/create/:id", (req, res) -> as.create(req, res));
     	post("/create", (req, res) -> as.add(req, res));
-    	get("/activity/update/:id", (req, res) -> as.update(req, res));
+    	post("/activity/update/validate", (req, res) -> as.change(req, res));
+    	post("/activity/update/form", (req, res) -> as.update(req, res));
+    	post("/activity/delete", (req, res) -> as.delete(req, res));
     	post("/update", (req, res) -> as.change(req, res));
         get("/content/see/:id", (req, res) -> cs.see(req, res));
         get("/content/check_user_type/:id", (req, res) -> cs.checkUserType(req, res));

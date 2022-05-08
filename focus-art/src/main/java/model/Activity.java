@@ -29,6 +29,11 @@ public class Activity {
 		this.statement = statement;
 		max_id = this.id;
 	}
+	@Override
+	public String toString() {
+		return "Activity [professor_id=" + professor_id + ", id=" + id + ", title=" + title + ", subject=" + subject
+				+ ", theme=" + theme + ", statement=" + statement + "]";
+	}
 	public static int getMax_id() {
 		return max_id;
 	}

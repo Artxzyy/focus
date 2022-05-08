@@ -36,6 +36,12 @@ public class Option {
 		this.is_correct = is_correct;
 		max_id = this.id;
 	}
+	@Override
+	public String toString() {
+		return "Option [activity_id=" + activity_id + ", id=" + id + ", text=" + text + ", is_correct=" + is_correct
+				+ "]";
+	}
+
 	public int getSchool_id() {
 		return school_id;
 	}

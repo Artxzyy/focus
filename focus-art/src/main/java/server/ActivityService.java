@@ -16,208 +16,314 @@ public class ActivityService {
 	public Object see_all(Request req, Response res) {
 		int id = Integer.parseInt(req.params(":id"));
 		Activity[] activities = activityDAO.get_student_activities(id);
+		if(activities == null) {
+			activities = activityDAO.get_professor_activities(id);
+		}
 		String contents = "";
 		String body = "";
 		if(personDAO.is_professor(id)) {
-			contents += "<form id=\"form-create\" onsubmit=\"addIdToPath('form-create', 'http://localhost:4567/activity/create/')\" method=\"get\">"+
+			contents += "<div style=\"display:block\"><form id=\"form-create\" onsubmit=\"addIdToPath('form-create', 'http://localhost:4567/activity/create/')\" method=\"get\">"+
 						"<input type=\"text\" name=\"id\" value=\""+id+"\" style=\"display: none\">"
 					+ "<button type=\"submit\" class=\"btn btn-secondary\">Criar nova atividade</button></form><br>"+
-					"<form id=\"form-update\" onsubmit=\"addIdToPath('form-update', 'http://localhost:4567/activity/update/')\" method=\"get\">";
+					"</div>";
 		}
 		if(activities == null) {
 			body += ""
-					+ "<!DOCTYPE html>\n" + 
-					"<html lang=\"pt-br\">\n" + 
-					"\n" + 
-					"<head>\n" + 
-					"  <title>FOCUS - Educação mais acessível</title>\n" + 
-					"  <meta charset=\"utf-8\">\n" + 
-					"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" + 
-					"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" + 
-					"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" + 
-					"\n" + 
-					"</head>\n" + 
-					"\n" + 
+					+ "<!DOCTYPE html>\n" +
+					"<html lang=\"pt-br\">\n" +
+					"\n" +
+					"<head>\n" +
+					"  <title>FOCUS - Educação mais acessível</title>\n" +
+					"  <meta charset=\"utf-8\">\n" +
+					"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
+					"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" +
+					"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" +
+					"\n" +
+					"</head>\n" +
+					"\n" +
 					"<body>\n"
 					+ "<script type=\"text/javascript\">"
-					+ "function addIdToPath(form_name, base_url){\n" + 
-					" var your_form = document.getElementById(form_name);\n" + 
-					" var id = your_form.elements.namedItem(\"id\").value;\n" + 
+					+ "function addIdToPath(form_name, base_url){\n" +
+					" var your_form = document.getElementById(form_name);\n" +
+					" var id = your_form.elements.namedItem(\"id\").value;\n" +
 					" action_src = base_url + id;\n"+ 
-					" your_form.action = action_src;\n" + 
+					" your_form.action = action_src;\n" +
 					" }"
 					+ "</script>" + 
-					"  <header>\n" + 
-					"    <nav class=\"nav-top\">\n" + 
-					"      <div>\n" + 
-					"        <div class=\"nav-top-expand\">\n" + 
-					"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" + 
-					"          <input type=\"checkbox\" class=\"none\">\n" + 
-					"        </div>\n" + 
-					"        <h1 class=\"nav-top-logo\">FOCUS</h1>\n" + 
-					"      </div>\n" + 
-					"      <div>\n" + 
-					"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" + 
-					"        <a href=\"index.html\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" + 
-					"      </div>\n" + 
-					"    </nav>\n" + 
-					"  </header>\n" + 
-					"\n" + 
-					"  <main class=\"main\">\n" + 
-					"      <aside class=\"aside-bar\">\n" + 
-					"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" + 
-					"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" + 
-					"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" + 
-					"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" + 
-					"      </aside>\n" + 
-					"      <article id=\"tela\" class=\"content\">\n" + 
-					"        <div id=\"aparecerAtividadeDiv\" class=\"content center\">\n" + 
-					"<h1>There's no activities to be displayed.<h1>"+			
+					"  <header>\n" +
+					"    <nav class=\"nav-top\">\n" +
+					"      <div>\n" +
+					"        <div class=\"nav-top-expand\">\n" +
+					"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" +
+					"          <input type=\"checkbox\" class=\"none\">\n" +
+					"        </div>\n" +
+					"        <h1 class=\"nav-top-logo\">FOCUS</h1>\n" +
+					"      </div>\n" +
+					"      <div>\n" +
+					"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" +
+					"        <a href=\"index.html\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" +
+					"      </div>\n" +
+					"    </nav>\n" +
+					"  </header>\n" +
+					"\n" +
+					"  <main class=\"main\">\n" +
+					"      <aside class=\"aside-bar\">\n" +
+					"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" +
+					"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" +
+					"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
+					"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
+					"      </aside>\n" +
+					"      <article id=\"tela\" class=\"content\">\n" +
+					"        <div id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +		
 					contents + 
-					"        </div>\n" + 
-					"      </article>\n" + 
-					"  </main>\n" + 
-					"  <script src=\"js/scriptsAtividade.js\"></script>\n" + 
-					"</body>\n" + 
-					"\n" + 
+					"        </div>\n" +
+					"      </article>\n" +
+					"  </main>\n" +
+					"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
+					"</body>\n" +
+					"\n" +
 					"</html>";
 		}else {
-			Person correct_user = studentDAO.get_by_id(id);
-			for(Activity a : activities) {
-				contents +=
-						""
-						+ "<div class=\"card-ex\">\n" + 
-						"      <div class=\"card-title\">\n" + 
-						"         <h1 class=\"card-title\">Atividade - " +a.getSubject()+"</h1>\n" + 
-						"      </div>\n" + 
-						"      <div class=\"card-body\">\n" + 
-						"         <strong><p class=\"card-text\"> " +a.getTitle() + "</p></strong>\n" + 
-						"            <form id=\"form-activity"+a.getId()+"\" onsubmit=\"addIdToPath('form-activity"+a.getId() +"', 'http://localhost:4567/activity/see/')\" method=\"get\">" +
-						"            <input type=\"text\" name=\"id\" value=\""+a.getId()+"\" style=\"display: none\">"
-								+ "<input type=\"text\" name=\"person_id\" value=\""+correct_user.getId()+"\" style=\"display: none\">"
-						+ "		     <button type=\"submit\">Ver atividade</button>\n" + 
-						"            </form>"+
-						"      </div>\n" + 
-						" </div>";
-			}
-			body += ""
-					+ "<!DOCTYPE html>\n" + 
-					"<html lang=\"pt-br\">\n" + 
-					"\n" + 
-					"<head>\n" + 
-					"  <title>FOCUS - Educação mais acessível</title>\n" + 
-					"  <meta charset=\"utf-8\">\n" + 
-					"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" + 
-					"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" + 
-					"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" + 
-					"\n" + 
-					"</head>\n" + 
-					"\n" + 
-					"<body>\n"
-					+ "<script type=\"text/javascript\">"
-					+ "function addIdToPath(form_name, base_url){\n" + 
-					" var your_form = document.getElementById(form_name);\n" + 
-					" var id = your_form.elements.namedItem(\"id\").value;\n" + 
-					" action_src = base_url + id;\n"+ 
-					" your_form.action = action_src;\n" + 
-					" }"
-					+ "</script>" + 
-					"  <header>\n" + 
-					"    <nav class=\"nav-top\">\n" + 
-					"      <div>\n" + 
-					"        <div class=\"nav-top-expand\">\n" + 
-					"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" + 
-					"          <input type=\"checkbox\" class=\"none\">\n" + 
-					"        </div>\n" + 
-					"        <h1 class=\"nav-top-logo\">FOCUS</h1>\n" + 
-					"      </div>\n" + 
-					"      <div>\n" + 
-					"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" + 
-					"        <a href=\"index.html\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" + 
-					"      </div>\n" + 
-					"    </nav>\n" + 
-					"  </header>\n" + 
-					"\n" + 
-					"  <main class=\"main\">\n" + 
-					"      <aside class=\"aside-bar\">\n" + 
-					"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" + 
-					"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" + 
-					"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" + 
-					"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" + 
-					"      </aside>\n" + 
-					"      <article class=\"content\">\n" + 
-					"        <div id=\"aparecerAtividadeDiv\" class=\"flex center\">\n" + 
-								contents + 
-					"        </div>\n" + 
-					"      </article>\n" + 
-					"  </main>\n" + 
-					"  <script src=\"js/scriptsAtividade.js\"></script>\n" + 
-					"</body>\n" + 
-					"\n" + 
-					"</html>";
-		}
+			if(personDAO.is_professor(id)) {
+				Person correct_user = studentDAO.get_by_id(id);
+				for(Activity a : activities) {
+					contents +=
+							""
+							+ "<div class=\"card-ex\">\n" +
+							"      <div class=\"card-title\">\n" +
+							"         <h1 class=\"card-title\">Atividade - " +a.getSubject()+"</h1>\n" +
+							"      </div>\n" +
+							"      <div class=\"card-body\">\n" +
+							"         <strong><p class=\"card-text\"> " +a.getTitle() + "</p></strong>\n" +
+							"            <form id=\"form-activity"+a.getId()+"\" onsubmit=\"addIdToPath('form-activity"+a.getId() +"', 'http://localhost:4567/activity/see/')\" method=\"get\">" +
+							"            <input type=\"text\" name=\"id\" value=\""+a.getId()+"\" style=\"display: none\">"
+									+ "<input type=\"text\" name=\"person_id\" value=\""+correct_user.getId()+"\" style=\"display: none\">"
+							+ "		     <button type=\"submit\">Ver atividade</button>\n" +
+							"            </form>"
+							+ "<form id=\"form-update\" action=\"http://localhost:4567/activity/update/form\"\" method=\"post\">"+
+							"  <input type=\"text\" name=\"id\" value=\""+a.getId()+"\" style=\"display:none\">"+
+							"  <input type=\"text\" name=\"person_id\" value=\""+id+"\" style=\"display:none\">"
+							+ ""
+							+ "<button type=\"submit\">Editar atividade</button>"
+							+ "</form>"
+							+ "<form action=\"http://localhost:4567/activity/delete\" method=\"post\">"
+							+ "<div><input type=\"text\" class=\"nav-top-input\" name=\"id\" value=\""+a.getId()+"\" style=\"display:none\"></div>"
+							+ "<div><input type=\"text\" class=\"nav-top-input\" name=\"person_id\" value=\""+id+"\" style=\"display:none\"></div>"
+							+ "<button type=\"submit\">Deletar atividade</button>"
+							+ "</form>"
+							+ "</div>\n" +
+							" </div>";
+				}
+				body += ""
+						+ "<!DOCTYPE html>\n" +
+						"<html lang=\"pt-br\">\n" +
+						"\n" +
+						"<head>\n" +
+						"  <title>FOCUS - Educação mais acessível</title>\n" +
+						"  <meta charset=\"utf-8\">\n" +
+						"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
+						"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" +
+						"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" +
+						"\n" +
+						"</head>\n" +
+						"\n" +
+						"<body>\n"
+						+ "<script type=\"text/javascript\">"
+						+ "function addIdToPath(form_name, base_url){\n" +
+						" var your_form = document.getElementById(form_name);\n" +
+						" var id = your_form.elements.namedItem(\"id\").value;\n" +
+						" action_src = base_url + id;\n"+ 
+						" your_form.action = action_src;\n" +
+						" }"
+						+ "</script>" + 
+						"  <header>\n" +
+						"    <nav class=\"nav-top\">\n" +
+						"      <div>\n" +
+						"        <div class=\"nav-top-expand\">\n" +
+						"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" +
+						"          <input type=\"checkbox\" class=\"none\">\n" +
+						"        </div>\n" +
+						"        <h1 class=\"nav-top-logo\">FOCUS</h1>\n" +
+						"      </div>\n" +
+						"      <div>\n" +
+						"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" +
+						"        <a href=\"index.html\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" +
+						"      </div>\n" +
+						"    </nav>\n" +
+						"  </header>\n" +
+						"\n" +
+						"  <main class=\"main\">\n" +
+						"      <aside class=\"aside-bar\">\n" +
+						"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" +
+						"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" +
+						"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
+						"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
+						"      </aside>\n" +
+						"      <article class=\"content\">\n" +
+						"        <div id=\"aparecerAtividadeDiv\" class=\"flex-wrap center\">\n" +
+									contents + 
+						"        </div>\n" +
+						"      </article>\n" +
+						"  </main>\n" +
+						"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
+						"</body>\n" +
+						"\n" +
+						"</html>";
+				}else {
+					Person correct_user = studentDAO.get_by_id(id);
+					for(Activity a : activities) {
+						contents +=
+								""
+								+ "<div class=\"card-ex\">\n" +
+								"      <div class=\"card-title\">\n" +
+								"         <h1 class=\"card-title\">Atividade - " +a.getSubject()+"</h1>\n" +
+								"      </div>\n" +
+								"      <div class=\"card-body\">\n" +
+								"         <strong><p class=\"card-text\"> " +a.getTitle() + "</p></strong>\n" +
+								"            <form id=\"form-activity"+a.getId()+"\" onsubmit=\"addIdToPath('form-activity"+a.getId() +"', 'http://localhost:4567/activity/see/')\" method=\"get\">" +
+								"            <input type=\"text\" name=\"id\" value=\""+a.getId()+"\" style=\"display: none\">"
+										+ "<input type=\"text\" name=\"person_id\" value=\""+correct_user.getId()+"\" style=\"display: none\">"
+								+ "		     <button type=\"submit\">Ver atividade</button>\n" +
+								"            </form>"
+								+ "</div>\n" +
+								" </div>";
+					}
+					body += ""
+							+ "<!DOCTYPE html>\n" +
+							"<html lang=\"pt-br\">\n" +
+							"\n" +
+							"<head>\n" +
+							"  <title>FOCUS - Educação mais acessível</title>\n" +
+							"  <meta charset=\"utf-8\">\n" +
+							"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
+							"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" +
+							"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" +
+							"\n" +
+							"</head>\n" +
+							"\n" +
+							"<body>\n"
+							+ "<script type=\"text/javascript\">"
+							+ "function addIdToPath(form_name, base_url){\n" +
+							" var your_form = document.getElementById(form_name);\n" +
+							" var id = your_form.elements.namedItem(\"id\").value;\n" +
+							" action_src = base_url + id;\n"+ 
+							" your_form.action = action_src;\n" +
+							" }"
+							+ "</script>" + 
+							"  <header>\n" +
+							"    <nav class=\"nav-top\">\n" +
+							"      <div>\n" +
+							"        <div class=\"nav-top-expand\">\n" +
+							"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" +
+							"          <input type=\"checkbox\" class=\"none\">\n" +
+							"        </div>\n" +
+							"        <h1 class=\"nav-top-logo\">FOCUS</h1>\n" +
+							"      </div>\n" +
+							"      <div>\n" +
+							"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" +
+							"        <a href=\"index.html\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" +
+							"      </div>\n" +
+							"    </nav>\n" +
+							"  </header>\n" +
+							"\n" +
+							"  <main class=\"main\">\n" +
+							"      <aside class=\"aside-bar\">\n" +
+							"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" +
+							"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" +
+							"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
+							"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
+							"      </aside>\n" +
+							"      <article class=\"content\">\n" +
+							"        <div id=\"aparecerAtividadeDiv\" class=\"flex-wrap center\">\n" +
+										contents + 
+							"        </div>\n" +
+							"      </article>\n" +
+							"  </main>\n" +
+							"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
+							"</body>\n" +
+							"\n" +
+							"</html>";
+					}
+				}
+			
+			
 		res.body(body);
 		return res.body();
 	}
 	public Object see(Request req, Response res) {
-		int act_id = Integer.parseInt(req.params(":id"));
+		int act_id = Integer.parseInt(req.queryParams("id"));
+		int person_id = Integer.parseInt(req.queryParams("person_id"));
 		Activity activity = activityDAO.get_by_id(act_id);
 		Option[] options = activityDAO.get_options_by_activity(activity);
 		String contents = "";
-		contents += ""+
-				"      <div id=\"disciplinaMostrarAtividade\" class=\"div-title\"><h1 class=\"ex-title\">"+ activity.getSubject() +"</h1></div>\n" + 
-				"      <div id=\"tituloMostrarAtividade\" class=\"center\"><h1 class=\"subtitulo\">"+ activity.getTitle() +"</h1></div>\n" + 
-				"      <div id=\"enunciadoMostrarAtividade\" class=\"justify enunciado\">"+ activity.getStatement() +"</div>\n" + 
-				"      <div id=\"opcao1MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">A</span>   <div class=\"opcao\" id=\"respostaOpcao1\">"+options[0].getOption_text()+"</div></div>\n" + 
-				"      <div id=\"opcao2MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">B</span>   <div class=\"opcao\" id=\"respostaOpcao2\">"+options[1].getOption_text()+"</div></div>\n" + 
-				"      <div id=\"opcao3MostrarAtividade\" class=\"justify ex-option\"<span class=\"negrito\">C</span>   <div class=\"opcao\" id=\"respostaOpcao3\">"+options[2].getOption_text()+"</div></div>\n" + 
-				"      <div id=\"opcao4MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">D</span>   <div class=\"opcao\" id=\"respostaOpcao4\">"+options[3].getOption_text()+"</div></div>\n" + 
-				"      <span id=\"validaRespostaSpan\" class=\"negrito center\"></span>";
+		contents += "<form action=\"http://localhost:4567/activity/see/validate\" method=\"post\">"+
+				"      <div id=\"disciplinaMostrarAtividade\" class=\"div-title\"><h1 class=\"ex-title\">"+ activity.getSubject() +"</h1></div>\n" +
+				"      <div id=\"tituloMostrarAtividade\" class=\"center\"><h1 class=\"subtitulo\">"+ activity.getTitle() +"</h1></div>\n" +
+				"      <div id=\"enunciadoMostrarAtividade\" class=\"justify enunciado\">"+ activity.getStatement() +"</div>\n" +
+				"      <div onclick=\"validate_options('"+options[0].getId()+"', 'respostaOpcao1', 'respostaOpcao2', 'respostaOpcao3', 'respostaOpcao4');\"id=\"opcao1MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">A</span>   <div class=\"opcao\" id=\"respostaOpcao1\">"+options[0].getOption_text()+"</div></div>\n" +
+				"      <div onclick=\"validate_options('"+options[1].getId()+"', 'respostaOpcao2', 'respostaOpcao1', 'respostaOpcao3', 'respostaOpcao4');\"id=\"opcao2MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">B</span>   <div class=\"opcao\" id=\"respostaOpcao2\">"+options[1].getOption_text()+"</div></div>\n" +
+				"      <div onclick=\"validate_options('"+options[2].getId()+"', 'respostaOpcao3', 'respostaOpcao2', 'opcao1MostrarAtividade', 'respostaOpcao4');\"id=\"opcao3MostrarAtividade\" class=\"justify ex-option\"<span class=\"negrito\">C</span>   <div class=\"opcao\" id=\"respostaOpcao3\">"+options[2].getOption_text()+"</div></div>\n" 
+				+ "<input type=\"text\" name=\"id\" style=\"display:none\" value=\""+act_id+"\">"+
+				"      <input type=\"text\" name=\"person_id\" value=\""+person_id+"\" style=\"display:none\">"
+				+ "	   <div onclick=\"validate_options('"+options[3].getId()+"', 'respostaOpcao4', 'respostaOpcao2', 'respostaOpcao3', 'respostaOpcao1');\"id=\"opcao4MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">D</span>   <div class=\"opcao\" id=\"respostaOpcao4\">"+options[3].getOption_text()+"</div></div>\n" +
+				"      <span id=\"validaRespostaSpan\" class=\"negrito center\"></span>"
+				+ "<input type=\"text\" name=\"answer\" value=\"0\" style=\"visibility:hidden\" id=\"answer\">"+
+				"		<center><button type=\"submit\">Responder</button></center>";
+		System.out.println("TESTE");
 		String body = "";
 		body += ""
-				+ "<!DOCTYPE html>\n" + 
-				"<html lang=\"pt-br\">\n" + 
-				"\n" + 
-				"<head>\n" + 
-				"  <title>FOCUS - Educação mais acessível</title>\n" + 
-				"  <meta charset=\"utf-8\">\n" + 
-				"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" + 
-				"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" + 
-				"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" + 
-				"\n" + 
-				"</head>\n" + 
-				"\n" + 
-				"<body>\n" + 
-				"  <header>\n" + 
-				"    <nav class=\"nav-top\">\n" + 
-				"      <div>\n" + 
-				"        <div class=\"nav-top-expand\">\n" + 
-				"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" + 
-				"          <input type=\"checkbox\" class=\"none\">\n" + 
-				"        </div>\n" + 
-				"        <h1 class=\"nav-top-logo\">FOCUS</h1>\n" + 
-				"      </div>\n" + 
-				"      <div>\n" + 
-				"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" + 
-				"        <a href=\"index.html\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" + 
-				"      </div>\n" + 
-				"    </nav>\n" + 
-				"  </header>\n" + 
-				"\n" + 
-				"  <main class=\"main\">\n" + 
-				"      <aside class=\"aside-bar\">\n" + 
-				"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" + 
-				"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" + 
-				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" + 
-				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" + 
-				"      </aside>\n" + 
-				"        <center><div class=\"act center\">\n" + 
+				+ "<!DOCTYPE html>\n" +
+				"<html lang=\"pt-br\">\n" +
+				"\n" +
+				"<head>\n" +
+				"  <title>FOCUS - Educação mais acessível</title>\n" +
+				"  <meta charset=\"utf-8\">\n" +
+				"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
+				"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" +
+				"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" +
+				"\n" +
+				"</head>\n" +
+				"\n" +
+				"<body>\n"
+				+ "<script type=\"text/javascript\">"
+				+ "function validate_options(id, clicked, option2, option3, option4){\n" +
+				" document.getElementById(clicked).style.backgroundColor = '#a5a5a5';"
+				+ "document.getElementById('answer').setAttribute('value', id);"
+				+ "document.getElementById(option2).style.backgroundColor = '#fff';"
+				+ "document.getElementById(option3).style.backgroundColor = '#fff';"
+				+ "document.getElementById(option4).style.backgroundColor = '#fff';" + 
+				" }"
+				+ "</script>" + 
+				"  <header>\n" +
+				"    <nav class=\"nav-top\">\n" +
+				"      <div>\n" +
+				"        <div class=\"nav-top-expand\">\n" +
+				"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" +
+				"          <input type=\"checkbox\" class=\"none\">\n" +
+				"        </div>\n" +
+				"        <h1 class=\"nav-top-logo\">FOCUS</h1>\n" +
+				"      </div>\n" +
+				"      <div>\n" +
+				"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" +
+				"        <a href=\"index.html\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" +
+				"      </div>\n" +
+				"    </nav>\n" +
+				"  </header>\n" +
+				"\n" +
+				"  <main class=\"main\">\n" +
+				"      <aside class=\"aside-bar\">\n" +
+				"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" +
+				"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" +
+				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
+				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
+				"      </aside>\n" +
+				"        <center><div class=\"act center\">\n" +
 							contents + 
-				"        </div></center>\n" +  
-				"  </main>\n" + 
-				"  <script src=\"js/scriptsAtividade.js\"></script>\n" + 
-				"</body>\n" + 
-				"\n" + 
+				"        </div></center>\n" + 
+				"  </main>\n" +
+				"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
+				"</body>\n" +
+				"\n" +
 				"</html>";
 		res.body(body);
 		return res.body();
@@ -227,135 +333,201 @@ public class ActivityService {
 		if(personDAO.is_professor(id)) {
 			String contents = "";
 			contents +=
-					"<form action=\"http://localhost:4567/create\" method=\"post\"" +
-					"<div id=\"mostrarCriarAtividade\">\n" + 
+					"<form action=\"http://localhost:4567/create\" method=\"post\">" +
+					"<div id=\"mostrarCriarAtividade\">\n" +
 							"<input type=\"text\" value=\""+ id +"\" name=\"id\" style=\"display:none\">" +
-					"      <div>\n" + 
-					"        <label for=\"disciplinaQuestao\">Disciplina:</label>\n" + 
-					"        <input type=\"text\" name=\"subject\" class=\"form-control input\">\n" + 
-					"      </div>\n" + 
-					"      <div>\n" + 
-					"        <label for=\"materiaQuestao\">Matéria:</label>\n" + 
-					"        <input type=\"text\" name=\"theme\" class=\"form-control input\">\n" + 
-					"      </div>\n" + 
-					"      <div>\n" + 
-					"        <label for=\"enunciadoQuestao\">Enunciado:</label>\n" + 
-					"        <textarea name=\"statement\" cols=\"70\" rows=\"15\" class=\"form-control input\"></textarea>\n" + 
-					"      </div>\n" + 
-					"      <div>\n" + 
-					"        <label for=\"tituloQuestao\">Título:</label>\n" + 
-					"        <input type=\"text\" name=\"title\" class=\"form-control input\">\n" + 
-					"      </div>\n" + 
-					"      \n" + 
-					"      <h3>Marque a opção que for a resposta correta.</h3>\n" + 
-					"      <div class=\"input-group\">\n" + 
-					"        <label for=\"respostaOpcaoA\">A: </label>\n" + 
-					"        <div class=\"input-group-prepend\">\n" + 
-					"          <div class=\"input-group-text\">\n" + 
-					"            <input type=\"radio\" aria-label=\"Radio button for following text input\" name=\"option_radio1\" id=\"respostaOpcaoA\">\n" + 
-					"          </div>\n" + 
-					"        </div>\n" + 
-					"        <input type=\"text\" class=\"form-control\" aria-label=\"Text input with radio button\" name=\"option_input1\" id=\"respostaOpcaoInputA\">\n" + 
-					"      </div>\n" + 
-					"      \n" + 
-					"      <div class=\"input-group\">\n" + 
-					"        <label for=\"respostaOpcaoB\">B: </label>\n" + 
-					"        <div class=\"input-group-prepend\">\n" + 
-					"          <div class=\"input-group-text\">\n" + 
-					"            <input type=\"radio\" aria-label=\"Radio button for following text input\" name=\"option_radio2\" id=\"respostaOpcaoB\" >\n" + 
-					"          </div>\n" + 
-					"        </div>\n" + 
-					"        <input type=\"text\" class=\"form-control\" aria-label=\"Text input with radio button\" name=\"option_input2\" id=\"respostaOpcaoInputB\">\n" + 
-					"      </div>\n" + 
-					"      \n" + 
-					"      <div class=\"input-group\">\n" + 
-					"        <label for=\"respostaOpcaoC\">C: </label>\n" + 
-					"        <div class=\"input-group-prepend\">\n" + 
-					"          <div class=\"input-group-text\">\n" + 
-					"            <input type=\"radio\" aria-label=\"Radio button for following text input\" name=\"option_radio3\" id=\"respostaOpcaoC\">\n" + 
-					"          </div>\n" + 
-					"        </div>\n" + 
-					"        <input type=\"text\" class=\"form-control\" aria-label=\"Text input with radio button\" name=\"option_input3\" id=\"respostaOpcaoInputC\">\n" + 
-					"      </div>\n" + 
-					"      \n" + 
-					"      <div class=\"input-group\">\n" + 
-					"        <label for=\"respostaOpcaoD\">D: </label>\n" + 
-					"        <div class=\"input-group-prepend\">\n" + 
-					"          <div class=\"input-group-text\">\n" + 
-					"            <input type=\"radio\" aria-label=\"Radio button for following text input\" name=\"option_radio4\" id=\"respostaOpcaoD\">\n" + 
-					"          </div>\n" + 
-					"        </div>\n" + 
-					"        <input type=\"text\" class=\"form-control\" aria-label=\"Text input with radio button\" name=\"option_input4\" id=\"respostaOpcaoInputD\">\n" + 
-					"      </div>\n" + 
-					"      <button type=\"submit\" id=\"btnPostarAtividade\" class=\"btn btn-success\">Publicar</button>\n" + 
+					"      <div>\n" +
+					"        <label for=\"disciplinaQuestao\">Disciplina:</label>\n" +
+					"        <input type=\"text\" name=\"subject\" class=\"form-control input\">\n" +
+					"      </div>\n" +
+					"      <div>\n" +
+					"        <label for=\"materiaQuestao\">Matéria:</label>\n" +
+					"        <input type=\"text\" name=\"theme\" class=\"form-control input\">\n" +
+					"      </div>\n" +
+					"      <div>\n" +
+					"        <label for=\"enunciadoQuestao\">Enunciado:</label>\n" +
+					"        <textarea name=\"statement\" cols=\"70\" rows=\"15\" class=\"form-control input\"></textarea>\n" +
+					"      </div>\n" +
+					"      <div>\n" +
+					"        <label for=\"tituloQuestao\">Título:</label>\n" +
+					"        <input type=\"text\" name=\"title\" class=\"form-control input\">\n" +
+					"      </div>\n" +
+					"      \n" +
+					"      <h3>Marque a opção que for a resposta correta.</h3>\n" +
+					"      <div class=\"input-group\">\n" +
+					"        <label for=\"respostaOpcaoA\">A: </label>\n" +
+					"        <div class=\"input-group-prepend\">\n" +
+					"          <div class=\"input-group-text\">\n" +
+					"            <input type=\"radio\" aria-label=\"Radio button for following text input\" name=\"option_radio1\" id=\"respostaOpcaoA\">\n" +
+					"          </div>\n" +
+					"        </div>\n" +
+					"        <input type=\"text\" class=\"form-control\" aria-label=\"Text input with radio button\" name=\"option_input1\" id=\"respostaOpcaoInputA\">\n" +
+					"      </div>\n" +
+					"      \n" +
+					"      <div class=\"input-group\">\n" +
+					"        <label for=\"respostaOpcaoB\">B: </label>\n" +
+					"        <div class=\"input-group-prepend\">\n" +
+					"          <div class=\"input-group-text\">\n" +
+					"            <input type=\"radio\" aria-label=\"Radio button for following text input\" name=\"option_radio2\" id=\"respostaOpcaoB\" >\n" +
+					"          </div>\n" +
+					"        </div>\n" +
+					"        <input type=\"text\" class=\"form-control\" aria-label=\"Text input with radio button\" name=\"option_input2\" id=\"respostaOpcaoInputB\">\n" +
+					"      </div>\n" +
+					"      \n" +
+					"      <div class=\"input-group\">\n" +
+					"        <label for=\"respostaOpcaoC\">C: </label>\n" +
+					"        <div class=\"input-group-prepend\">\n" +
+					"          <div class=\"input-group-text\">\n" +
+					"            <input type=\"radio\" aria-label=\"Radio button for following text input\" name=\"option_radio3\" id=\"respostaOpcaoC\">\n" +
+					"          </div>\n" +
+					"        </div>\n" +
+					"        <input type=\"text\" class=\"form-control\" aria-label=\"Text input with radio button\" name=\"option_input3\" id=\"respostaOpcaoInputC\">\n" +
+					"      </div>\n" +
+					"      \n" +
+					"      <div class=\"input-group\">\n" +
+					"        <label for=\"respostaOpcaoD\">D: </label>\n" +
+					"        <div class=\"input-group-prepend\">\n" +
+					"          <div class=\"input-group-text\">\n" +
+					"            <input type=\"radio\" aria-label=\"Radio button for following text input\" name=\"option_radio4\" id=\"respostaOpcaoD\">\n" +
+					"          </div>\n" +
+					"        </div>\n" +
+					"        <input type=\"text\" class=\"form-control\" aria-label=\"Text input with radio button\" name=\"option_input4\" id=\"respostaOpcaoInputD\">\n" +
+					"      </div>\n" +
+					"      <button type=\"submit\" id=\"btnPostarAtividade\" class=\"btn btn-success\">Publicar</button>\n" +
 					"    </div>";
 			String body = "";
 			body += ""
-					+ "<!DOCTYPE html>\n" + 
-					"<html lang=\"pt-br\">\n" + 
-					"\n" + 
-					"<head>\n" + 
-					"  <title>FOCUS - Educação mais acessível</title>\n" + 
-					"  <meta charset=\"utf-8\">\n" + 
-					"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" + 
-					"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" + 
-					"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" + 
-					"\n" + 
-					"</head>\n" + 
-					"\n" + 
+					+ "<!DOCTYPE html>\n" +
+					"<html lang=\"pt-br\">\n" +
+					"\n" +
+					"<head>\n" +
+					"  <title>FOCUS - Educação mais acessível</title>\n" +
+					"  <meta charset=\"utf-8\">\n" +
+					"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
+					"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" +
+					"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" +
+					"\n" +
+					"</head>\n" +
+					"\n" +
 					"<body>\n"
 					+ "<script type=\"text/javascript\">"
-					+ "function addIdToPath(form_name, base_url){\n" + 
-					" var your_form = document.getElementById(form_name);\n" + 
-					" var id = your_form.elements.namedItem(\"id\").value;\n" + 
+					+ "function addIdToPath(form_name, base_url){\n" +
+					" var your_form = document.getElementById(form_name);\n" +
+					" var id = your_form.elements.namedItem(\"id\").value;\n" +
 					" action_src = base_url + id;\n"+ 
-					" your_form.action = action_src;\n" + 
+					" your_form.action = action_src;\n" +
 					" }"
 					+ "</script>" + 
-					"  <header>\n" + 
-					"    <nav class=\"nav-top\">\n" + 
-					"      <div>\n" + 
-					"        <div class=\"nav-top-expand\">\n" + 
-					"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" + 
-					"          <input type=\"checkbox\" class=\"none\">\n" + 
-					"        </div>\n" + 
-					"        <h1 class=\"nav-top-logo\">FOCUS</h1>\n" + 
-					"      </div>\n" + 
-					"      <div>\n" + 
-					"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" + 
-					"        <a href=\"/\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" + 
-					"      </div>\n" + 
-					"    </nav>\n" + 
-					"  </header>\n" + 
-					"\n" + 
-					"  <main class=\"main\">\n" + 
-					"      <aside class=\"aside-bar\">\n" + 
-					"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" + 
-					"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" + 
-					"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" + 
-					"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" + 
-					"      </aside>\n" + 
-					"      <article id=\"tela\" class=\"content\">\n" + 
-					"        <div id=\"aparecerAtividadeDiv\" class=\"content center\">\n" + 
+					"  <header>\n" +
+					"    <nav class=\"nav-top\">\n" +
+					"      <div>\n" +
+					"        <div class=\"nav-top-expand\">\n" +
+					"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" +
+					"          <input type=\"checkbox\" class=\"none\">\n" +
+					"        </div>\n" +
+					"        <h1 class=\"nav-top-logo\">FOCUS</h1>\n" +
+					"      </div>\n" +
+					"      <div>\n" +
+					"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" +
+					"        <a href=\"/\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" +
+					"      </div>\n" +
+					"    </nav>\n" +
+					"  </header>\n" +
+					"\n" +
+					"  <main class=\"main\">\n" +
+					"      <aside class=\"aside-bar\">\n" +
+					"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" +
+					"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" +
+					"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
+					"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
+					"      </aside>\n" +
+					"      <article id=\"tela\" class=\"content\">\n" +
+					"        <div id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
 								contents + 
-					"        </div>\n" + 
-					"      </article>\n" + 
-					"  </main>\n" + 
-					"  <script src=\"js/scriptsAtividade.js\"></script>\n" + 
-					"</body>\n" + 
-					"\n" + 
+					"        </div>\n" +
+					"      </article>\n" +
+					"  </main>\n" +
+					"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
+					"</body>\n" +
+					"\n" +
 					"</html>";
 			res.body(body);
 		}
 		return res.body();
 	}
-	// yet to do
+
 	public Object change(Request req, Response res) {
 		int id = Integer.parseInt(req.queryParams("id"));
+		int person_id = Integer.parseInt(req.queryParams("person_id"));
 		String title = req.queryParams("title");
 		String subject = req.queryParams("subject");
 		String theme = req.queryParams("theme");
 		String statement = req.queryParams("statement");
+		Activity updated = new Activity(person_id, id, title, subject, theme, statement);
+		String contents = "";
+		if(activityDAO.update(updated, id)) {
+			res.status(200);
+			contents += "A atividade foi atualizada com sucesso";
+		}else {
+			res.status(400);
+			contents += "Não foi possível atualizar a atividade.";
+		}
+		String body = "";
+		body += "<!DOCTYPE html>\n" +
+		"<html lang=\"pt-br\">\n" +
+		"\n" +
+		"<head>\n" +
+		"  <title>FOCUS - Educação mais acessível</title>\n" +
+		"  <meta charset=\"utf-8\">\n" +
+		"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
+		"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" +
+		"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" +
+		"\n" +
+		"</head>\n" +
+		"\n" +
+		"<body>\n"
+		+ "<script type=\"text/javascript\">"
+		+ "function addIdToPath(form_name, base_url){\n" +
+		" var your_form = document.getElementById(form_name);\n" +
+		" var id = your_form.elements.namedItem(\"id\").value;\n" +
+		" action_src = base_url + id;\n"+ 
+		" your_form.action = action_src;\n" +
+		" }"
+		+ "</script>" + 
+		"  <header>\n" +
+		"    <nav class=\"nav-top\">\n" +
+		"      <div>\n" +
+		"        <div class=\"nav-top-expand\">\n" +
+		"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" +
+		"          <input type=\"checkbox\" class=\"none\">\n" +
+		"        </div>\n" +
+		"        <h1 class=\"nav-top-logo\">FOCUS</h1>\n" +
+		"      </div>\n" +
+		"      <div>\n" +
+		"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" +
+		"        <a href=\"/\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" +
+		"      </div>\n" +
+		"    </nav>\n" +
+		"  </header>\n" +
+		"\n" +
+		"  <main class=\"main\">\n" +
+		"      <aside class=\"aside-bar\">\n" +
+		"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" +
+		"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" +
+		"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
+		"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
+		"      </aside>\n" +
+		"      <article id=\"tela\" class=\"content\">\n" +
+		"        <div id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
+					contents + 
+		"        </div>\n" +
+		"      </article>\n" +
+		"  </main>\n" +
+		"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
+		"</body>\n" +
+		"\n" +
+		"</html>";
+		res.body(body);
 		return res.body(); // 404
 	}
 	public Object add(Request req, Response res) {
@@ -383,24 +555,266 @@ public class ActivityService {
 			else options[2] = new Option(a.getId(), oi3, false);
 			if(or4 != null) options[3] = new Option(a.getId(), oi4, true);
 			else options[3] = new Option(a.getId(), oi4, false);
-			res.status(201);
-			res.body("Success! Status "+ res.status() + ".");
+			if(activityDAO.add(a, options)) {
+				res.status(201);
+				res.body("Success! Status "+ res.status() + ".");				
+			}else {
+				res.status(400);
+				res.body("Success! Activity was published. Status: "+ res.status() + ".");
+			}
 
 		}else {
 			res.body("You're not allowed here!");
 		}
 		return res.body();
 	}
+	public Object delete(Request req, Response res) {
+		int id = Integer.parseInt(req.queryParams("id"));
+		int person_id = Integer.parseInt(req.queryParams("person_id"));
+		String contents = "";
+		String body = "";
+		boolean b = false;
+		if(personDAO.is_professor(person_id)) {
+			b = activityDAO.delete(id);
+			contents += "Conteúdo deletado com sucesso.";
+		}
+		if(b) {
+			body += "<!DOCTYPE html>" + 
+					"<html lang=\"pt-br\">" + 
+					"<head>" + 
+					"<title>FOCUS - Educação mais acessível</title>" + 
+					"<meta charset=\"utf-8\">" + 
+					"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">" + 
+					"<script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>" + 
+					"<link rel=\"stylesheet\" href=\"/styles/style-main.css\">" + 
+					"</head>" + 
+					"<body>" + 
+					"<script type=\"text/javascript\">" + 
+					"function addIdToPath(form_name, base_url){" + 
+					"var your_form = document.getElementById(form_name);" + 
+					"var id = your_form.elements.namedItem(\"id\").value;" + 
+					"action_src = base_url + id;" + 
+					"your_form.action = action_src;" + 
+					"}" + 
+					"function validate_options(id, clicked, option2, option3, option4){" + 
+					" document.getElementById(clicked).style.backgroundColor = '#a5a5a5';" + 
+					"document.getElementById('answer').setAttribute('value', id);" + 
+					"document.getElementById(option2).style.backgroundColor = '#fff';" + 
+					"document.getElementById(option3).style.backgroundColor = '#fff';" + 
+					"document.getElementById(option4).style.backgroundColor = '#fff';" + 
+					" }" + 
+					"</script>" + 
+					"  <header>" + 
+					"    <nav class=\"nav-top\">" + 
+					"      <div>" + 
+					"        <div class=\"nav-top-expand\">" + 
+					"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>" + 
+					"          <input type=\"checkbox\" class=\"none\">" + 
+					"        </div>" + 
+					"        <h1 class=\"nav-top-logo\">FOCUS</h1>" + 
+					"      </div>" + 
+					"      <div>" + 
+					"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">" + 
+					"        <a href=\"index.html\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>" + 
+					"      </div>" + 
+					"    </nav>" + 
+					"  </header>" + 
+					"  <main class=\"main\">" + 
+					"      <aside class=\"aside-bar\">" + 
+					"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>" + 
+					"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>" + 
+					"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>" + 
+					"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>" + 
+					"      </aside>" + 
+					"        <center><div class=\"content center\">" + 
+					contents + 
+					"        </div></center>" + 
+					"  </main>" + 
+					"  <script src=\"js/scriptsAtividade.js\"></script>" + 
+					"</body>" + 
+					"</html>";
+			res.body(body);
+		}
+		else res.body("Something went wrong.");
+		return res.body();
+	}
 	public Object update(Request req, Response res) {
 		int id = Integer.parseInt(req.queryParams("id"));
-		int activity_id = Integer.parseInt(req.queryParams("activity_id"));
-		String title = req.queryParams("title");
-		String subject = req.queryParams("subject");
-		String theme = req.queryParams("theme");
-		String statement = req.queryParams("statement");
-		Activity new_activity = new Activity(id, activity_id, title, subject, theme, statement);
-		if(activityDAO.update(new_activity, activity_id)) res.body("Success. '"+title+"' was updated!");
+		int person_id = Integer.parseInt(req.queryParams("person_id"));
+		String contents = "";
+		String body = "";
+		boolean b = false;
+		if(personDAO.is_professor(person_id)) {
+			contents += ""
+					+ "<form action=\"http://localhost:4567/activity/update/validate\" method=\"post\">"
+					+ "<h4>Caso algum campo precise se manter igual antes, copie o valor antigo em seu respectivo campo.</h4>"
+					+ "<div><input type=\"text\" class=\"nav-top-input\" name=\"id\" value=\""+id+"\" style=\"display:none\"></div>"
+					+ "<div><input type=\"text\" class=\"nav-top-input\" name=\"person_id\" value=\""+person_id+"\" style=\"display:none\"></div>"
+					+ "<div><input type=\"text\" class=\"nav-top-input\" name=\"title\" placeholder=\"Título\"></div></br>"
+					+ "<div><input type=\"text\" class=\"nav-top-input\" name=\"subject\" placeholder=\"Disciplina\"></div></br>"
+					+ "<div><input type=\"text\" class=\"nav-top-input\" name=\"theme\" placeholder=\"Matéria\"></div></br>"
+					+ "<div><input type=\"text\" class=\"nav-top-input\" name=\"statement\" placeholder=\"Enunciado\"></div></div></br>"
+					+ "<br><button type=\"submit\">Atualizar dados</button>"
+					+ "</form>";
+			b = true;
+		}
+		if(b) {
+			body += "<!DOCTYPE html>" + 
+					"<html lang=\"pt-br\">" + 
+					"<head>" + 
+					"<title>FOCUS - Educação mais acessível</title>" + 
+					"<meta charset=\"utf-8\">" + 
+					"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">" + 
+					"<script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>" + 
+					"<link rel=\"stylesheet\" href=\"/styles/style-main.css\">" + 
+					"</head>" + 
+					"<body>" + 
+					"<script type=\"text/javascript\">" + 
+					"function addIdToPath(form_name, base_url){" + 
+					"var your_form = document.getElementById(form_name);" + 
+					"var id = your_form.elements.namedItem(\"id\").value;" + 
+					"action_src = base_url + id;" + 
+					"your_form.action = action_src;" + 
+					"}" + 
+					"function validate_options(id, clicked, option2, option3, option4){" + 
+					" document.getElementById(clicked).style.backgroundColor = '#a5a5a5';" + 
+					"document.getElementById('answer').setAttribute('value', id);" + 
+					"document.getElementById(option2).style.backgroundColor = '#fff';" + 
+					"document.getElementById(option3).style.backgroundColor = '#fff';" + 
+					"document.getElementById(option4).style.backgroundColor = '#fff';" + 
+					" }" + 
+					"</script>" + 
+					"  <header>" + 
+					"    <nav class=\"nav-top\">" + 
+					"      <div>" + 
+					"        <div class=\"nav-top-expand\">" + 
+					"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>" + 
+					"          <input type=\"checkbox\" class=\"none\">" + 
+					"        </div>" + 
+					"        <h1 class=\"nav-top-logo\">FOCUS</h1>" + 
+					"      </div>" + 
+					"      <div>" + 
+					"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">" + 
+					"        <a href=\"index.html\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>" + 
+					"      </div>" + 
+					"    </nav>" + 
+					"  </header>" + 
+					"  <main class=\"main\">" + 
+					"      <aside class=\"aside-bar\">" + 
+					"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>" + 
+					"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>" + 
+					"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>" + 
+					"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>" + 
+					"      </aside>" + 
+					"        <center><div class=\"content center\">" + 
+					contents + 
+					"        </div></center>" + 
+					"  </main>" + 
+					"  <script src=\"js/scriptsAtividade.js\"></script>" + 
+					"</body>" + 
+					"</html>";
+			res.body(body);
+		}
 		else res.body("Something went wrong.");
+		return res.body();
+	}
+	public Object validate(Request req, Response res) {
+		int act_id = Integer.parseInt(req.queryParams("id"));
+		int person_id = Integer.parseInt(req.queryParams("person_id"));
+		int answer = Integer.parseInt(req.queryParams("answer"));
+		String body = "";
+		String contents = "";
+		if(answer == activityDAO.get_correct_option_by_activity_id(act_id).getId()) {
+			Activity activity = activityDAO.get_by_id(act_id);
+			Option[] options = activityDAO.get_options_by_activity(activity);
+			contents = "" +
+					"      <div id=\"disciplinaMostrarAtividade\" class=\"div-title\"><h1 class=\"ex-title\">"+ activity.getSubject() +"</h1></div>\n" +
+					"      <div id=\"tituloMostrarAtividade\" class=\"center\"><h1 class=\"subtitulo\">"+ activity.getTitle() +"</h1></div>\n" +
+					"      <div id=\"enunciadoMostrarAtividade\" class=\"justify enunciado\">"+ activity.getStatement() +"</div>\n" +
+					"      <div id=\"opcao1MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">A</span>   <div class=\"opcao\" id=\"respostaOpcao1\">"+options[0].getOption_text()+"</div></div>\n" +
+					"      <div id=\"opcao2MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">B</span>   <div class=\"opcao\" id=\"respostaOpcao2\">"+options[1].getOption_text()+"</div></div>\n" +
+					"      <div id=\"opcao3MostrarAtividade\" class=\"justify ex-option\"<span class=\"negrito\">C</span>   <div class=\"opcao\" id=\"respostaOpcao3\">"+options[2].getOption_text()+"</div></div>\n" 
+					+ "<input type=\"text\" name=\"id\" style=\"display:none\" value=\""+act_id+"\">"+
+					"      <input type=\"text\" name=\"person_id\" value=\""+person_id+"\" style=\"display:none\">"
+					+ "	   <div id=\"opcao4MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">D</span>   <div class=\"opcao\" id=\"respostaOpcao4\">"+options[3].getOption_text()+"</div></div>\n" +
+					"      <span id=\"validaRespostaSpan\" class=\"negrito center\"></span>"
+					+ "<input type=\"text\" name=\"answer\" value=\"0\" style=\"display:none\" id=\"answer\">"
+					+ "<span id=\"validaRespostaSpan\" class=\"negrito center\" style=\"color:#0f0\">Correto!</span>"+
+					"		<center><button type=\"submit\" disabled>Responder</button></center>";
+		}else {
+			Activity activity = activityDAO.get_by_id(act_id);
+			Option[] options = activityDAO.get_options_by_activity(activity);
+			contents = ""+
+					"      <div id=\"disciplinaMostrarAtividade\" class=\"div-title\"><h1 class=\"ex-title\">"+ activity.getSubject() +"</h1></div>\n" +
+					"      <div id=\"tituloMostrarAtividade\" class=\"center\"><h1 class=\"subtitulo\">"+ activity.getTitle() +"</h1></div>\n" +
+					"      <div id=\"enunciadoMostrarAtividade\" class=\"justify enunciado\">"+ activity.getStatement() +"</div>\n" +
+					"      <div id=\"opcao1MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">A</span>   <div class=\"opcao\" id=\"respostaOpcao1\">"+options[0].getOption_text()+"</div></div>\n" +
+					"      <div id=\"opcao2MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">B</span>   <div class=\"opcao\" id=\"respostaOpcao2\">"+options[1].getOption_text()+"</div></div>\n" +
+					"      <div id=\"opcao3MostrarAtividade\" class=\"justify ex-option\"<span class=\"negrito\">C</span>   <div class=\"opcao\" id=\"respostaOpcao3\">"+options[2].getOption_text()+"</div></div>\n" 
+					+ "<input type=\"text\" name=\"id\" style=\"display:none\" value=\""+act_id+"\">"+
+					"      <input type=\"text\" name=\"person_id\" value=\""+person_id+"\" style=\"display:none\">"
+					+ "	   <div id=\"opcao4MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">D</span>   <div class=\"opcao\" id=\"respostaOpcao4\">"+options[3].getOption_text()+"</div></div>\n" +
+					"      <span id=\"validaRespostaSpan\" class=\"negrito center\"></span>"
+					+ "<input type=\"text\" name=\"answer\" value=\"0\" style=\"display:none\" id=\"answer\">"
+					+ "<span id=\"validaRespostaSpan\" class=\"negrito center\" style=\"color:#f00\">Você errou :(</span>"+
+					"		<center><button type=\"submit\" disabled>Responder</button></center>";
+		}
+			body += ""
+					+ "<!DOCTYPE html> "+ 
+					"<html lang=\"pt-br\">" +
+					"<head>" + 
+					"  <title>FOCUS - Educação mais acessível</title> "+ 
+					"  <meta charset=\"utf-8\">" + 
+					"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">" + 
+					"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script> "+ 
+					"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\"> "+ 
+					"</head>" + 
+					"<body>"+
+					"<script type=\"text/javascript\">"
+					+ "function addIdToPath(form_name, base_url){" + 
+					"var your_form = document.getElementById(form_name);" + 
+					"var id = your_form.elements.namedItem(\"id\").value;" + 
+					"action_src = base_url + id;" + 
+					"your_form.action = action_src;" + 
+					"}" + 
+					"function validate_options(id, clicked, option2, option3, option4){ "+ 
+					" document.getElementById(clicked).style.backgroundColor = '#a5a5a5';\"\n" + 
+					"document.getElementById('answer').setAttribute('value', id);\"\n" + 
+					"document.getElementById(option2).style.backgroundColor = '#fff';\"\n" + 
+					"document.getElementById(option3).style.backgroundColor = '#fff';\"\n" + 
+					"document.getElementById(option4).style.backgroundColor = '#fff';\"\n"+ 
+					" }\n" + 
+					"</script>"+ 
+					"  <header> "+ 
+					"    <nav class=\"nav-top\">" + 
+					"      <div>" + 
+					"        <div class=\"nav-top-expand\"> "+ 
+					"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button> "+ 
+					"          <input type=\"checkbox\" class=\"none\">" + 
+					"        </div> "+ 
+					"        <h1 class=\"nav-top-logo\">FOCUS</h1>" + 
+					"      </div> "+ 
+					"      <div> "+ 
+					"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\"> "+ 
+					"        <a href=\"index.html\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a> "+ 
+					"      </div> "+ 
+					"    </nav> "+ 
+					"  </header>" + 
+					"  <main class=\"main\"> "+ 
+					"      <aside class=\"aside-bar\"> "+ 
+					"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>" + 
+					"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>" + 
+					"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>" + 
+					"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>" + 
+					"      </aside>" + 
+					"        <center><div class=\"act center\"> "+ 
+					contents +
+					"        </div></center>\n"+ 
+					"  </main> "+ 
+					"  <script src=\"js/scriptsAtividade.js\"></script>" + 
+					"</body> "+
+					"</html>";
+		res.body(body);
 		return res.body();
 	}
 }
