@@ -1,5 +1,7 @@
 package server;
 
+import java.util.MissingFormatWidthException;
+
 import dao.ActivityDAO;
 import dao.PersonDAO;
 import model.Activity;
@@ -255,10 +257,12 @@ public class ActivityService {
 		int person_id = Integer.parseInt(req.queryParams("person_id"));
 		Activity activity = activityDAO.get_by_id(act_id);
 		Option[] options = activityDAO.get_options_by_activity(activity);
+		String diff = "";
+		try{diff = String.format("%.2f", activity.getDifficulty());}catch(MissingFormatWidthException e) {}
 		String contents = "";
 		contents += "<form action=\"http://localhost:4567/activity/see/validate\" method=\"post\">"+
 				"      <div id=\"disciplinaMostrarAtividade\" class=\"div-title\"><h1 class=\"ex-title\">"+ activity.getSubject() +"</h1></div>\n" +
-				"      <div id=\"tituloMostrarAtividade\" class=\"center\"><h1 class=\"subtitulo\">"+ activity.getTitle() +"</h1></div>\n" +
+				"      <div id=\"tituloMostrarAtividade\" class=\"center\"><h1 class=\"subtitulo\">"+ activity.getTitle() +"</h1><h4>Dificuldade (0 - 5): "+ diff +"</4></div>\n" +
 				"      <div id=\"enunciadoMostrarAtividade\" class=\"justify enunciado\">"+ activity.getStatement() +"</div>\n" +
 				"      <div onclick=\"validate_options('"+options[0].getId()+"', 'respostaOpcao1', 'respostaOpcao2', 'respostaOpcao3', 'respostaOpcao4');\"id=\"opcao1MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">A</span>   <div class=\"opcao\" id=\"respostaOpcao1\">"+options[0].getOption_text()+"</div></div>\n" +
 				"      <div onclick=\"validate_options('"+options[1].getId()+"', 'respostaOpcao2', 'respostaOpcao1', 'respostaOpcao3', 'respostaOpcao4');\"id=\"opcao2MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">B</span>   <div class=\"opcao\" id=\"respostaOpcao2\">"+options[1].getOption_text()+"</div></div>\n" +
@@ -463,7 +467,8 @@ public class ActivityService {
 		String subject = req.queryParams("subject");
 		String theme = req.queryParams("theme");
 		String statement = req.queryParams("statement");
-		Activity updated = new Activity(person_id, id, title, subject, theme, statement);
+		Activity a = activityDAO.get_by_id(id);
+		Activity updated = new Activity(person_id, id, title, subject, theme, statement, a.getDifficulty(), a.getQttAnswers(), a.getQttWrongAnswers());
 		String contents = "";
 		if(activityDAO.update(updated, id)) {
 			res.status(200);
@@ -724,12 +729,16 @@ public class ActivityService {
 		int answer = Integer.parseInt(req.queryParams("answer"));
 		String body = "";
 		String contents = "";
-		if(answer == activityDAO.get_correct_option_by_activity_id(act_id).getId()) {
-			Activity activity = activityDAO.get_by_id(act_id);
+		boolean status = (answer == activityDAO.get_correct_option_by_activity_id(act_id).getId());
+		Activity activity = null;
+		String diff = "";
+		if(status) {
+			activity = activityDAO.get_by_id(act_id);
+			try{diff = String.format("%.2f", activity.getDifficulty());}catch(MissingFormatWidthException e) {}
 			Option[] options = activityDAO.get_options_by_activity(activity);
 			contents = "" +
 					"      <div id=\"disciplinaMostrarAtividade\" class=\"div-title\"><h1 class=\"ex-title\">"+ activity.getSubject() +"</h1></div>\n" +
-					"      <div id=\"tituloMostrarAtividade\" class=\"center\"><h1 class=\"subtitulo\">"+ activity.getTitle() +"</h1></div>\n" +
+					"      <div id=\"tituloMostrarAtividade\" class=\"center\"><h1 class=\"subtitulo\">"+ activity.getTitle() +"</h1><h4>Dificuldade (0 - 5): "+ diff +"</h4></div>\n" +
 					"      <div id=\"enunciadoMostrarAtividade\" class=\"justify enunciado\">"+ activity.getStatement() +"</div>\n" +
 					"      <div id=\"opcao1MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">A</span>   <div class=\"opcao\" id=\"respostaOpcao1\">"+options[0].getOption_text()+"</div></div>\n" +
 					"      <div id=\"opcao2MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">B</span>   <div class=\"opcao\" id=\"respostaOpcao2\">"+options[1].getOption_text()+"</div></div>\n" +
@@ -742,11 +751,12 @@ public class ActivityService {
 					+ "<span id=\"validaRespostaSpan\" class=\"negrito center\" style=\"color:#0f0\">Correto!</span>"+
 					"		<center><button type=\"submit\" disabled>Responder</button></center>";
 		}else {
-			Activity activity = activityDAO.get_by_id(act_id);
+			activity = activityDAO.get_by_id(act_id);
+			try{diff = String.format("%.2f", activity.getDifficulty());}catch(MissingFormatWidthException e) {}
 			Option[] options = activityDAO.get_options_by_activity(activity);
 			contents = ""+
 					"      <div id=\"disciplinaMostrarAtividade\" class=\"div-title\"><h1 class=\"ex-title\">"+ activity.getSubject() +"</h1></div>\n" +
-					"      <div id=\"tituloMostrarAtividade\" class=\"center\"><h1 class=\"subtitulo\">"+ activity.getTitle() +"</h1></div>\n" +
+					"      <div id=\"tituloMostrarAtividade\" class=\"center\"><h1 class=\"subtitulo\">"+ activity.getTitle() +"</h1><h4>Dificuldade (0 - 5): "+diff+"</h4></div>\n" +
 					"      <div id=\"enunciadoMostrarAtividade\" class=\"justify enunciado\">"+ activity.getStatement() +"</div>\n" +
 					"      <div id=\"opcao1MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">A</span>   <div class=\"opcao\" id=\"respostaOpcao1\">"+options[0].getOption_text()+"</div></div>\n" +
 					"      <div id=\"opcao2MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">B</span>   <div class=\"opcao\" id=\"respostaOpcao2\">"+options[1].getOption_text()+"</div></div>\n" +
@@ -759,61 +769,64 @@ public class ActivityService {
 					+ "<span id=\"validaRespostaSpan\" class=\"negrito center\" style=\"color:#f00\">Você errou :(</span>"+
 					"		<center><button type=\"submit\" disabled>Responder</button></center>";
 		}
-			body += ""
-					+ "<!DOCTYPE html> "+ 
-					"<html lang=\"pt-br\">" +
-					"<head>" + 
-					"  <title>FOCUS - Educação mais acessível</title> "+ 
-					"  <meta charset=\"utf-8\">" + 
-					"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">" + 
-					"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script> "+ 
-					"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\"> "+ 
-					"</head>" + 
-					"<body>"+
-					"<script type=\"text/javascript\">"
-					+ "function addIdToPath(form_name, base_url){" + 
-					"var your_form = document.getElementById(form_name);" + 
-					"var id = your_form.elements.namedItem(\"id\").value;" + 
-					"action_src = base_url + id;" + 
-					"your_form.action = action_src;" + 
-					"}" + 
-					"function validate_options(id, clicked, option2, option3, option4){ "+ 
-					" document.getElementById(clicked).style.backgroundColor = '#a5a5a5';\"\n" + 
-					"document.getElementById('answer').setAttribute('value', id);\"\n" + 
-					"document.getElementById(option2).style.backgroundColor = '#fff';\"\n" + 
-					"document.getElementById(option3).style.backgroundColor = '#fff';\"\n" + 
-					"document.getElementById(option4).style.backgroundColor = '#fff';\"\n"+ 
-					" }\n" + 
-					"</script>"+ 
-					"  <header> "+ 
-					"    <nav class=\"nav-top\">" + 
-					"      <div>" + 
-					"        <div class=\"nav-top-expand\"> "+ 
-					"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button> "+ 
-					"          <input type=\"checkbox\" class=\"none\">" + 
-					"        </div> "+ 
-					"        <h1 class=\"nav-top-logo\">FOCUS</h1>" + 
-					"      </div> "+ 
-					"      <div> "+ 
-					"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\"> "+ 
-					"        <a href=\"index.html\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a> "+ 
-					"      </div> "+ 
-					"    </nav> "+ 
-					"  </header>" + 
-					"  <main class=\"main\"> "+ 
-					"      <aside class=\"aside-bar\"> "+ 
-					"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>" + 
-					"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>" + 
-					"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>" + 
-					"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>" + 
-					"      </aside>" + 
-					"        <center><div class=\"act center\"> "+ 
-					contents +
-					"        </div></center>\n"+ 
-					"  </main> "+ 
-					"  <script src=\"js/scriptsAtividade.js\"></script>" + 
-					"</body> "+
-					"</html>";
+		activity.updateDifficulty(status);
+		activityDAO.update(activity, act_id);
+		body += ""
+				+ "<!DOCTYPE html> "+ 
+				"<html lang=\"pt-br\">" +
+				"<head>" + 
+				"  <title>FOCUS - Educação mais acessível</title> "+ 
+				"  <meta charset=\"utf-8\">" + 
+				"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">" + 
+				"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script> "+ 
+				"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\"> "+ 
+				"</head>" + 
+				"<body>"+
+				"<script type=\"text/javascript\">"
+				+ "function addIdToPath(form_name, base_url){" + 
+				"var your_form = document.getElementById(form_name);" + 
+				"var id = your_form.elements.namedItem(\"id\").value;" + 
+				"action_src = base_url + id;" + 
+				"your_form.action = action_src;" + 
+				"}" + 
+				"function validate_options(id, clicked, option2, option3, option4){ "+ 
+				" document.getElementById(clicked).style.backgroundColor = '#a5a5a5';\"\n" + 
+				"document.getElementById('answer').setAttribute('value', id);\"\n" + 
+				"document.getElementById(option2).style.backgroundColor = '#fff';\"\n" + 
+				"document.getElementById(option3).style.backgroundColor = '#fff';\"\n" + 
+				"document.getElementById(option4).style.backgroundColor = '#fff';\"\n"+ 
+				" }\n" + 
+				"</script>"+ 
+				"  <header> "+ 
+				"    <nav class=\"nav-top\">" + 
+				"      <div>" + 
+				"        <div class=\"nav-top-expand\"> "+ 
+				"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button> "+ 
+				"          <input type=\"checkbox\" class=\"none\">" + 
+				"        </div> "+ 
+				"        <h1 class=\"nav-top-logo\">FOCUS</h1>" + 
+				"      </div> "+ 
+				"      <div> "+ 
+				"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\"> "+ 
+				"        <a href=\"index.html\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a> "+ 
+				"      </div> "+ 
+				"    </nav> "+ 
+				"  </header>" + 
+				"  <main class=\"main\"> "+ 
+				"      <aside class=\"aside-bar\"> "+ 
+				"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>" + 
+				"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>" + 
+				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>" + 
+				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>" + 
+				"      </aside>" + 
+				"        <center><div class=\"act center\"> "
+				+ "<h4>"+activity.getDifficulty()+"</h4>"+ 
+				contents +
+				"        </div></center>\n"+ 
+				"  </main> "+ 
+				"  <script src=\"js/scriptsAtividade.js\"></script>" + 
+				"</body> "+
+				"</html>";
 		res.body(body);
 		return res.body();
 	}

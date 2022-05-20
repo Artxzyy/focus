@@ -57,8 +57,7 @@ public class ActivityDAO {
 		try {
 			conectar();
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT activity.professor_id, activity.id, activity.title, activity.subject, activity.theme, "
-					+ "activity.statement "
+			ResultSet rs = st.executeQuery("SELECT * "
 					+ "FROM activity INNER JOIN student ON activity."
 					+ "professor_id = student.professor_id AND student.person_id = "+student_id);
 			if(rs.next()) {
@@ -67,7 +66,7 @@ public class ActivityDAO {
 				rs.beforeFirst();
 				for(int i = 0; rs.next(); i++) {
 					activities[i] = new Activity(rs.getInt("professor_id"), rs.getInt("id"), rs.getString("title"), rs.getString("subject"),
-							rs.getString("theme"), rs.getString("statement"));
+							rs.getString("theme"), rs.getString("statement"), rs.getFloat("difficulty"), rs.getInt("qtt_answers"), rs.getInt("qtt_wrong_answers"));
 				}
 			}
 			close();
@@ -91,7 +90,7 @@ public class ActivityDAO {
 				rs.beforeFirst();
 				for(int i = 0; rs.next(); i++) {
 					activities[i] = new Activity(rs.getInt("professor_id"), rs.getInt("id"), rs.getString("title"), rs.getString("subject"),
-							rs.getString("theme"), rs.getString("statement"));
+							rs.getString("theme"), rs.getString("statement"), rs.getFloat("difficulty"), rs.getInt("qtt_answers"), rs.getInt("qtt_wrong_answers"));
 				}
 			}
 			close();
@@ -130,9 +129,9 @@ public class ActivityDAO {
 		try {
 			conectar();
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT professor_id, id, title, subject, theme, statement FROM activity WHERE id = "+id);
+			ResultSet rs = st.executeQuery("SELECT * FROM activity WHERE id = "+id);
 			if(rs.first()) a = new Activity(rs.getInt("professor_id"), rs.getInt("id"), rs.getString("title"), rs.getString("subject")
-					, rs.getString("theme"), rs.getString("statement"));
+					, rs.getString("theme"), rs.getString("statement"), rs.getFloat("difficulty"), rs.getInt("qtt_answers"), rs.getInt("qtt_wrong_answers"));
 			else throw new Exception("Something went wrong.");
 			close();
 		}catch(Exception e) {
@@ -224,7 +223,10 @@ public class ActivityDAO {
 					+ "'" +a.getTitle() + "', subject = "
 					+ "'" + a.getSubject() + "', theme = "
 					+ "'" + a.getTheme() + "', statement = "
-					+ "'" + a.getStatement() + "'"
+					+ "'" + a.getStatement() + "', difficulty = "
+					+ "'" + a.getDifficulty() + "', qtt_answers = "
+					+ "'" + a.getQttAnswers() + "', qtt_wrong_answers = "
+					+ "'" + a.getQttWrongAnswers() + "'"
 							+ " WHERE id = "+id);
 			result = true;
 			close();

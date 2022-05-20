@@ -1,6 +1,9 @@
 package model;
 
 public class Activity {
+	public static final float STARTING_DIFFICULTY = 2.5f; // 0.0 - 5.0
+	public static final boolean CORRECT_ANSWER = true;
+	public static final boolean WRONG_ANSWER = false;
 	public static int count = 20;
 	public static int max_id;
 	private int professor_id;
@@ -9,16 +12,21 @@ public class Activity {
 	private String subject;
 	private String theme;
 	private String statement;
+	private float difficulty;
+	private int qtt_answers;
+	private int qtt_wrong_answers;
 	public Activity() {
-		this(0, 0, "", "", "", "");
+		this(0, 0, "", "", "", "", 2.5f, 0, 0);
 	}
-	public Activity(int professor_id, int id, String title, String subject, String theme, String statement) {
+	public Activity(int professor_id, int id, String title, String subject, String theme, String statement, float difficulty, int qtt_answers, int qtt_wrong_answers) {
 		this.professor_id = professor_id;
 		this.id = id;
 		this.title = title;
 		this.subject = subject;
 		this.theme = theme;
 		this.statement = statement;
+		this.difficulty = difficulty;
+		this.qtt_answers = qtt_answers; this.qtt_wrong_answers = qtt_wrong_answers;
 	}
 	public Activity(int professor_id, String title, String subject, String theme, String statement) {
 		this.professor_id = professor_id;
@@ -27,6 +35,7 @@ public class Activity {
 		this.subject = subject;
 		this.theme = theme;
 		this.statement = statement;
+		this.qtt_answers = this.qtt_wrong_answers = 0;
 		max_id = this.id;
 	}
 	@Override
@@ -70,6 +79,33 @@ public class Activity {
 	public void setStatement(String statement) {
 		this.statement = statement;
 	}
-	
-	
+	public int getQttAnswers() {
+		return qtt_answers;
+	}
+	public void setQttAnswers(int qtt_answers) {
+		this.qtt_answers = qtt_answers;
+	}
+	public float getDifficulty() {
+		return difficulty;
+	}
+	public void setDifficulty(float difficulty) {
+		this.difficulty = difficulty;
+	}
+	public void updateDifficulty(boolean answer) {
+		if(answer == WRONG_ANSWER) {
+			this.qtt_wrong_answers++;
+		}
+		this.qtt_answers++;
+		if(this.qtt_wrong_answers > 0) {
+			this.difficulty = ((float)this.qtt_wrong_answers / (float)this.qtt_answers) * 5;
+		}else {
+			this.difficulty = 0.0f;
+		}
+	}
+	public int getQttWrongAnswers() {
+		return this.qtt_wrong_answers;
+	}
+	public void setQttWrongAnswers(int qtt_wrong_answers) {
+		this.qtt_wrong_answers = qtt_wrong_answers;
+	}
 }
