@@ -16,6 +16,7 @@ public class App {
     	get("/content/see/:id", (req, res) -> cs.see(req, res));
     	get("/activity/see/:id", (req, res) -> as.see(req, res));
     	post("/activity/see/validate", (req, res) -> as.validate(req, res));
+    	post("/activity/see/next", (req, res) -> as.next(req, res));
     	get("/activity/:id", (req, res) -> as.see_all(req, res));
     	get("/activity/create/:id", (req, res) -> as.create(req, res));
     	post("/create", (req, res) -> as.add(req, res));

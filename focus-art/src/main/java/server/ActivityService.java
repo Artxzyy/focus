@@ -15,6 +15,8 @@ public class ActivityService {
 	public static ActivityDAO activityDAO = new ActivityDAO();
 	public static StudentDAO studentDAO = new StudentDAO();
 	public static PersonDAO personDAO = new PersonDAO();
+	public static final int WRONG = 0;
+	public static final int RIGHT = 1;
 	public Object see_all(Request req, Response res) {
 		int id = Integer.parseInt(req.params(":id"));
 		Activity[] activities = activityDAO.get_student_activities(id);
@@ -731,12 +733,15 @@ public class ActivityService {
 		String contents = "";
 		boolean status = (answer == activityDAO.get_correct_option_by_activity_id(act_id).getId());
 		Activity activity = null;
+		float difficulty = -1.0f;
 		String diff = "";
 		if(status) {
 			activity = activityDAO.get_by_id(act_id);
+			difficulty = activity.getDifficulty();
 			try{diff = String.format("%.2f", activity.getDifficulty());}catch(MissingFormatWidthException e) {}
 			Option[] options = activityDAO.get_options_by_activity(activity);
 			contents = "" +
+					"<form action=\"http://localhost:4567/activity/see/next\" method=\"post\">" +
 					"      <div id=\"disciplinaMostrarAtividade\" class=\"div-title\"><h1 class=\"ex-title\">"+ activity.getSubject() +"</h1></div>\n" +
 					"      <div id=\"tituloMostrarAtividade\" class=\"center\"><h1 class=\"subtitulo\">"+ activity.getTitle() +"</h1><h4>Dificuldade (0 - 5): "+ diff +"</h4></div>\n" +
 					"      <div id=\"enunciadoMostrarAtividade\" class=\"justify enunciado\">"+ activity.getStatement() +"</div>\n" +
@@ -748,13 +753,16 @@ public class ActivityService {
 					+ "	   <div id=\"opcao4MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">D</span>   <div class=\"opcao\" id=\"respostaOpcao4\">"+options[3].getOption_text()+"</div></div>\n" +
 					"      <span id=\"validaRespostaSpan\" class=\"negrito center\"></span>"
 					+ "<input type=\"text\" name=\"answer\" value=\"0\" style=\"display:none\" id=\"answer\">"
+					+ "<input type=\"text\" name=\"d\" value=\""+ difficulty +"\" style=\"display:none\">"
 					+ "<span id=\"validaRespostaSpan\" class=\"negrito center\" style=\"color:#0f0\">Correto!</span>"+
-					"		<center><button type=\"submit\" disabled>Responder</button></center>";
+					"		<center><button type=\"submit\">Próxima questão</button></center></form>";
 		}else {
 			activity = activityDAO.get_by_id(act_id);
+			difficulty = activity.getDifficulty();
 			try{diff = String.format("%.2f", activity.getDifficulty());}catch(MissingFormatWidthException e) {}
 			Option[] options = activityDAO.get_options_by_activity(activity);
 			contents = ""+
+					"<form action=\"http://localhost:4567/activity/see/next\" method=\"post\">" +
 					"      <div id=\"disciplinaMostrarAtividade\" class=\"div-title\"><h1 class=\"ex-title\">"+ activity.getSubject() +"</h1></div>\n" +
 					"      <div id=\"tituloMostrarAtividade\" class=\"center\"><h1 class=\"subtitulo\">"+ activity.getTitle() +"</h1><h4>Dificuldade (0 - 5): "+diff+"</h4></div>\n" +
 					"      <div id=\"enunciadoMostrarAtividade\" class=\"justify enunciado\">"+ activity.getStatement() +"</div>\n" +
@@ -766,8 +774,9 @@ public class ActivityService {
 					+ "	   <div id=\"opcao4MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">D</span>   <div class=\"opcao\" id=\"respostaOpcao4\">"+options[3].getOption_text()+"</div></div>\n" +
 					"      <span id=\"validaRespostaSpan\" class=\"negrito center\"></span>"
 					+ "<input type=\"text\" name=\"answer\" value=\"0\" style=\"display:none\" id=\"answer\">"
+					+ "<input type=\"text\" name=\"d\" value=\""+ difficulty +"\" style=\"display:none\">"
 					+ "<span id=\"validaRespostaSpan\" class=\"negrito center\" style=\"color:#f00\">Você errou :(</span>"+
-					"		<center><button type=\"submit\" disabled>Responder</button></center>";
+					"		<center><button type=\"submit\">Próxima questão</button></center></form>";
 		}
 		activity.updateDifficulty(status);
 		activityDAO.update(activity, act_id);
@@ -820,12 +829,91 @@ public class ActivityService {
 				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>" + 
 				"      </aside>" + 
 				"        <center><div class=\"act center\"> "
-				+ "<h4>"+activity.getDifficulty()+"</h4>"+ 
-				contents +
+				+ contents +
 				"        </div></center>\n"+ 
 				"  </main> "+ 
 				"  <script src=\"js/scriptsAtividade.js\"></script>" + 
 				"</body> "+
+				"</html>";
+		res.body(body);
+		return res.body();
+	}
+	public Object next(Request req, Response res) {
+		int act_id = Integer.parseInt(req.queryParams("id"));
+		int person_id = Integer.parseInt(req.queryParams("person_id"));
+		float difficulty = Float.parseFloat(req.queryParams("d"));
+		Activity activity = activityDAO.get_by_diff(difficulty, person_id, act_id);
+		Option[] options = activityDAO.get_options_by_activity(activity);
+		String diff = "";
+		try{diff = String.format("%.2f", activity.getDifficulty());}catch(MissingFormatWidthException e) {}
+		String contents = "";
+		contents += "<form action=\"http://localhost:4567/activity/see/validate\" method=\"post\">"+
+				"      <div id=\"disciplinaMostrarAtividade\" class=\"div-title\"><h1 class=\"ex-title\">"+ activity.getSubject() +"</h1></div>\n" +
+				"      <div id=\"tituloMostrarAtividade\" class=\"center\"><h1 class=\"subtitulo\">"+ activity.getTitle() +"</h1><h4>Dificuldade (0 - 5): "+ diff +"</4></div>\n" +
+				"      <div id=\"enunciadoMostrarAtividade\" class=\"justify enunciado\">"+ activity.getStatement() +"</div>\n" +
+				"      <div onclick=\"validate_options('"+options[0].getId()+"', 'respostaOpcao1', 'respostaOpcao2', 'respostaOpcao3', 'respostaOpcao4');\"id=\"opcao1MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">A</span>   <div class=\"opcao\" id=\"respostaOpcao1\">"+options[0].getOption_text()+"</div></div>\n" +
+				"      <div onclick=\"validate_options('"+options[1].getId()+"', 'respostaOpcao2', 'respostaOpcao1', 'respostaOpcao3', 'respostaOpcao4');\"id=\"opcao2MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">B</span>   <div class=\"opcao\" id=\"respostaOpcao2\">"+options[1].getOption_text()+"</div></div>\n" +
+				"      <div onclick=\"validate_options('"+options[2].getId()+"', 'respostaOpcao3', 'respostaOpcao2', 'opcao1MostrarAtividade', 'respostaOpcao4');\"id=\"opcao3MostrarAtividade\" class=\"justify ex-option\"<span class=\"negrito\">C</span>   <div class=\"opcao\" id=\"respostaOpcao3\">"+options[2].getOption_text()+"</div></div>\n" 
+				+ "<input type=\"text\" name=\"id\" style=\"display:none\" value=\""+activity.getId()+"\">"+
+				"      <input type=\"text\" name=\"person_id\" value=\""+person_id+"\" style=\"display:none\">"
+				+ "	   <div onclick=\"validate_options('"+options[3].getId()+"', 'respostaOpcao4', 'respostaOpcao2', 'respostaOpcao3', 'respostaOpcao1');\"id=\"opcao4MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">D</span>   <div class=\"opcao\" id=\"respostaOpcao4\">"+options[3].getOption_text()+"</div></div>\n" +
+				"      <span id=\"validaRespostaSpan\" class=\"negrito center\"></span>"
+				+ "<input type=\"text\" name=\"answer\" value=\"0\" style=\"visibility:hidden\" id=\"answer\">"+
+				"		<center><button type=\"submit\">Responder</button></center></form>";
+		String body = "";
+		body += ""
+				+ "<!DOCTYPE html>\n" +
+				"<html lang=\"pt-br\">\n" +
+				"\n" +
+				"<head>\n" +
+				"  <title>FOCUS - Educação mais acessível</title>\n" +
+				"  <meta charset=\"utf-8\">\n" +
+				"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
+				"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" +
+				"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" +
+				"\n" +
+				"</head>\n" +
+				"\n" +
+				"<body>\n"
+				+ "<script type=\"text/javascript\">"
+				+ "function validate_options(id, clicked, option2, option3, option4){\n" +
+				" document.getElementById(clicked).style.backgroundColor = '#a5a5a5';"
+				+ "document.getElementById('answer').setAttribute('value', id);"
+				+ "document.getElementById(option2).style.backgroundColor = '#fff';"
+				+ "document.getElementById(option3).style.backgroundColor = '#fff';"
+				+ "document.getElementById(option4).style.backgroundColor = '#fff';" + 
+				" }"
+				+ "</script>" + 
+				"  <header>\n" +
+				"    <nav class=\"nav-top\">\n" +
+				"      <div>\n" +
+				"        <div class=\"nav-top-expand\">\n" +
+				"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" +
+				"          <input type=\"checkbox\" class=\"none\">\n" +
+				"        </div>\n" +
+				"        <h1 class=\"nav-top-logo\">FOCUS</h1>\n" +
+				"      </div>\n" +
+				"      <div>\n" +
+				"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" +
+				"        <a href=\"index.html\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" +
+				"      </div>\n" +
+				"    </nav>\n" +
+				"  </header>\n" +
+				"\n" +
+				"  <main class=\"main\">\n" +
+				"      <aside class=\"aside-bar\">\n" +
+				"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" +
+				"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" +
+				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
+				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
+				"      </aside>\n" +
+				"        <center><div class=\"act center\">\n" +
+							contents + 
+				"        </div></center>\n" + 
+				"  </main>\n" +
+				"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
+				"</body>\n" +
+				"\n" +
 				"</html>";
 		res.body(body);
 		return res.body();

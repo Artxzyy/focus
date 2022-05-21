@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import model.Person;
+
 public class PersonDAO {
 private Connection conexao;
 	
@@ -57,5 +59,32 @@ private Connection conexao;
 			System.err.println("ERROR: "+ e);
 		}
 		return result;
+	}
+	
+	public Person get_by_id(int id) {
+		Person person = null;
+		try {
+			conectar();
+			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = st.executeQuery("SELECT school_id, id, first_name, surname FROM person WHERE id = "+ id);
+			if(rs.first()) person = new Person(rs.getInt("school_id"), rs.getInt("id"), rs.getString("first_name"), rs.getString("surname"));
+			else throw new Exception("Something went wrong.");
+		}catch(Exception e) {
+			System.err.println("ERROR: "+ e);
+		}
+		return person;
+	}
+	public Person professor_of(int id) {
+		Person person = null;
+		try {
+			conectar();
+			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+			ResultSet rs = st.executeQuery("SELECT professor_id FROM student WHERE person_id = "+ id);
+			if(rs.first()) person = get_by_id(rs.getInt("professor_id"));
+			else throw new Exception("Something went wrong.");
+		}catch(Exception e) {
+			System.err.println("ERROR: "+ e);
+		}
+		return person;
 	}
 }

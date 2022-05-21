@@ -12,8 +12,13 @@ import java.sql.Statement;
 
 import model.Activity;
 import model.Option;
-
+import model.Person;
+import dao.PersonDAO;
+import dao.StudentDAO;
+import java.util.Random;
 public class ActivityDAO {
+	public static PersonDAO personDAO = new PersonDAO();
+	public static StudentDAO studentDAO = new StudentDAO();
 	private Connection conexao;
 	
 	public ActivityDAO() {
@@ -80,8 +85,7 @@ public class ActivityDAO {
 		try {
 			conectar();
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT activity.professor_id, activity.id, activity.title, activity.subject, activity.theme, "
-					+ "activity.statement "
+			ResultSet rs = st.executeQuery("SELECT * "
 					+ "FROM activity WHERE activity."
 					+ "professor_id = "+professor_id);
 			if(rs.next()) {
@@ -234,5 +238,92 @@ public class ActivityDAO {
 			System.err.println("ERROR: "+ e);
 		}
 		return result;
+	}
+	public Activity get_by_diff(float diff, int person_id, int last_id_activity) {
+		Activity a = null;
+		Activity[] candidates = null;
+		Person p = null;
+		if(personDAO.is_professor(person_id)) {
+			try {
+				conectar();
+				Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = st.executeQuery("SELECT * FROM activity WHERE professor_id = "+ person_id +" AND id != "+last_id_activity
+						+ " AND difficulty > "+ (diff - 1.0f) +"AND difficulty < "+(diff + 1.0f));
+				if(rs.first()) {
+					rs.last();
+					int size = rs.getRow();
+					candidates = new Activity[size];
+					rs.beforeFirst();
+					int i = 0;
+					while(rs.next()) {
+						candidates[i] = new Activity(rs.getInt("professor_id"), rs.getInt("id"), rs.getString("title"), rs.getString("subject")
+								, rs.getString("theme"), rs.getString("statement"), rs.getFloat("difficulty"), rs.getInt("qtt_answers"), rs.getInt("qtt_wrong_answers"));
+						i++;
+					}
+					Random gen = new Random();
+					int pos = gen.nextInt() % size;
+					a = candidates[pos];
+				}else {
+					rs = st.executeQuery("SELECT * FROM activity WHERE professor_id = "+ person_id +" AND id != "+last_id_activity
+							+ " AND difficulty > "+ (diff - 2.0f) +"AND difficulty < "+(diff + 2.0f));
+					if(rs.next()) {
+						rs.last();
+						int size = rs.getRow();
+						candidates = new Activity[size];
+						rs.beforeFirst();
+						int i = 0;
+						while(rs.next()) {
+							candidates[i] = new Activity(rs.getInt("professor_id"), rs.getInt("id"), rs.getString("title"), rs.getString("subject")
+									, rs.getString("theme"), rs.getString("statement"), rs.getFloat("difficulty"), rs.getInt("qtt_answers"), rs.getInt("qtt_wrong_answers"));
+							i++;
+						}
+						Random gen = new Random();
+						int pos = gen.nextInt() % size;
+						a = candidates[pos];	
+					}
+				}
+			}catch(Exception e) { System.err.println("ERROR:"+ e.getMessage()); }
+		}else {
+			try {
+				conectar();
+				Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = st.executeQuery("SELECT * FROM activity WHERE professor_id = "+ personDAO.professor_of(person_id).getId() +" AND id != "+last_id_activity
+						+ " AND difficulty > "+ (diff - 1.0f) +"AND difficulty < "+(diff + 1.0f));
+				if(rs.first()) {
+					rs.last();
+					int size = rs.getRow();
+					candidates = new Activity[size];
+					rs.beforeFirst();
+					int i = 0;
+					while(rs.next()) {
+						candidates[i] = new Activity(rs.getInt("professor_id"), rs.getInt("id"), rs.getString("title"), rs.getString("subject")
+								, rs.getString("theme"), rs.getString("statement"), rs.getFloat("difficulty"), rs.getInt("qtt_answers"), rs.getInt("qtt_wrong_answers"));
+						i++;
+					}
+					Random gen = new Random();
+					int pos = gen.nextInt() % size;
+					a = candidates[pos];
+				}else {
+					rs = st.executeQuery("SELECT * FROM activity WHERE professor_id = "+ personDAO.professor_of(person_id).getId() +" AND id != "+last_id_activity
+							+ " AND difficulty > "+ (diff - 2.0f) +"AND difficulty < "+(diff + 2.0f));
+					if(rs.next()) {
+						rs.last();
+						int size = rs.getRow();
+						candidates = new Activity[size];
+						rs.beforeFirst();
+						int i = 0;
+						while(rs.next()) {
+							candidates[i] = new Activity(rs.getInt("professor_id"), rs.getInt("id"), rs.getString("title"), rs.getString("subject")
+									, rs.getString("theme"), rs.getString("statement"), rs.getFloat("difficulty"), rs.getInt("qtt_answers"), rs.getInt("qtt_wrong_answers"));
+							i++;
+						}
+						Random gen = new Random();
+						int pos = gen.nextInt() % size;
+						a = candidates[pos];	
+					}
+				}
+			}catch(Exception e) { System.err.println("ERROR:"+ e.getMessage()); }
+		}
+		return a;
 	}
 }
