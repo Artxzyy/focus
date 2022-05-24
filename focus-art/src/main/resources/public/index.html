@@ -46,33 +46,44 @@
                     </h1>
                 </header>
                 <main class="main-register">
+                	<form id="registerFormId" action="http://localhost:4567/register/validate" method="post" autocomplete="off">
+                    <div class="div-input">
+                        <label for="name"><i class="fa-solid fa-user"></i></label>
+                        <input type="text" name="name" placeholder="Nome">
+                    </div>
+                    <div class="div-input">
+                        <label for="surname"><i class="fa-solid fa-user"></i></label>
+                        <input type="text" name="surname" placeholder="Sobrenome">
+                    </div>
+                    
                     <div class="div-input">
                         <label for="usernameRegisterId"><i class="fa-solid fa-user"></i></label>
-                        <input type="text" placeholder="Your username" id="usernameRegisterId">
+                        <input type="text" name="username" placeholder="Nome de usuário" id="usernameRegisterId">
                     </div>
                     <div class="div-input">
                         <label for="emailRegisterId"><i class="fa-solid fa-at"></i></label>
-                        <input type="e-mail" placeholder="Your e-mail" id="emailRegisterId">
+                        <input type="e-mail" name="email" placeholder="E-mail" id="emailRegisterId">
                     </div>
                     <div class="div-input">
                         <label for="password1RegisterId"><i class="fa-solid fa-lock"></i></label>
-                        <input type="password" placeholder="Your password" id="password1RegisterId">
+                        <input type="password" name="p" placeholder="Senha" id="password1RegisterId">
                     </div>
                     <div class="div-input">
                         <label for="password2RegisterId"><i class="fa-solid fa-lock"></i></label>
-                        <input type="password" placeholder="Repeat password" id="password2RegisterId">
+                        <input type="password" name="repeat_p" placeholder="Repita sua senha" id="password2RegisterId">
+                        
                     </div>
                     <div class="p">
-                        <div class="last">
-                            <span class="bold">Are you a professor?</span>
-                            <label for="isProfessor">Yes</label>
-                            <input type="radio" name="isProfessor" id="isProfessor">
-                            <label for="isProfessor">No</label>
-                            <input type="radio" name="isProfessor" id="isNotProfessor" checked>
-                        </div>
+                    	<div class="div-input">
+                        	<input type="text" name="school_id" placeholder="Identificador de sua escola">
+                    	</div>
+                    	<div class="div-input">
+                        	<input type="text" name="prof_id" placeholder="Identificador de seu professor">
+                    	</div>
                         <div class="float">
                             <input id="registerBtn" type="submit" value="Create account" class="submit-button-reg">
                         </div>
+                        </form>
                     </div>
                     <div class="p" id="registerValidationId">
                         <span class="block text-error" id="spanUsernameRegister"><i

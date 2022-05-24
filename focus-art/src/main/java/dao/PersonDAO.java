@@ -1,11 +1,13 @@
 package dao;
 
+import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import model.Activity;
 import model.Person;
 
 public class PersonDAO {
@@ -13,6 +15,23 @@ private Connection conexao;
 	
 	public PersonDAO() {
 		conexao = null;
+	}
+	
+	public static String encryptPassword(final String base) {
+		try{
+			final MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			final byte[] hash = digest.digest(base.getBytes("UTF-8"));
+			final StringBuilder hexString = new StringBuilder();
+			for (int i = 0; i < hash.length; i++) {
+				final String hex = Integer.toHexString(0xff & hash[i]);
+				if(hex.length() == 1)
+					hexString.append('0');
+				hexString.append(hex);
+			}
+			return hexString.toString();
+		} catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
 	}
 	public boolean conectar() {
 		String driverName = "org.postgresql.Driver";                    
@@ -86,5 +105,26 @@ private Connection conexao;
 			System.err.println("ERROR: "+ e);
 		}
 		return person;
+	}
+	public boolean update(Person p, int id) {
+		boolean result = false;
+		try {
+			conectar();
+			Statement st = conexao.createStatement();
+			st.executeUpdate("UPDATE person SET school_id = "
+					+ "" +p.getSchool_id() + ", id = "
+					+ "" + p.getId() + ", first_name = "
+					+ "'" + p.getFirst_name() + "', surname = "
+					+ "'" + p.getSurname() + "', login = "
+					+ "'" + p.getLogin() + "', password = "
+					+ "'" + p.getPassword() + "'"
+							+ " WHERE id = "+id);
+			result = true;
+			close();
+		}catch(Exception e) {
+			System.err.println("ERROR: "+ e);
+			result = false;
+		}
+		return result;
 	}
 }

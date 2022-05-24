@@ -2,6 +2,8 @@ package dao;
 
 import model.Student;
 import model.Person;
+
+import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -13,7 +15,22 @@ public class StudentDAO {
 	public StudentDAO() {
 		conexao = null;
 	}
-	
+	public static String encryptPassword(final String base) {
+		try{
+			final MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			final byte[] hash = digest.digest(base.getBytes("UTF-8"));
+			final StringBuilder hexString = new StringBuilder();
+			for (int i = 0; i < hash.length; i++) {
+				final String hex = Integer.toHexString(0xff & hash[i]);
+				if(hex.length() == 1)
+					hexString.append('0');
+				hexString.append(hex);
+			}
+			return hexString.toString();
+		} catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
+	}
 	public boolean conectar() {
 		String driverName = "org.postgresql.Driver";                    
 		String serverName = "localhost";
@@ -49,18 +66,18 @@ public class StudentDAO {
 		return status;
 	}
 	
-	public boolean add(Student student) {
+	public boolean add(Person student, int prof_id) {
 		boolean status = false;
 		try {  
 			Statement st = conexao.createStatement();
-			st.executeUpdate("INSERT INTO student (school_id, professor_id, id, first_name, surname, login, password) "
+			st.executeUpdate("INSERT INTO person (school_id, id, first_name, surname, login, password) "
 					       + "VALUES (" + student.getSchool_id() + ", "
-					       + student.getProfessor_id() + ", "
-					       +(Student.getMaxId() + 1)+ ", '"
-					       + student.getFirst_name() + "', '"  
+					       +(student.getId())+ ", '"
+					       + student.getFirst_name() + "', '"
 					       + student.getSurname() + "', '"
 					       + student.getLogin() + "', '"
 					       + student.getPassword() + "');");
+			st.executeUpdate("INSERT INTO student VALUES ("+ student.getId() +", "+ prof_id +")");
 			st.close();
 			status = true;
 		} catch (SQLException u) {  

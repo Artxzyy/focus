@@ -2,7 +2,7 @@ package model;
 
 public class Student {
 	public static int count = 20;
-	public static int max_id;
+	public static int max_id = 21;
 	private int school_id;
 	private int professor_id;
 	private int id;
@@ -85,7 +85,7 @@ public class Student {
 		return id;
 	}
 	public static int getMaxId() {
-		return max_id;
+		return ++max_id;
 	}
 	public Student clone() {
 		Student copy = new Student(school_id, professor_id, id, first_name, surname, login, password);

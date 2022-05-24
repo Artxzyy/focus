@@ -1,4 +1,6 @@
 package server;
+import java.security.MessageDigest;
+
 import dao.ContentDAO;
 import dao.ProfessorDAO;
 import dao.StudentDAO;
@@ -11,16 +13,27 @@ public class PersonService {
 	public static ContentDAO contentDAO = new ContentDAO();
 	public static ProfessorDAO professorDAO = new ProfessorDAO();
 	public static StudentDAO studentDAO = new StudentDAO();
+	public static String encryptPassword(final String base) {
+		try{
+			final MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			final byte[] hash = digest.digest(base.getBytes("UTF-8"));
+			final StringBuilder hexString = new StringBuilder();
+			for (int i = 0; i < hash.length; i++) {
+				final String hex = Integer.toHexString(0xff & hash[i]);
+				if(hex.length() == 1)
+					hexString.append('0');
+				hexString.append(hex);
+			}
+			return hexString.toString();
+		} catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
+	}
 	public Object login(Request req, Response res) {
 		boolean valid = false;
 		try {
 			String login = req.queryParams("login");
-			//SecureRandom random = new SecureRandom();
-			//byte[] salt = new byte[16];
-			//random.nextBytes(salt);
-			//KeySpec spec = new PBEKeySpec(req.queryParams("password").toCharArray(), salt, 200, 128);
-			//String hash = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1").generateSecret(spec).getEncoded().toString();
-			String password = req.queryParams("password"); // tmp
+			String password = encryptPassword(req.queryParams("password"));
 			Person[] students = studentDAO.getStudents();
 			Person[] professors = professorDAO.getProfessors();
 			Person correct_user = null;
@@ -158,6 +171,13 @@ public class PersonService {
 			res.status(400);
 			res.body("ERROR: "+ res.status() + " | "+ e.getMessage());
 		}
+		return res.body();
+	}
+	
+	public Object update(Request req, Response res) {
+		String login = req.queryParams("username");
+		String password1 = encryptPassword(req.queryParams("p"));
+		String repeat_p = encryptPassword(req.queryParams("repeat_p"));
 		return res.body();
 	}
 }

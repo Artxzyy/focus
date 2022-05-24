@@ -31,5 +31,6 @@ public class App {
         post("/content/update", (req, res) -> cs.updateSave(req, res));
         get("/content/delete/:id", (req, res) -> cs.delete(req, res));
         post("/main", (req, res) -> ps.login(req, res));
+        post("/register/validate", (req, res) -> ss.add(req, res));
     }
 }

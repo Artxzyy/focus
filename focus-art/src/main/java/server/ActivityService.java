@@ -1,5 +1,6 @@
 package server;
 
+import java.text.SimpleDateFormat;
 import java.util.MissingFormatWidthException;
 
 import dao.ActivityDAO;
@@ -275,7 +276,6 @@ public class ActivityService {
 				"      <span id=\"validaRespostaSpan\" class=\"negrito center\"></span>"
 				+ "<input type=\"text\" name=\"answer\" value=\"0\" style=\"visibility:hidden\" id=\"answer\">"+
 				"		<center><button type=\"submit\">Responder</button></center>";
-		System.out.println("TESTE");
 		String body = "";
 		body += ""
 				+ "<!DOCTYPE html>\n" +
@@ -323,9 +323,9 @@ public class ActivityService {
 				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
 				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 				"      </aside>\n" +
-				"        <center><div class=\"act center\">\n" +
+				"        <div style=\"position: relative; width: 80%; left: 230px; top: 20px;\">\n" +
 							contents + 
-				"        </div></center>\n" + 
+				"        </div>\n" + 
 				"  </main>\n" +
 				"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
 				"</body>\n" +
@@ -447,11 +447,9 @@ public class ActivityService {
 					"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
 					"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 					"      </aside>\n" +
-					"      <article id=\"tela\" class=\"content\">\n" +
-					"        <div id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
+					"        <div id=\"aparecerAtividadeDiv\" style=\"position: relative; width: 80%; left: 230px; top: 20px;\">\n" +
 								contents + 
 					"        </div>\n" +
-					"      </article>\n" +
 					"  </main>\n" +
 					"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
 					"</body>\n" +
@@ -524,11 +522,9 @@ public class ActivityService {
 		"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
 		"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 		"      </aside>\n" +
-		"      <article id=\"tela\" class=\"content\">\n" +
-		"        <div id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
+		"        <div id=\"aparecerAtividadeDiv\" style=\"position: relative; width: 80%; left: 230px; top: 20px;\">\n" +
 					contents + 
 		"        </div>\n" +
-		"      </article>\n" +
 		"  </main>\n" +
 		"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
 		"</body>\n" +
@@ -633,9 +629,9 @@ public class ActivityService {
 					"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>" + 
 					"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>" + 
 					"      </aside>" + 
-					"        <center><div class=\"content center\">" + 
-					contents + 
-					"        </div></center>" + 
+					"        <div style=\"position: relative; width: 80%; left: 230px; top: 20px;\">" + 
+								contents + 
+					"        </div>" + 
 					"  </main>" + 
 					"  <script src=\"js/scriptsAtividade.js\"></script>" + 
 					"</body>" + 
@@ -713,9 +709,9 @@ public class ActivityService {
 					"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>" + 
 					"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>" + 
 					"      </aside>" + 
-					"        <center><div class=\"content center\">" + 
+					"        <div style=\"position: relative; width: 80%; left: 230px; top: 20px;\">" + 
 					contents + 
-					"        </div></center>" + 
+					"        </div>" + 
 					"  </main>" + 
 					"  <script src=\"js/scriptsAtividade.js\"></script>" + 
 					"</body>" + 
@@ -828,9 +824,9 @@ public class ActivityService {
 				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>" + 
 				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>" + 
 				"      </aside>" + 
-				"        <center><div class=\"act center\"> "
+				"        <div style=\"position: relative; width: 80%; left: 230px; top: 20px;\"> "
 				+ contents +
-				"        </div></center>\n"+ 
+				"        </div>\n"+ 
 				"  </main> "+ 
 				"  <script src=\"js/scriptsAtividade.js\"></script>" + 
 				"</body> "+
@@ -907,9 +903,9 @@ public class ActivityService {
 				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
 				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 				"      </aside>\n" +
-				"        <center><div class=\"act center\">\n" +
+				"        <div style=\"position: relative; width: 80%; left: 230px; top: 20px;\">\n" +
 							contents + 
-				"        </div></center>\n" + 
+				"        </div>\n" + 
 				"  </main>\n" +
 				"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
 				"</body>\n" +

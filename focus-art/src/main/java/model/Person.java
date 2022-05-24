@@ -1,9 +1,8 @@
 package model;
 
-// import java.security.MessageDigest;
 public class Person {
 	public static int count = 20;
-	public static int max_id;
+	public static int max_id = 21;
 	private int school_id; // fk
 	private int id; // pk
 	private String first_name;
@@ -90,7 +89,7 @@ public class Person {
 		this.password = password;
 	}
 	public static int getMaxId() {
-		return max_id;
+		return ++max_id;
 	}
 	public int getId() {
 		return id;
