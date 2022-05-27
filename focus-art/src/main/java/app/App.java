@@ -2,6 +2,7 @@ package app;
 // test
 import static spark.Spark.*;
 import server.StudentService;
+import server.MessageService;
 import server.ActivityService;
 import server.ContentService;
 import server.PersonService;
@@ -10,6 +11,7 @@ public class App {
 	public static PersonService ps = new PersonService();
 	public static ContentService cs = new ContentService();
 	public static ActivityService as = new ActivityService();
+	private static MessageService ms= new MessageService();
     public static void main(String[] args) {
     	staticFiles.location("/public");
     	port(4567);
@@ -32,5 +34,11 @@ public class App {
         get("/content/delete/:id", (req, res) -> cs.delete(req, res));
         post("/main", (req, res) -> ps.login(req, res));
         post("/register/validate", (req, res) -> ss.add(req, res));
+        get("/message/one/:msgid",(request,response)->ms.see1Msg(request, response));
+		get("/message/:id",(request,response)->ms.seeAllMsg(request, response));
+		get("/message/edit/:msgid",(request,response)->ms.editMsg(request, response));
+		get("/message/upd/:msgid",(request,response)->ms.updateMsg(request,response));
+		get("/message/cre/:senderid",(request,response)->ms.createMsg(request,response));
+		get("/message/ate/:senderid",(request,response)->ms.sendMsg(request,response));
     }
 }
