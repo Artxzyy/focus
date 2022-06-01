@@ -63,6 +63,10 @@ body {
     margin-right: 4rem;
 }
 
+.flex-form{
+    width: 70%;
+    margin: 1rem;
+}
 .submit-button {
     border-radius: 999px;
     background-color: var(--sky-light);

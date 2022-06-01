@@ -73,8 +73,7 @@ public class Option {
 	public void setOption_text(String text) {
 		this.text = text;
 	}
-
-	public boolean isIs_correct() {
+	public boolean getIsCorrect() {
 		return is_correct;
 	}
 

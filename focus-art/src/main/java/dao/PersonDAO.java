@@ -3,6 +3,7 @@ package dao;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -70,8 +71,10 @@ private Connection conexao;
 		boolean result = false;
 		try {
 			conectar();
-			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT * FROM professor WHERE person_id = "+id);
+			String sql = "SELECT * FROM professor WHERE person_id = ?";
+			PreparedStatement pst = conexao.prepareStatement(sql);
+			pst.setString(1, Integer.toString(id));
+			ResultSet rs = pst.executeQuery(sql);
 			if(rs.first()) result = true;
 			close();
 		}catch(Exception e) {
@@ -85,7 +88,10 @@ private Connection conexao;
 		try {
 			conectar();
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT school_id, id, first_name, surname FROM person WHERE id = "+ id);
+			String sql = "SELECT school_id, id, first_name, surname FROM person WHERE id = ?";
+			PreparedStatement pst = conexao.prepareStatement(sql);
+			pst.setString(1, Integer.toString(id));
+			ResultSet rs = pst.executeQuery(sql);
 			if(rs.first()) person = new Person(rs.getInt("school_id"), rs.getInt("id"), rs.getString("first_name"), rs.getString("surname"));
 			else throw new Exception("Something went wrong.");
 		}catch(Exception e) {
@@ -97,8 +103,10 @@ private Connection conexao;
 		Person person = null;
 		try {
 			conectar();
-			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT professor_id FROM student WHERE person_id = "+ id);
+			String sql = "SELECT professor_id FROM student WHERE person_id = ?";
+			PreparedStatement pst = conexao.prepareStatement(sql);
+			pst.setString(1, Integer.toString(id));
+			ResultSet rs = pst.executeQuery(sql);
 			if(rs.first()) person = get_by_id(rs.getInt("professor_id"));
 			else throw new Exception("Something went wrong.");
 		}catch(Exception e) {
@@ -110,15 +118,26 @@ private Connection conexao;
 		boolean result = false;
 		try {
 			conectar();
-			Statement st = conexao.createStatement();
-			st.executeUpdate("UPDATE person SET school_id = "
-					+ "" +p.getSchool_id() + ", id = "
-					+ "" + p.getId() + ", first_name = "
-					+ "'" + p.getFirst_name() + "', surname = "
-					+ "'" + p.getSurname() + "', login = "
-					+ "'" + p.getLogin() + "', password = "
-					+ "'" + p.getPassword() + "'"
-							+ " WHERE id = "+id);
+			String sql = "UPDATE person SET school_id = "
+					+ "?, id = "
+					+ "?, first_name = "
+					+ "'?', surname = "
+					+ "'?', email = "
+					+ "'?', login = "
+					+ "'?', password = "
+					+ "'?'"
+							+ " WHERE id = ?";
+			PreparedStatement pst = conexao.prepareStatement(sql);
+			pst.setString(1, Integer.toString(p.getSchool_id()));
+			pst.setString(2, Integer.toString(p.getId()));
+			pst.setString(3, p.getFirst_name());
+			pst.setString(4, p.getSurname());
+			pst.setString(5, p.getEmail());
+			pst.setString(6, p.getLogin());
+			pst.setString(7, p.getPassword());
+			pst.setString(8, Integer.toString(id));
+			ResultSet rs = pst.executeQuery(sql);
+			pst.executeUpdate(sql);
 			result = true;
 			close();
 		}catch(Exception e) {

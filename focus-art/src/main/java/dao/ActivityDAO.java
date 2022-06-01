@@ -196,7 +196,7 @@ public class ActivityDAO {
 						+ activity.getId() + ", "
 						+ i.getId() + ", "
 						+ "'" +i.getOption_text() + "', "
-						+ i.isIs_correct()+ ");");	
+						+ i.getIsCorrect()+ ");");	
 			}
 			close();
 		}catch(Exception e) {
@@ -232,6 +232,31 @@ public class ActivityDAO {
 					+ "'" + a.getQttAnswers() + "', qtt_wrong_answers = "
 					+ "'" + a.getQttWrongAnswers() + "'"
 							+ " WHERE id = "+id);
+			result = true;
+			close();
+		}catch(Exception e) {
+			System.err.println("ERROR: "+ e);
+		}
+		return result;
+	}
+	public boolean update(Activity a, Option[] options, int id) {
+		boolean result = false;
+		try {
+			conectar();
+			Statement st = conexao.createStatement();
+			st.executeUpdate("UPDATE activity SET title = "
+					+ "'" +a.getTitle() + "', subject = "
+					+ "'" + a.getSubject() + "', theme = "
+					+ "'" + a.getTheme() + "', statement = "
+					+ "'" + a.getStatement() + "', difficulty = "
+					+ "'" + a.getDifficulty() + "', qtt_answers = "
+					+ "'" + a.getQttAnswers() + "', qtt_wrong_answers = "
+					+ "'" + a.getQttWrongAnswers() + "'"
+							+ " WHERE id = "+id);
+			for(int i = 0; i < 4; i++) {
+				System.out.println(options[i].getOption_text() + " " + options[i].getIsCorrect() + " " + options[i].getId());
+				st.executeUpdate("UPDATE option SET text = '"+ options[i].getOption_text() +"', is_correct = "+ options[i].getIsCorrect() +" WHERE id = "+ options[i].getId());
+			}
 			result = true;
 			close();
 		}catch(Exception e) {

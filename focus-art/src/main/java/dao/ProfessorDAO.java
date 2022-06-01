@@ -81,7 +81,7 @@ public class ProfessorDAO {
 	             students = new Person[rs.getRow()];
 	             rs.beforeFirst();
 	             for(int i = 0; rs.next(); i++) {
-	                students[i] = new Person(rs.getInt("school_id"), rs.getInt("person_id"), rs.getString("first_name"), rs.getString("surname"), rs.getString("login"), rs.getString("password"));
+	                students[i] = new Person(rs.getInt("school_id"), rs.getInt("person_id"), rs.getString("first_name"), rs.getString("surname"), rs.getString("email"), rs.getString("login"), rs.getString("password"));
 	             }
 	          }
 	          close();

@@ -467,10 +467,28 @@ public class ActivityService {
 		String subject = req.queryParams("subject");
 		String theme = req.queryParams("theme");
 		String statement = req.queryParams("statement");
+		String op_a = req.queryParams("a");
+		String op_b = req.queryParams("b");
+		String op_c = req.queryParams("c");
+		String op_d = req.queryParams("d");
+		String or1 = req.queryParams("option_radio1");
+		String or2 = req.queryParams("option_radio2");
+		String or3 = req.queryParams("option_radio3");
+		String or4 = req.queryParams("option_radio4");
 		Activity a = activityDAO.get_by_id(id);
 		Activity updated = new Activity(person_id, id, title, subject, theme, statement, a.getDifficulty(), a.getQttAnswers(), a.getQttWrongAnswers());
+		Option[] old_options = activityDAO.get_options_by_activity(a);
+		Option[] options  = new Option[4];
+		if(or1 != null) options[0] = new Option(a.getId(), old_options[0].getId(), op_a, true);
+		else options[0] = new Option(a.getId(), old_options[0].getId(), op_a, false);
+		if(or2 != null) options[1] = new Option(a.getId(), old_options[1].getId(), op_b, true);
+		else options[1] = new Option(a.getId(), old_options[1].getId(), op_b, false);
+		if(or3 != null) options[2] = new Option(a.getId(), old_options[2].getId(), op_c, true);
+		else options[2] = new Option(a.getId(), old_options[2].getId(), op_c, false);
+		if(or4 != null) options[3] = new Option(a.getId(), old_options[3].getId(), op_d, true);
+		else options[3] = new Option(a.getId(), old_options[3].getId(), op_d, false);
 		String contents = "";
-		if(activityDAO.update(updated, id)) {
+		if(activityDAO.update(updated, options, id)) {
 			res.status(200);
 			contents += "A atividade foi atualizada com sucesso";
 		}else {
@@ -650,13 +668,17 @@ public class ActivityService {
 		if(personDAO.is_professor(person_id)) {
 			contents += ""
 					+ "<form action=\"http://localhost:4567/activity/update/validate\" method=\"post\">"
-					+ "<h4>Caso algum campo precise se manter igual antes, copie o valor antigo em seu respectivo campo.</h4>"
-					+ "<div><input type=\"text\" class=\"nav-top-input\" name=\"id\" value=\""+id+"\" style=\"display:none\"></div>"
-					+ "<div><input type=\"text\" class=\"nav-top-input\" name=\"person_id\" value=\""+person_id+"\" style=\"display:none\"></div>"
-					+ "<div><input type=\"text\" class=\"nav-top-input\" name=\"title\" placeholder=\"Título\"></div></br>"
-					+ "<div><input type=\"text\" class=\"nav-top-input\" name=\"subject\" placeholder=\"Disciplina\"></div></br>"
-					+ "<div><input type=\"text\" class=\"nav-top-input\" name=\"theme\" placeholder=\"Matéria\"></div></br>"
-					+ "<div><input type=\"text\" class=\"nav-top-input\" name=\"statement\" placeholder=\"Enunciado\"></div></div></br>"
+					+ "<div><input type=\"text\" class=\"nav-top-input flex-form\" name=\"id\" value=\""+id+"\" style=\"display:none\"></div>"
+					+ "<div><input type=\"text\" class=\"nav-top-input flex-form\" name=\"person_id\" value=\""+person_id+"\" style=\"display:none\"></div>"
+					+ "<div><input type=\"text\" class=\"nav-top-input flex-form\" name=\"title\" placeholder=\"Título\"></div></br>"
+					+ "<div><input type=\"text\" class=\"nav-top-input flex-form\" name=\"subject\" placeholder=\"Disciplina\"></div></br>"
+					+ "<div><input type=\"text\" class=\"nav-top-input flex-form\" name=\"theme\" placeholder=\"Matéria\"></div></br>"
+					+ "<div><input type=\"text\" class=\"nav-top-input flex-form\" name=\"statement\" placeholder=\"Enunciado\"></div></div></br>"
+					+ "<div style=\"position: relative;\">"
+					+ "<div><input type=\"radio\" aria-label=\"Radio button for following text input\" name=\"option_radio1\" id=\"respostaOpcaoC\"><div><input type=\"text\" class=\"nav-top-input flex-form\" name=\"a\" placeholder=\"Opção A\"></div></div><br>\n" + 
+					"  <div><input type=\"radio\" aria-label=\"Radio button for following text input\" name=\"option_radio2\" id=\"respostaOpcaoC\"><div><input type=\"text\" class=\"nav-top-input flex-form\" name=\"b\" placeholder=\"Opção B\"></div></div><br>\n" + 
+					"  <div><input type=\"radio\" aria-label=\"Radio button for following text input\" name=\"option_radio3\" id=\"respostaOpcaoC\"><div><input type=\"text\" class=\"nav-top-input flex-form\" name=\"c\" placeholder=\"Opção C\"></div></div><br>\n" + 
+					"  <div><input type=\"radio\" aria-label=\"Radio button for following text input\" name=\"option_radio4\" id=\"respostaOpcaoC\"><div><input type=\"text\" class=\"nav-top-input flex-form\" name=\"d\" placeholder=\"Opção D\"></div></div><br>"
 					+ "<br><button type=\"submit\">Atualizar dados</button>"
 					+ "</form>";
 			b = true;

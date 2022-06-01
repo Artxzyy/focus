@@ -11,9 +11,9 @@ public class App {
 	public static ContentService cs = new ContentService();
 	public static ActivityService as = new ActivityService();
     public static void main(String[] args) {
-    	staticFiles.location("/public");
     	port(4567);
-    	get("/content/see/:id", (req, res) -> cs.see(req, res));
+    	staticFiles.location("/public");
+    	
     	get("/activity/see/:id", (req, res) -> as.see(req, res));
     	post("/activity/see/validate", (req, res) -> as.validate(req, res));
     	post("/activity/see/next", (req, res) -> as.next(req, res));
@@ -24,6 +24,8 @@ public class App {
     	post("/activity/update/form", (req, res) -> as.update(req, res));
     	post("/activity/delete", (req, res) -> as.delete(req, res));
     	post("/update", (req, res) -> as.change(req, res));
+    	
+    	get("/content/see/:id", (req, res) -> cs.see(req, res));
         get("/content/see/:id", (req, res) -> cs.see(req, res));
         get("/content/check_user_type/:id", (req, res) -> cs.checkUserType(req, res));
         post("/content/insert", (req, res) -> cs.insert(req, res));
@@ -31,6 +33,8 @@ public class App {
         post("/content/update", (req, res) -> cs.updateSave(req, res));
         get("/content/delete/:id", (req, res) -> cs.delete(req, res));
         post("/main", (req, res) -> ps.login(req, res));
+        
         post("/register/validate", (req, res) -> ss.add(req, res));
+        post("/user/update/validate", (req, res) -> ss.update(req, res));
     }
 }
