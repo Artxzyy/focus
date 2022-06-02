@@ -1,12 +1,10 @@
 package server;
 
-import java.text.SimpleDateFormat;
 import java.util.MissingFormatWidthException;
 
 import dao.ActivityDAO;
 import dao.PersonDAO;
 import model.Activity;
-import model.Content;
 import model.Person;
 import model.Option;
 import spark.Request;
@@ -767,7 +765,8 @@ public class ActivityService {
 					"      <div id=\"opcao2MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">B</span>   <div class=\"opcao\" id=\"respostaOpcao2\">"+options[1].getOption_text()+"</div></div>\n" +
 					"      <div id=\"opcao3MostrarAtividade\" class=\"justify ex-option\"<span class=\"negrito\">C</span>   <div class=\"opcao\" id=\"respostaOpcao3\">"+options[2].getOption_text()+"</div></div>\n" 
 					+ "<input type=\"text\" name=\"id\" style=\"display:none\" value=\""+act_id+"\">"+
-					"      <input type=\"text\" name=\"person_id\" value=\""+person_id+"\" style=\"display:none\">"
+					"      <input type=\"text\" name=\"person_id\" value=\""+person_id+"\" style=\"display:none\">"+
+					"      <input type=\"text\" name=\"status\" value=\"1\" style=\"display:none\">"
 					+ "	   <div id=\"opcao4MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">D</span>   <div class=\"opcao\" id=\"respostaOpcao4\">"+options[3].getOption_text()+"</div></div>\n" +
 					"      <span id=\"validaRespostaSpan\" class=\"negrito center\"></span>"
 					+ "<input type=\"text\" name=\"answer\" value=\"0\" style=\"display:none\" id=\"answer\">"
@@ -788,7 +787,8 @@ public class ActivityService {
 					"      <div id=\"opcao2MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">B</span>   <div class=\"opcao\" id=\"respostaOpcao2\">"+options[1].getOption_text()+"</div></div>\n" +
 					"      <div id=\"opcao3MostrarAtividade\" class=\"justify ex-option\"<span class=\"negrito\">C</span>   <div class=\"opcao\" id=\"respostaOpcao3\">"+options[2].getOption_text()+"</div></div>\n" 
 					+ "<input type=\"text\" name=\"id\" style=\"display:none\" value=\""+act_id+"\">"+
-					"      <input type=\"text\" name=\"person_id\" value=\""+person_id+"\" style=\"display:none\">"
+					"      <input type=\"text\" name=\"person_id\" value=\""+person_id+"\" style=\"display:none\">"+
+					"      <input type=\"text\" name=\"status\" value=\"0\" style=\"display:none\">"
 					+ "	   <div id=\"opcao4MostrarAtividade\" class=\"justify ex-option\"><span class=\"negrito\">D</span>   <div class=\"opcao\" id=\"respostaOpcao4\">"+options[3].getOption_text()+"</div></div>\n" +
 					"      <span id=\"validaRespostaSpan\" class=\"negrito center\"></span>"
 					+ "<input type=\"text\" name=\"answer\" value=\"0\" style=\"display:none\" id=\"answer\">"
@@ -858,9 +858,10 @@ public class ActivityService {
 	}
 	public Object next(Request req, Response res) {
 		int act_id = Integer.parseInt(req.queryParams("id"));
+		int status = Integer.parseInt(req.queryParams("status"));
 		int person_id = Integer.parseInt(req.queryParams("person_id"));
 		float difficulty = Float.parseFloat(req.queryParams("d"));
-		Activity activity = activityDAO.get_by_diff(difficulty, person_id, act_id);
+		Activity activity = activityDAO.get_by_diff(difficulty, person_id, act_id, status);
 		Option[] options = activityDAO.get_options_by_activity(activity);
 		String diff = "";
 		try{diff = String.format("%.2f", activity.getDifficulty());}catch(MissingFormatWidthException e) {}

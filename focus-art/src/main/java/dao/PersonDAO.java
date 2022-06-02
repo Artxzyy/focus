@@ -71,13 +71,15 @@ private Connection conexao;
 		boolean result = false;
 		try {
 			conectar();
-			String sql = "SELECT * FROM professor WHERE person_id = ?";
-			PreparedStatement pst = conexao.prepareStatement(sql);
+			String sql = "SELECT * FROM professor WHERE person_id = CAST(? AS integer)";
+			PreparedStatement pst = conexao.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			pst.setString(1, Integer.toString(id));
-			ResultSet rs = pst.executeQuery(sql);
+			System.out.println("TESTE!");
+			ResultSet rs = pst.executeQuery();
 			if(rs.first()) result = true;
 			close();
 		}catch(Exception e) {
+			System.out.println("Caiu no catch!");
 			System.err.println("ERROR: "+ e);
 		}
 		return result;
@@ -87,11 +89,10 @@ private Connection conexao;
 		Person person = null;
 		try {
 			conectar();
-			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			String sql = "SELECT school_id, id, first_name, surname FROM person WHERE id = ?";
-			PreparedStatement pst = conexao.prepareStatement(sql);
+			String sql = "SELECT school_id, id, first_name, surname FROM person WHERE id = CAST(? AS integer)";
+			PreparedStatement pst = conexao.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			pst.setString(1, Integer.toString(id));
-			ResultSet rs = pst.executeQuery(sql);
+			ResultSet rs = pst.executeQuery();
 			if(rs.first()) person = new Person(rs.getInt("school_id"), rs.getInt("id"), rs.getString("first_name"), rs.getString("surname"));
 			else throw new Exception("Something went wrong.");
 		}catch(Exception e) {
@@ -103,10 +104,10 @@ private Connection conexao;
 		Person person = null;
 		try {
 			conectar();
-			String sql = "SELECT professor_id FROM student WHERE person_id = ?";
-			PreparedStatement pst = conexao.prepareStatement(sql);
+			String sql = "SELECT professor_id FROM student WHERE person_id = CAST(? AS integer)";
+			PreparedStatement pst = conexao.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			pst.setString(1, Integer.toString(id));
-			ResultSet rs = pst.executeQuery(sql);
+			ResultSet rs = pst.executeQuery();
 			if(rs.first()) person = get_by_id(rs.getInt("professor_id"));
 			else throw new Exception("Something went wrong.");
 		}catch(Exception e) {
@@ -136,8 +137,7 @@ private Connection conexao;
 			pst.setString(6, p.getLogin());
 			pst.setString(7, p.getPassword());
 			pst.setString(8, Integer.toString(id));
-			ResultSet rs = pst.executeQuery(sql);
-			pst.executeUpdate(sql);
+			pst.executeUpdate();
 			result = true;
 			close();
 		}catch(Exception e) {
