@@ -156,7 +156,10 @@ public class PersonService {
 					+ "				<input type=\"text\" name=\"id\" value=\""+ correct_user.getId() +"\" style=\"display: none\">"
 							+ "			<a onclick=\"create_path('http://localhost:4567/activity/', 'id', 'form-activity')\">"
 							+ "				<div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a></form>\n" + 
-					"            <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" + 
+					"<form id = \"form-msg\" action = \"http://localhost:4567/message/\"method=\"get\">"+
+					"				<input type=\"text\" name=\"msgid\" value=\""+ correct_user.getId() +"\" style=\"display: none\">"	+
+					 "			<a onclick=\"create_path('http://localhost:4567/message/', 'msgid', 'form-msg')\">"+
+					"            <div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a></form>\n" + 
 					"      </aside>\n" + 
 					"      <article id=\"tela\" class=\"content center\">"
 					+ contents
