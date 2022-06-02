@@ -30,86 +30,86 @@
 
     <main class="main">
         <aside class="aside-bar">
-            <a href="main.html">
+            <a href="http://localhost:4567">
                 <div><i class="fa-solid fa-stopwatch icon"></i>
                     <h1 class="aside-option">Pendências</h1>
                 </div>
             </a>
-            <a href="http://localhost:4567/content/see">
+            <a href="http://localhost:4567">
                 <div><i class="fa-solid fa-file-alt icon"></i>
                     <h1 class="aside-option">Conteúdos</h1>
                 </div>
             </a>
-            <a href="atividade.html">
+            <a href="http://localhost:4567">
                 <div><i class="fa-solid fa-pencil-alt icon"></i>
                     <h1 class="aside-option">Atividades</h1>
                 </div>
             </a>
-            <a href="mensagem.html">
+            <a href="http://localhost:4567">
                 <div><i class="fa-solid fa-envelope icon"></i>
                     <h1 class="aside-option">Mensagens</h1>
                 </div>
             </a>
         </aside>
 
-        <article id="tela" class="content">
-            <section class="main conteudo" style="left: 0% !important;">
-                <div class="content-div conteudoColocado" id="conteudoColocado" hidden>
-                    <label for="disciplinaTexto">Disciplina deste conteúdo:</label>
-                    <div class="input-group">
-                        <input type="text" id="disciplinaTexto" name="disciplinaTexto" class="input form-control" required="required"></div>
-                    <label for="materiaTexto">Matéria deste conteúdo:</label>
-                    <div class="input-group">
-                        <input type="text" id="materiaTexto" name="materiaTexto" class="input form-control" required="required"></div>
-                    <label for="tituloTexto">Título para seu texto:</label>
-                    <div class="input-group">
-                        <input type="text" id="tituloTexto" name="tituloTexto" class="input form-control" required="required"></div>
-                    <label for="corpoTexto">Coloque abaixo o texto principal:</label>
-                    <div class="input-group">
-                        <textarea type="text" id="corpoTexto" class="input form-control" rows="20" cols="45" classname="corpoTexto" required="required"></textarea>
-                    </div><br>
+
+        <div style="position: relative; width: 80%; left: 230px; top: 20px">
+            <div class="conteudoColocado" id="conteudoColocado" hidden>
+                <label for="disciplinaTexto">Disciplina deste conteúdo:</label>
+                <div class="input-group">
+                    <input type="text" id="disciplinaTexto" name="disciplinaTexto" class="input " required="required"></div>
+                <label for="materiaTexto">Matéria deste conteúdo:</label>
+                <div class="input-group">
+                    <input type="text" id="materiaTexto" name="materiaTexto" class="input " required="required"></div>
+                <label for="tituloTexto">Título para seu texto:</label>
+                <div class="input-group">
+                    <input type="text" id="tituloTexto" name="tituloTexto" class="input " required="required"></div>
+                <label for="corpoTexto">Coloque abaixo o texto principal:</label>
+                <div class="input-group">
+                    <textarea type="text" id="corpoTexto" class="input " rows="20" cols="45" classname="corpoTexto" required="required"></textarea>
+                </div><br>
+                <div class="input-group" style="display: flex; justify-content: center; align-items: center;">
                     <button type="submit" id="publicarConteudo" class="btn btn-success">Publicar</button><br><br>
                 </div>
-                <div class="d-block">
-                    <button class="btn btn-secondary" id="novoConteudo" hidden><i class="fa-solid fa-plus"></i> Novo conteúdo</button>
-                    <button class="btn btn-secondary" id="editarConteudo" hidden><i class="fa-solid fa-pen"></i> Editar conteúdo</button>
-                    <button class="btn btn-danger" id="excluirConteudo" hidden><i class="fa-solid fa-trash"></i> Excluir conteúdo</button>
-                    <select id="conteudoVer" class="dropdown-toggle">
+            </div>
+            <div id="botoes">
+                <button id="novoConteudo" style="background: green !important; color: white;" hidden><i class="fa-solid fa-plus"></i> Novo conteúdo</button>
+                <button id="editarConteudo" style="background: blue !important; color: white;" hidden><i class="fa-solid fa-pen"></i> Editar conteúdo</button>
+                <button id="excluirConteudo" style="background: red !important; color: white;" hidden><i class="fa-solid fa-trash"></i> Excluir conteúdo</button>
+                <select id="conteudoVer" class="dropdown-toggle">
                       <option value="-1" >Selecione o conteúdo a ver:</option>
                       <OPCOES>
                     </select>
-                </div>
-                <div id="conteudoPostado">
-                    <h2 class="text-center" id="titulo">
+            </div>
+            <div id="conteudoPostado">
+                <div class="div-title">
+                    <h1 class="text-center ex-title" id="titulo">
                         <TITULO>
-                    </h2>
-                    <div class="content-main">
-                        <h3 class="text-center" id="disciplina">
-                            <DISCIPLINA>
-                        </h3>
-                    </div>
-                    <div class="content-main">
-                        <h3 class="text-center" id="disciplina">
-                            <MATERIA>
-                        </h3>
-                    </div>
-                    <div class="my-3 mx-3">
-                        <p class="text-center" id="materia">
-                            <TEXTO>
-                        </p>
-                    </div>
+                    </h1>
                 </div>
+                <div class="center">
+                    <h1 class="text-center subtitulo" id="disciplina">
+                        <DISCIPLINA>
+                    </h1>
+                    <h4 id="disciplina">
+                        <MATERIA>
+                    </h4>
+                </div>
+                <div class="content-main">
+                </div>
+                <div class="my-3 mx-3">
+                    <p class="text-center" id="materia">
+                        <TEXTO>
+                    </p>
+                </div>
+            </div>
 
-                </div>
-                </div>
-                <div class="edicaoConteudo" hidden>
-                    <input type="text">
-                    <input type="text">
-                    <textarea name="" id="" cols="30" rows="10"></textarea>
-                </div>
-            </section>
-
-        </article>
+            <div class="edicaoConteudo" hidden>
+                <input type="text">
+                <input type="text">
+                <textarea name="" id="" cols="30" rows="10"></textarea>
+            </div>
+        </div>
     </main>
 </body>
 <script src="http://localhost:4567/js/scriptsConteudo"></script>
@@ -158,6 +158,10 @@
         $('#novoConteudo').click(function() {
             $('#conteudoPostado').prop('hidden', true);
             $('.edicaoConteudo').prop('hidden', true);
+            $('#novoConteudo').prop('hidden', true);
+            $('#editarConteudo').prop('hidden', true);
+            $('#excluirConteudo').prop('hidden', true);
+            $('#conteudoVer').prop('hidden', true);
             $('.conteudoColocado').prop('hidden', false);
         });
 

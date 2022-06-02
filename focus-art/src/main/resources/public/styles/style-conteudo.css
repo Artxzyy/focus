@@ -12,13 +12,46 @@
 .conteudoColocado input,
 .conteudoColocado textarea {
     width: 100%;
-    margin: 10px;
-    border-radius: 3px;
+    margin: 5px 0px 10px 0px;
 }
 
 .conteudoColocado button {
-    float: right;
+    float: center;
     background-color: green;
     color: white;
     width: 20%;
+}
+
+.conteudoColocado input {
+    height: 25px;
+    border-radius: 5px;
+    border: solid 1.5px #D3D3D3;
+    transition: 1s;
+    text-indent: 5px;
+}
+
+.conteudoColocado input:hover {
+    box-shadow: 0 0 5pt 0.5pt #D3D3D3;
+}
+
+.conteudoColocado input:focus {
+    box-shadow: 0 0 5pt 2pt #D3D3D3;
+    outline-width: 0px;
+}
+
+.conteudoColocado textarea {
+    height: 150px;
+    border-radius: 5px;
+    border: solid 1.5px #D3D3D3;
+    transition: 1s;
+    text-indent: 5px;
+}
+
+.conteudoColocado textarea:hover {
+    box-shadow: 0 0 5pt 0.5pt #D3D3D3;
+}
+
+.conteudoColocado textarea:focus {
+    box-shadow: 0 0 5pt 2pt #D3D3D3;
+    outline-width: 0px;
 }
