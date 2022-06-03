@@ -151,8 +151,8 @@ public class MessageService {
 				+"<aside class=\"aside-bar\">\n" 
 				+"<a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" 
 				+"<a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" 
-				+"<a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" 
-				+"<a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" 
+				+"<a href=\"/activity/"+senderid+"\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" 
+				+"<a href=\"/message/"+senderid+"\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" 
 				+"</aside>\n" 
 				+"<div style=\"position: relative; width: 80%; left: 230px; top: 20px\">" 
 				+"<div id=\"botoes\">\n" 
@@ -265,8 +265,8 @@ public class MessageService {
 				"      <aside class=\"aside-bar\">\n" +
 				"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" +
 				"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" +
-				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
-				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
+				"        <a href=\"/activity/"+senderid+"\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
+				"        <a href=\"/message/"+senderid+"\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 				"      </aside>\n" +
 				"      <div style=\"position: relative; width: 80%; left: 230px; top: 20px\">\n" +
 				"        <div id=\"mensagemCriacao\" style=\"width:100%\">"  +
@@ -375,8 +375,8 @@ public class MessageService {
 					"      <aside class=\"aside-bar\">\n" +
 					"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" +
 					"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" +
-					"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
-					"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
+					"        <a href=\"/activity/"+user+"\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
+					"        <a href=\"/message/"+user+"\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 					"      </aside>\n" +
 					"      <article id=\"tela\" class=\"content\">\n" +
 					"        <div style = \"inline-block\"id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
@@ -398,6 +398,7 @@ public class MessageService {
 		messageDAO.updateMessage(msg);
 		
 		Person pessoa = (Person) personDAO.get_by_id(msg.getAddresee_id());
+		Person pessoaEu = (Person) personDAO.get_by_id(msg.getSender_id());
 		String nome = "";
 	//Se é professor,colocamos o sobrenome no cabeçalho das mensagens
 	//Se é aluno,o primeiro nome
@@ -473,8 +474,8 @@ public class MessageService {
 				"      <aside class=\"aside-bar\">\n" +
 				"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" +
 				"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" +
-				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
-				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
+				"        <a href=\"/activity/"+pessoaEu.getId()+"\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
+				"        <a href=\"/message/"+pessoaEu.getId()+"\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 				"      </aside>\n" +
 				"      <div style=\"position: relative; width: 80%; left: 230px; top: 20px\">\n" +
 				"        <div id=\"mensagemVizualizacao\" style=\"width:100%\">" +
@@ -497,6 +498,7 @@ public class MessageService {
 		int id = Integer.parseInt(request.params(":msgid"));
 		Message msg = (Message) messageDAO.readMessage(id);
 		Person pessoa = (Person) personDAO.get_by_id(msg.getAddresee_id());
+		Person pessoaEu = (Person) personDAO.get_by_id(msg.getSender_id());
 		String nome = "";
 		if(personDAO.is_professor(pessoa.getId())) {
 			nome+=pessoa.getSurname();
@@ -571,8 +573,8 @@ public class MessageService {
 				"      <aside class=\"aside-bar\">\n" +
 				"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" +
 				"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" +
-				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
-				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
+				"        <a href=\"/activity/"+pessoaEu.getId()+"\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
+				"        <a href=\"/message/"+pessoaEu.getId()+"\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 				"      </aside>\n" +
 				"      <div style=\"position: relative; width: 80%; left: 230px; top: 20px\">\n" +
 				"        <div id=\"mensagemVizualizacao\" style=\"width:100%\">" +
@@ -594,6 +596,7 @@ public class MessageService {
 		int id = Integer.parseInt(request.params(":msgid"));
 		Message msg = (Message) messageDAO.readMessage(id);
 		Person pessoa = (Person) personDAO.get_by_id(msg.getSender_id());
+		Person pessoaEu = (Person) personDAO.get_by_id(msg.getAddresee_id());
 		String nome = "";
 		if(personDAO.is_professor(pessoa.getId())) {
 			nome+=pessoa.getSurname();
@@ -653,8 +656,8 @@ public class MessageService {
 				"      <aside class=\"aside-bar\">\n" +
 				"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" +
 				"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" +
-				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
-				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
+				"        <a href=\"/activity/"+pessoaEu.getId()+"\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
+				"        <a href=\"/message/"+pessoaEu.getId()+"\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 				"      </aside>\n" +
 				"      <div style=\"position: relative; width: 80%; left: 230px; top: 20px\">\n" +
 				"        <div id=\"mensagemVizualizacao\" style=\"width:100%\">" +
@@ -761,8 +764,8 @@ public class MessageService {
 				+"<aside class=\"aside-bar\">\n" 
 				+"<a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" 
 				+"<a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" 
-				+"<a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" 
-				+"<a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" 
+				+"<a href=\"/activity/"+addresseid+"\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" 
+				+"<a href=\"/message/"+addresseid+"\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" 
 				+"</aside>\n" 
 				+"<div style=\"position: relative; width: 80%; left: 230px; top: 20px\">" 
 				+"<div id=\"botoes\">\n" 
