@@ -406,26 +406,30 @@ public class MessageService {
 			}else {
 			nome+=pessoa.getFirst_name();
 			}
-		String mycontent = "<form action=\"http://localhost:4567/message/upd/"+id+"\">\n" +
-				"         <h1 class=\"card-title\">Altere sua mensagem nos campos abaixo:</h1>\n" +
-				" <label for=\"subject\">Assunto:</label>\n"+
-				 " <input type=\"text\" name=\"subject\">" +
-				"<strong><p class=\"card-text\">" +
-				" <label for=\"body\">Mensagem:</label>"+
-				 "</p></strong>\n" +
-				" <textarea name=\"body\"></textarea>\n" +
-				"<button type=\"submit\" class=\"btn btn-secondary\">Editar Mensagem</button>\n"+
-				"</form>\n";
-		String contents = "<div class=\"card-ex\">\n" +
-				"      <div class=\"card-title\">\n" +
-				"         <h1 class=\"card-title\">Mensagem sua para : " +nome+"</h1>\n" +
-				"         <h2 class=\"card-title\">Data: " + msg.getDateAsStringDisplay()+"</h2>\n" +
-				"      </div>\n" +
-				"<div class=\"card-body\">\n" +
-				"<strong><p class=\"card-text\"> " +msg.getSubject() + "</p></strong>\n" +
-				"<p class = \"card-text\"> "+msg.getBody() + "</p>\n"+
-				"</div>\n"+
-				"</div>\n";
+		String mycontent = "<form id=\"update_form\" action=\"http://localhost:4567/message/upd/"+id+"\">\n" 
+				 + "<h1 class=\"card-title\">Altere sua mensagem nos campos abaixo:</h1>\n" 
+				 + "<label for=\"subject\">Assunto:</label>\n"
+				 + "<div class=\"input-group\">"
+				 + "<input class=\"input\" type=\"text\" name=\"subject\">" 
+				 + "</div>"
+				 + "<label for=\"body\">Mensagem:</label>"
+				 + "<div class=\"input-group\">"
+				 + "<textarea class=\"input\" name=\"body\" rows=\"20\" cols=\"45\"></textarea>\n" 
+				 + "</div>"
+				 + "<div class=\"input-group\" style=\"display: flex; justify-content: center; align-items: center;\">"
+				 + "<button type=\"submit\" class=\"btn btn-secondary\">Editar Mensagem</button>\n"
+				 + "</div>"
+				 + "</form>\n";
+		String contents = "<div class=\"div-title\">"
+				+ "<h1 class=\"text-center ex-title\" id=\"assunto\">" + msg.getSubject() + "</h1>"
+				+ "</div>"
+				+ "<div class=\"center\">"
+				+ "<p style=\"margin: 15px 0px; color:#212F3D\"><strong>De:</strong> " + nome + "</p>"
+				+ "<p style=\"margin: 0px 0px 15px 0px; color:#212F3D\"><strong>Data:</strong> " + msg.getDateAsStringDisplay() + "</p>"
+				+ "</div>"
+				+ "<div class=\"my-3 mx-3\">"
+				+ "<p class=\"text-center\">" + msg.getBody() + "</p>"
+				+ "</div";
 		String body= "";
 		body+= "<!DOCTYPE html>\n" +
 				"<html lang=\"pt-br\">\n" +
@@ -436,6 +440,7 @@ public class MessageService {
 				"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
 				"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" +
 				"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" +
+				"  <link rel=\"stylesheet\" href=\"/styles/style-mensagem.css\">\n" +
 				"\n" +
 				"</head>\n" +
 				"\n" +
@@ -471,14 +476,14 @@ public class MessageService {
 				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
 				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 				"      </aside>\n" +
-				"      <article id=\"tela\" class=\"content\">\n" +
-				"        <div style = \"inline-block\" id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
+				"      <div style=\"position: relative; width: 80%; left: 230px; top: 20px\">\n" +
+				"        <div id=\"mensagemVizualizacao\" style=\"width:100%\">" +
 							contents + 
 				"        </div>\n" +
-				"        <div style = \"inline-block\" id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
+				"        <div id=\"mensagemAtualizacao\" style=\"width:100%; margin: 30px 0px\">" +
 				        mycontent + 
 	            "        </div>\n" +
-				"      </article>\n" +
+				"      </div>\n" +
 				"  </main>\n" +
 				"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
 				"</body>\n" +
