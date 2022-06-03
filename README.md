@@ -1,14 +1,19 @@
 # FOCUS
-
-## Integrantes
+## Sobre o projeto
+### Integrantes
 * Ana Cristina;
 * Arthur Rodrigues;
 * Rodolfo Lopes.
 
-## Professores envolvidos
+### Professores envolvidos
 * Max do Val Machado;
 * Sandro Jerônimo de Almeida;
 * Wladmir Cardoso Brandão.
+
+### Proposta
+A proposta desse projeto é que ele seja um auxiliador de ensino de pessoas com algum grau de deficiência
+intelectual, com um foco em, principalmente, crianças. O protótipo possui o início de um sistema de gameficação
+e também possui um sistema básico de diagnóstico de dificuldades nas áreas básicas da matemática (adição, subtração, multiplicação e divisão).
 
 ## Sobre as implementações
 
