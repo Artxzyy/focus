@@ -112,7 +112,12 @@ public class StudentDAO {
 	             students = new Person[rs.getRow()];
 	             rs.beforeFirst();
 	             for(int i = 0; rs.next(); i++) {
-	                students[i] = new Person(rs.getInt("school_id"), rs.getInt("person_id"), rs.getString("first_name"), rs.getString("surname"), rs.getString("email"), rs.getString("login"), rs.getString("password"));
+	                students[i] = new Person(rs.getInt("school_id"), rs.getInt("person_id"),
+	                		rs.getString("first_name"), rs.getString("surname"), rs.getString("email"),
+	                		rs.getString("login"), rs.getString("password"),
+	                		rs.getInt("qtt_answers"), rs.getInt("qtt_wrong_answers"), rs.getInt("qtt_sum_answers"), rs.getInt("qtt_correct_sum_answers"), 
+	    					rs.getInt("qtt_sub_answers"), rs.getInt("qtt_correct_sub_answers"), rs.getInt("qtt_mul_answers"), rs.getInt("qtt_correct_mul_answers"), 
+	    					rs.getInt("qtt_div_answers"), rs.getInt("qtt_correct_div_answers"));
 	             }
 	          }
 	          close();
@@ -127,8 +132,13 @@ public class StudentDAO {
 		try {
 			conectar();
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT school_id, id, first_name, surname, email, login, password FROM person WHERE id = "+ id);
-			if(rs.first()) person = new Person(rs.getInt("school_id"), rs.getInt("id"), rs.getString("first_name"), rs.getString("surname"), rs.getString("email"), rs.getString("login"), rs.getString("password"));
+			ResultSet rs = st.executeQuery("SELECT * FROM person WHERE id = "+ id);
+			if(rs.first()) person = new Person(rs.getInt("school_id"), rs.getInt("id"),
+					rs.getString("first_name"), rs.getString("surname"), rs.getString("email"),
+					rs.getString("login"), rs.getString("password"),
+					rs.getInt("qtt_answers"), rs.getInt("qtt_wrong_answers"), rs.getInt("qtt_sum_answers"), rs.getInt("qtt_correct_sum_answers"), 
+					rs.getInt("qtt_sub_answers"), rs.getInt("qtt_correct_sub_answers"), rs.getInt("qtt_mul_answers"), rs.getInt("qtt_correct_mul_answers"), 
+					rs.getInt("qtt_div_answers"), rs.getInt("qtt_correct_div_answers"));
 			else throw new Exception("Something went wrong.");
 		}catch(Exception e) {
 			System.err.println("ERROR: "+ e);
@@ -141,7 +151,8 @@ public class StudentDAO {
 		try {
 			conectar();
 			Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-			ResultSet rs = st.executeQuery("SELECT school_id, id, first_name, surname, email, login, password FROM person WHERE email = '"+ email +"'");
+			ResultSet rs = st.executeQuery("SELECT school_id, id, first_name, surname,"
+					+ "email, login, password FROM person WHERE email = '"+ email +"'");
 			if(rs.first()) {result = rs.getInt("id");}
 			else throw new Exception("Something went wrong.");
 		}catch(Exception e) {

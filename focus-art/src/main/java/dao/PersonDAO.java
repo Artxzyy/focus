@@ -74,12 +74,10 @@ private Connection conexao;
 			String sql = "SELECT * FROM professor WHERE person_id = CAST(? AS integer)";
 			PreparedStatement pst = conexao.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			pst.setString(1, Integer.toString(id));
-			System.out.println("TESTE!");
 			ResultSet rs = pst.executeQuery();
 			if(rs.first()) result = true;
 			close();
 		}catch(Exception e) {
-			System.out.println("Caiu no catch!");
 			System.err.println("ERROR: "+ e);
 		}
 		return result;
@@ -89,12 +87,17 @@ private Connection conexao;
 		Person person = null;
 		try {
 			conectar();
-			String sql = "SELECT school_id, id, first_name, surname FROM person WHERE id = CAST(? AS integer)";
+			String sql = "SELECT * FROM person WHERE id = CAST(? AS integer)";
 			PreparedStatement pst = conexao.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			pst.setString(1, Integer.toString(id));
 			ResultSet rs = pst.executeQuery();
-			if(rs.first()) person = new Person(rs.getInt("school_id"), rs.getInt("id"), rs.getString("first_name"), rs.getString("surname"));
+			if(rs.first()) person = new Person(rs.getInt("school_id"), rs.getInt("id"),
+					rs.getString("first_name"), rs.getString("surname"), rs.getString("email"), rs.getString("login"), rs.getString("password"),
+					rs.getInt("qtt_answers"), rs.getInt("qtt_wrong_answers"), rs.getInt("qtt_sum_answers"), rs.getInt("qtt_correct_sum_answers"), 
+					rs.getInt("qtt_sub_answers"), rs.getInt("qtt_correct_sub_answers"), rs.getInt("qtt_mul_answers"), rs.getInt("qtt_correct_mul_answers"), 
+					rs.getInt("qtt_div_answers"), rs.getInt("qtt_correct_div_answers"));
 			else throw new Exception("Something went wrong.");
+			close();
 		}catch(Exception e) {
 			System.err.println("ERROR: "+ e);
 		}
@@ -110,6 +113,7 @@ private Connection conexao;
 			ResultSet rs = pst.executeQuery();
 			if(rs.first()) person = get_by_id(rs.getInt("professor_id"));
 			else throw new Exception("Something went wrong.");
+			close();
 		}catch(Exception e) {
 			System.err.println("ERROR: "+ e);
 		}
@@ -119,31 +123,52 @@ private Connection conexao;
 		boolean result = false;
 		try {
 			conectar();
-			String sql = "UPDATE person SET school_id = "
+			p.toString();
+			String sql = "UPDATE person SET "
+					+ "school_id = "
 					+ "?, id = "
 					+ "?, first_name = "
-					+ "'?', surname = "
-					+ "'?', email = "
-					+ "'?', login = "
-					+ "'?', password = "
-					+ "'?'"
+					+ "?, surname = "
+					+ "?, email = "
+					+ "?, login = "
+					+ "?, password = "
+					+ "?, qtt_answers = "
+					+ "?, qtt_wrong_answers = "
+					+ "?, qtt_sum_answers = "
+					+ "?, qtt_correct_sum_answers = "
+					+ "?, qtt_sub_answers = "
+					+ "?, qtt_correct_sub_answers = "
+					+ "?, qtt_mul_answers = "
+					+ "?, qtt_correct_mul_answers = "
+					+ "?, qtt_div_answers = "
+					+ "?, qtt_correct_div_answers = ?"
 							+ " WHERE id = ?";
+			p.toString();
 			PreparedStatement pst = conexao.prepareStatement(sql);
-			pst.setString(1, Integer.toString(p.getSchool_id()));
-			pst.setString(2, Integer.toString(p.getId()));
+			p.toString();
+			pst.setInt(1, p.getSchool_id());
+			pst.setInt(2, p.getId());
 			pst.setString(3, p.getFirst_name());
 			pst.setString(4, p.getSurname());
 			pst.setString(5, p.getEmail());
 			pst.setString(6, p.getLogin());
 			pst.setString(7, p.getPassword());
-			pst.setString(8, Integer.toString(id));
-			pst.executeUpdate();
+			pst.setInt(8, p.getQtt_answers());
+			pst.setInt(9, p.getQtt_wrong_answers());
+			pst.setInt(10, p.getQtt_sum_answers());
+			pst.setInt(11, p.getQtt_correct_sum_answers());
+			pst.setInt(12, p.getQtt_sub_answers());
+			pst.setInt(13, p.getQtt_correct_sub_answers());
+			pst.setInt(14, p.getQtt_mul_answers());
+			pst.setInt(15, p.getQtt_correct_mul_answers());
+			pst.setInt(16, p.getQtt_div_answers());
+			pst.setInt(17, p.getQtt_correct_div_answers());
+			pst.setInt(18, id);
+			pst.execute();
+			p.toString();
 			result = true;
 			close();
-		}catch(Exception e) {
-			System.err.println("ERROR: "+ e);
-			result = false;
-		}
+		}catch(Exception e) {}
 		return result;
 	}
 }

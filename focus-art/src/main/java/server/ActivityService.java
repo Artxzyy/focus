@@ -16,7 +16,7 @@ public class ActivityService {
 	public static PersonDAO personDAO = new PersonDAO();
 	public static final int WRONG = 0;
 	public static final int RIGHT = 1;
-	public Object see_all(Request req, Response res) {
+	public Object see_all(Request req, Response res) throws MissingFormatWidthException{
 		int id = Integer.parseInt(req.params(":id"));
 		Activity[] activities = activityDAO.get_student_activities(id);
 		if(activities == null) {
@@ -30,6 +30,53 @@ public class ActivityService {
 					+ "<button type=\"submit\" class=\"btn btn-secondary\">Criar nova atividade</button></form><br>"+
 					"</div>";
 		}
+		Person user = personDAO.get_by_id(id);
+		int total = (user.getQtt_correct_sum_answers()+user.getQtt_correct_sub_answers()+
+				user.getQtt_correct_mul_answers()+user.getQtt_correct_div_answers());
+		String diagnostic =
+				"<div style=\"position: relative; left: 15%;\">\n" + 
+				"    <h1>Diagnóstico geral</h1>\n" + 
+				"\n" + 
+				"    <table id=\"diagnostic\">\n" + 
+				"      <tr>\n" + 
+				"        <th>Áreas</th>\n" + 
+				"        <th>Total de acertos</th>\n" + 
+				"        <th>Total de erros</th>\n" + 
+				"        <th>Percentual de acertos</th>\n" + 
+				"      </tr>\n" + 
+				"      <tr>\n" + 
+				"        <td style=\"font-weight:bolder\">Geral</td>\n" + 
+				"        <td>"+ (total) +"</td>\n" + 
+				"        <td>"+ (user.getQtt_answers()-total) +"</td>\n" + 
+				"        <td>"+ String.format("%.2f",((float)total/user.getQtt_answers())*100f) +"%</td>\n" + 
+				"      </tr>\n" + 
+				"      <tr>\n" + 
+				"        <td style=\"font-weight:bolder\">Soma</td>\n" + 
+				"        <td>"+ (user.getQtt_correct_sum_answers()) +"</td>\n" + 
+				"        <td>"+ (user.getQtt_sum_answers()-user.getQtt_correct_sum_answers()) +"</td>\n" + 
+				"        <td>"+ String.format("%.2f",((float)user.getQtt_correct_sum_answers()/user.getQtt_sum_answers())*100f) +"%</td>\n" + 
+				"      </tr>\n" + 
+				"      <tr>\n" + 
+				"        <td style=\"font-weight:bolder\">Subtração</td>\n" + 
+				"        <td>"+ (user.getQtt_correct_sub_answers()) +"</td>\n" + 
+				"        <td>"+ (user.getQtt_sub_answers()-user.getQtt_correct_sub_answers()) +"</td>\n" + 
+				"        <td>"+ String.format("%.2f",((float)user.getQtt_correct_sub_answers()/user.getQtt_sub_answers())*100f) +"%</td>\n" + 
+				"      </tr>\n" + 
+				"      <tr>\n" + 
+				"        <td style=\"font-weight:bolder\">Multiplicação</td>\n" + 
+				"        <td>"+ (user.getQtt_correct_mul_answers()) +"</td>\n" + 
+				"        <td>"+ (user.getQtt_mul_answers()-user.getQtt_correct_mul_answers()) +"</td>\n" + 
+				"        <td>"+ String.format("%.2f",((float)user.getQtt_correct_mul_answers()/user.getQtt_mul_answers())*100f) +"%</td>\n" + 
+				"      </tr>\n" + 
+				"      <tr>\n" + 
+				"        <td style=\"font-weight:bolder\">Divisão</td>\n" + 
+				"        <td>"+ (user.getQtt_correct_div_answers()) +"</td>\n" + 
+				"        <td>"+ (user.getQtt_div_answers()-user.getQtt_correct_div_answers()) +"</td>\n" + 
+				"        <td>"+ String.format("%.2f",((float)user.getQtt_correct_div_answers()/user.getQtt_div_answers())*100f) +"%</td>\n" + 
+				"      </tr>\n" + 
+				"\n" + 
+				"    </table>\n" + 
+				"  </div>";
 		if(activities == null) {
 			body += ""
 					+ "<!DOCTYPE html>\n" +
@@ -41,7 +88,36 @@ public class ActivityService {
 					"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
 					"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" +
 					"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" +
-					"\n" +
+					"\n"+
+					"<style>\n" + 
+					"    #diagnostic {\n" + 
+					"      font-family: Arial, Helvetica, sans-serif;\n" + 
+					"      border-collapse: collapse;\n" + 
+					"      width: 100%;\n" + 
+					"    }\n" + 
+					"\n" + 
+					"    #diagnostic td,\n" + 
+					"    #diagnostic th {\n" + 
+					"      border: 1px solid #ddd;\n" + 
+					"      padding: 8px;\n" + 
+					"    }\n" + 
+					"\n" + 
+					"    #diagnostic tr:nth-child(even) {\n" + 
+					"      background-color: #f2f2f2;\n" + 
+					"    }\n" + 
+					"\n" + 
+					"    #diagnostic tr:hover {\n" + 
+					"      background-color: #cdcdcd;\n" + 
+					"    }\n" + 
+					"\n" + 
+					"    #diagnostic th {\n" + 
+					"      padding-top: 12px;\n" + 
+					"      padding-bottom: 12px;\n" + 
+					"      text-align: left;\n" + 
+					"      color: black;\n" + 
+					"      font-weight: bolder;\n" + 
+					"    }\n" + 
+					"  </style>"+
 					"</head>\n" +
 					"\n" +
 					"<body>\n"
@@ -77,6 +153,7 @@ public class ActivityService {
 					"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 					"      </aside>\n" +
 					"      <article id=\"tela\" class=\"content\">\n" +
+					diagnostic +
 					"        <div id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +		
 					contents + 
 					"        </div>\n" +
@@ -127,7 +204,36 @@ public class ActivityService {
 						"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
 						"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" +
 						"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" +
-						"\n" +
+						"\n"+
+						"<style>\n" + 
+						"    #diagnostic {\n" + 
+						"      font-family: Arial, Helvetica, sans-serif;\n" + 
+						"      border-collapse: collapse;\n" + 
+						"      width: 100%;\n" + 
+						"    }\n" + 
+						"\n" + 
+						"    #diagnostic td,\n" + 
+						"    #diagnostic th {\n" + 
+						"      border: 1px solid #ddd;\n" + 
+						"      padding: 8px;\n" + 
+						"    }\n" + 
+						"\n" + 
+						"    #diagnostic tr:nth-child(even) {\n" + 
+						"      background-color: #f2f2f2;\n" + 
+						"    }\n" + 
+						"\n" + 
+						"    #diagnostic tr:hover {\n" + 
+						"      background-color: #cdcdcd;\n" + 
+						"    }\n" + 
+						"\n" + 
+						"    #diagnostic th {\n" + 
+						"      padding-top: 12px;\n" + 
+						"      padding-bottom: 12px;\n" + 
+						"      text-align: left;\n" + 
+						"      color: black;\n" + 
+						"      font-weight: bolder;\n" + 
+						"    }\n" + 
+						"  </style>"+
 						"</head>\n" +
 						"\n" +
 						"<body>\n"
@@ -163,6 +269,7 @@ public class ActivityService {
 						"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 						"      </aside>\n" +
 						"      <article class=\"content\">\n" +
+						diagnostic +
 						"        <div id=\"aparecerAtividadeDiv\" class=\"flex-wrap center\">\n" +
 									contents + 
 						"        </div>\n" +
@@ -201,7 +308,36 @@ public class ActivityService {
 							"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
 							"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" +
 							"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" +
-							"\n" +
+							"\n"+
+							"<style>\n" + 
+							"    #diagnostic {\n" + 
+							"      font-family: Arial, Helvetica, sans-serif;\n" + 
+							"      border-collapse: collapse;\n" + 
+							"      width: 100%;\n" + 
+							"    }\n" + 
+							"\n" + 
+							"    #diagnostic td,\n" + 
+							"    #diagnostic th {\n" + 
+							"      border: 1px solid #ddd;\n" + 
+							"      padding: 8px;\n" + 
+							"    }\n" + 
+							"\n" + 
+							"    #diagnostic tr:nth-child(even) {\n" + 
+							"      background-color: #f2f2f2;\n" + 
+							"    }\n" + 
+							"\n" + 
+							"    #diagnostic tr:hover {\n" + 
+							"      background-color: #cdcdcd;\n" + 
+							"    }\n" + 
+							"\n" + 
+							"    #diagnostic th {\n" + 
+							"      padding-top: 12px;\n" + 
+							"      padding-bottom: 12px;\n" + 
+							"      text-align: left;\n" + 
+							"      color: black;\n" + 
+							"      font-weight: bolder;\n" + 
+							"    }\n" + 
+							"  </style>"+
 							"</head>\n" +
 							"\n" +
 							"<body>\n"
@@ -237,6 +373,7 @@ public class ActivityService {
 							"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 							"      </aside>\n" +
 							"      <article class=\"content\">\n" +
+							diagnostic +
 							"        <div id=\"aparecerAtividadeDiv\" class=\"flex-wrap center\">\n" +
 										contents + 
 							"        </div>\n" +
@@ -796,8 +933,37 @@ public class ActivityService {
 					+ "<span id=\"validaRespostaSpan\" class=\"negrito center\" style=\"color:#f00\">Você errou :(</span>"+
 					"		<center><button type=\"submit\">Próxima questão</button></center></form>";
 		}
+		Person user = personDAO.get_by_id(person_id);
+		user.setQtt_answers(user.getQtt_answers()+1);
+		if(status) {
+			if(activity.getTheme().contains("Soma")) {
+				user.setQtt_correct_sum_answers(user.getQtt_correct_sum_answers()+1);
+				user.setQtt_sum_answers(user.getQtt_sum_answers()+1);
+			}else if(activity.getTheme().contains("Subtração")) {
+				user.setQtt_correct_sub_answers(user.getQtt_correct_sub_answers()+1);
+				user.setQtt_sub_answers(user.getQtt_sub_answers()+1);
+			}else if(activity.getTheme().contains("Multiplicação")) {
+				user.setQtt_correct_mul_answers(user.getQtt_correct_mul_answers()+1);
+				user.setQtt_mul_answers(user.getQtt_mul_answers()+1);
+			}else if(activity.getTheme().contains("Divisão")) {
+				user.setQtt_correct_div_answers(user.getQtt_correct_div_answers()+1);
+				user.setQtt_div_answers(user.getQtt_div_answers()+1);
+			}
+		}else {
+			user.setQtt_wrong_answers(user.getQtt_wrong_answers()+1);
+			if(activity.getTheme().contains("Soma")) {
+				user.setQtt_sum_answers(user.getQtt_sum_answers()+1);
+			}else if(activity.getTheme().contains("Subtração")) {
+				user.setQtt_sub_answers(user.getQtt_sub_answers()+1);
+			}else if(activity.getTheme().contains("Multiplicação")) {
+				user.setQtt_mul_answers(user.getQtt_mul_answers()+1);
+			}else if(activity.getTheme().contains("Divisão")) {
+				user.setQtt_div_answers(user.getQtt_div_answers()+1);
+			}
+		}
 		activity.updateDifficulty(status);
 		activityDAO.update(activity, act_id);
+		personDAO.update(user, person_id);
 		body += ""
 				+ "<!DOCTYPE html> "+ 
 				"<html lang=\"pt-br\">" +

@@ -33,7 +33,7 @@ public class StudentService {
 		try {
 			if(!password1.equals(repeat_p)) throw new Exception("Both passwords need to be equal.");
 			if(password1.length() < 8) throw new Exception("Password is too short.");
-			Person student = new Person(school_id, name, surname, email, login, StudentDAO.encryptPassword(password1));
+			Person student = new Person(school_id, name, surname, email, login, StudentDAO.encryptPassword(password1), 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0);
 			if(studentDAO.add(student, professor_id)) {
 				res.status(201);
 				res.body("Account successfully created. STATUS: "+ res.status() + ".");

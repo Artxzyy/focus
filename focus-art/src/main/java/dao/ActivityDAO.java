@@ -68,10 +68,13 @@ public class ActivityDAO {
         Activity[] activities = null;
         try {
             conectar();
-            Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = st.executeQuery("SELECT * "
+            String sql = "SELECT * "
                     + "FROM activity INNER JOIN student ON activity."
-                    + "professor_id = student.professor_id AND student.person_id = " + student_id);
+                    + "professor_id = student.professor_id AND student.person_id = CAST(? AS integer)";
+            PreparedStatement pst = conexao.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            pst.setString(1, Integer.toString(student_id));
+            ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 rs.last();
                 activities = new Activity[rs.getRow()];
@@ -94,10 +97,13 @@ public class ActivityDAO {
         Activity[] activities = null;
         try {
             conectar();
-            Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = st.executeQuery("SELECT * "
+            String sql = "SELECT * "
                     + "FROM activity WHERE activity."
-                    + "professor_id = " + professor_id);
+                    + "professor_id = CAST(? AS integer)";
+            PreparedStatement pst = conexao.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            pst.setString(1, Integer.toString(professor_id));
+            ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 rs.last();
                 activities = new Activity[rs.getRow()];
@@ -146,8 +152,11 @@ public class ActivityDAO {
         Activity a = null;
         try {
             conectar();
-            Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = st.executeQuery("SELECT * FROM activity WHERE id = " + id);
+            String sql = "SELECT * FROM activity WHERE id = CAST(? AS integer)";
+            PreparedStatement pst = conexao.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            pst.setString(1, Integer.toString(id));
+            ResultSet rs = pst.executeQuery();
             if (rs.first())
                 a = new Activity(rs.getInt("professor_id"), rs.getInt("id"), rs.getString("title"),
                         rs.getString("subject"), rs.getString("theme"), rs.getString("statement"),
@@ -166,9 +175,12 @@ public class ActivityDAO {
         Option[] options = null;
         try {
             conectar();
-            Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = st.executeQuery("SELECT option.id, option.text, option.is_correct FROM option"
-                    + " WHERE option.activity_id = " + a.getId());
+            String sql = "SELECT option.id, option.text, option.is_correct FROM option"
+                    + " WHERE option.activity_id = CAST(? AS integer)";
+            PreparedStatement pst = conexao.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            pst.setString(1, Integer.toString(a.getId()));
+            ResultSet rs = pst.executeQuery();
             if (rs.first()) {
                 rs.last();
                 options = new Option[rs.getRow()];
@@ -189,11 +201,15 @@ public class ActivityDAO {
         Option result = null;
         try {
             conectar();
-            Statement st = conexao.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = st.executeQuery("SELECT option.activity_id, option.id, option.text FROM option"
-                    + " WHERE option.activity_id = " + id + " AND option.is_correct = TRUE");
+            String sql = "SELECT option.activity_id, option.id, option.text FROM option"
+                    + " WHERE option.activity_id = CAST(? AS integer) AND option.is_correct = TRUE";
+            PreparedStatement pst = conexao.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY);
+            pst.setString(1, Integer.toString(id));
+            ResultSet rs = pst.executeQuery();
             rs.first();
             result = new Option(rs.getInt("activity_id"), rs.getInt("id"), rs.getString("text"), true);
+            close();
         } catch (Exception e) {
             System.err.println("ERROR:" + e.getMessage());
         }
@@ -293,11 +309,12 @@ public class ActivityDAO {
 
     public Activity get_by_diff(float diff, int person_id, int last_id_activity, int status) {
         Activity a = null;
-        Person p = null;
         if (personDAO.is_professor(person_id)) {
             try {
                 Activity past = get_by_id(last_id_activity);
                 String theme = past.getTheme();
+                if(theme.equals("Soma")) {
+                }
                 if (status == STATUS_CORRECT) {
                     conectar();
                     String sql = "SELECT * FROM activity WHERE professor_id = CAST(? AS integer) AND id != CAST(? AS integer) "
