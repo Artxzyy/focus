@@ -1,0 +1,114 @@
+#update_form input,
+#update_form textarea,
+#update_form label {
+    width: 100%;
+    margin: 5px 0px 10px 0px;
+}
+
+#update_form input {
+    height: 25px;
+    border-radius: 5px;
+    border: solid 1.5px #D3D3D3;
+    transition: 1s;
+    text-indent: 5px;
+}
+
+#update_form input:hover {
+    box-shadow: 0 0 5pt 0.5pt #D3D3D3;
+}
+
+#update_form input:focus {
+    box-shadow: 0 0 5pt 2pt #D3D3D3;
+    outline-width: 0px;
+}
+
+#update_form textarea {
+    height: 150px;
+    border-radius: 5px;
+    border: solid 1.5px #D3D3D3;
+    transition: 1s;
+    text-indent: 5px;
+}
+
+#update_form textarea:hover {
+    box-shadow: 0 0 5pt 0.5pt #D3D3D3;
+}
+
+#update_form textarea:focus {
+    box-shadow: 0 0 5pt 2pt #D3D3D3;
+    outline-width: 0px;
+}
+
+#update_form button {
+    float: center;
+    background-color: green;
+    color: white;
+    width: 20%;
+}
+
+#create_form input,
+#create_form textarea,
+#create_form label,
+#create_form select {
+    width: 100%;
+    margin: 5px 0px 10px 0px;
+}
+
+#create_form input {
+    height: 25px;
+    border-radius: 5px;
+    border: solid 1.5px #D3D3D3;
+    transition: 1s;
+    text-indent: 5px;
+}
+
+#create_form input:hover {
+    box-shadow: 0 0 5pt 0.5pt #D3D3D3;
+}
+
+#create_form input:focus {
+    box-shadow: 0 0 5pt 2pt #D3D3D3;
+    outline-width: 0px;
+}
+
+#create_form textarea {
+    height: 150px;
+    border-radius: 5px;
+    border: solid 1.5px #D3D3D3;
+    transition: 1s;
+    text-indent: 5px;
+}
+
+#create_form textarea:hover {
+    box-shadow: 0 0 5pt 0.5pt #D3D3D3;
+}
+
+#create_form textarea:focus {
+    box-shadow: 0 0 5pt 2pt #D3D3D3;
+    outline-width: 0px;
+}
+
+#create_form select {
+    height: 40px;
+    border-radius: 5px;
+    border: solid 1.5px #D3D3D3;
+    transition: 1s;
+    text-indent: 5px;
+    background: white;
+}
+
+#create_form select:hover {
+    box-shadow: 0 0 5pt 0.5pt #D3D3D3;
+}
+
+#create_form select:focus {
+    box-shadow: 0 0 5pt 2pt #D3D3D3;
+    outline-width: 0px;
+}
+
+#create_form button {
+    float: center;
+    background-color: green;
+    color: white;
+    width: 20%;
+}

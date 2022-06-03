@@ -57,14 +57,6 @@ public class MessageService {
 		String nome = "";
 		String contents="";
 		String mycontent ="";
-		String creation = "<div class=\"card-ex\">\n" +
-				"      <div class=\"card-title\">\n" +
-				"         <a href =\"http://localhost:4567/message/cre/" + senderid+"\"><img src =\"http://localhost:4567/imgs/sinalMais.png\"alt = \"Sinal de Mais,simbolizando criação de mensagem\" width=20% height=auto></a>\n" +
-				"      </div>\n" +
-				"      <div class=\"card-body\">\n" +
-				"<strong><p class=\"card-text\">Clique acima para criar uma mensagem nova:</p></strong>\n" +
-				"      </div>\n"+
-				"    </div>\n";
 		for(int v = 0;msg1!=null&&v<msg1.length;v++) {
 			Person pessoa = (Person) personDAO.get_by_id(msg1[v].getSender_id());
 		if(personDAO.is_professor(pessoa.getId())) {
@@ -72,7 +64,7 @@ public class MessageService {
 			}else {
 			nome=pessoa.getFirst_name();
 			}
-		contents += "<div class=\"card-ex\">\n" +
+		/*contents += "<div class=\"card-ex\">\n" +
 				"      <div class=\"card-title\">\n" +
 				"         <h1 class=\"card-title\">Mensagem de : " +nome+"</h1>\n" +
 				"         <h2 class=\"card-title\">Data: " + msg1[v].getDateAsStringDisplay()+"</h2>\n" +
@@ -80,7 +72,15 @@ public class MessageService {
 				"      <div class=\"card-body\">\n" +
 				"<strong><p class=\"card-text\"> <a href=\"http://localhost:4567/message/one/"+msg1[v].getId() +"\">Clique aqui para ver a mensagem</a></p></strong>\n" +
 				"      </div>\n"+
-				"    </div>\n";
+				"    </div>\n";*/
+		contents += "<a href=\"http://localhost:4567/message/one/" + msg1[v].getId() + "\" style=\"text-decoration: none\">" 
+				   +"<div class=\"card-ex\" style=\"width: 100%;height: fit-content;margin: 15px 0px\">\n" 
+				   +"<div class=\"card-title\" style=\"background-color: #3498DB\">\n" 
+				   +"<h1 class=\"card-title\" style=\"color:black; background-color: transparent\">Mensagem de : " +nome+"</h1>\n" 
+				   +"<h2 class=\"card-title\" style=\"color:#F4F6F6; background-color: transparent\">Data: " + msg1[v].getDateAsStringDisplay()+"</h2>\n" 
+				   +"</div>\n" 
+				   +"</div>\n"
+				   +"</a>";
 		}
 		
 		for(int v = 0;msg2!=null&&v<msg2.length;v++) {
@@ -90,7 +90,7 @@ public class MessageService {
 				}else {
 				nome=pessoaTu.getFirst_name();
 				}
-		         mycontent += "<div class=\"card-ex\">\n" +
+		         /*mycontent += "<div class=\"card-ex\">\n" +
 				"      <div class=\"card-title\">\n" +
 				"         <h1 class=\"card-title\">Mensagem sua para : " +nome+"</h1>\n" +
 				"         <h2 class=\"card-title\">Data: " + msg2[v].getDateAsStringDisplay()+"</h2>\n" +
@@ -98,69 +98,90 @@ public class MessageService {
 				"      <div class=\"card-body\">\n" +
 				"<strong><p class=\"card-text\"> <a href=\"http://localhost:4567/message/edit/"+msg2[v].getId() +"\">Clique aqui para ver e/ou editar a mensagem</a></p></strong>\n" +
 				"      </div>\n"+
-				"    </div>\n";
+				"    </div>\n";*/
+			mycontent += "<a href=\"http://localhost:4567/message/edit/" + msg2[v].getId() + "\" style=\"text-decoration: none\">"  
+    		 	    +"<div class=\"card-ex\" style=\"width: 100%;height: fit-content;margin: 15px 0px\">\n" 
+    		        +"<div class=\"card-title\" style=\"background-color: #3498DB\">\n" 
+    		        +"<h1 class=\"card-title\" style=\"color:black; background-color: transparent\">Mensagem sua para : " +nome+"</h1>\n" 
+    		        +"<h2 class=\"card-title\" style=\"color:#F4F6F6; background-color: transparent\">Data: " + msg2[v].getDateAsStringDisplay()+"</h2>\n" 
+    		        +"</div>\n" 
+    		        +"</div>\n"
+    		        +"</a>";
 		}
 		String body= "";
-		body+= "<!DOCTYPE html>\n" +
-				"<html lang=\"pt-br\">\n" +
-				"\n" +
-				"<head>\n" +
-				"  <title>FOCUS - Educação mais acessível</title>\n" +
-				"  <meta charset=\"utf-8\">\n" +
-				"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
-				"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" +
-				"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" +
-				"\n" +
-				"</head>\n" +
-				"\n" +
-				"<body>\n"
-				+ "<script type=\"text/javascript\">"
-				+ "function addIdToPath(form_name, base_url){\n" +
-				" var your_form = document.getElementById(form_name);\n" +
-				" var id = your_form.elements.namedItem(\"id\").value;\n" +
-				" action_src = base_url + id;\n"+ 
-				" your_form.action = action_src;\n" +
-				" }"
-				+ "</script>" + 
-				"  <header>\n" +
-				"    <nav class=\"nav-top\">\n" +
-				"      <div>\n" +
-				"        <div class=\"nav-top-expand\">\n" +
-				"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" +
-				"          <input type=\"checkbox\" class=\"none\">\n" +
-				"        </div>\n" +
-				"        <h1 class=\"nav-top-logo\">FOCUS</h1>\n" +
-				"      </div>\n" +
-				"      <div>\n" +
-				"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" +
-				"        <a href=\"/\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" +
-				"      </div>\n" +
-				"    </nav>\n" +
-				"  </header>\n" +
-				"\n" +
-				"  <main class=\"main\">\n" +
-				"      <aside class=\"aside-bar\">\n" +
-				"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" +
-				"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" +
-				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
-				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
-				"      </aside>\n" +
-				"      <article id=\"tela\" class=\"content\">\n" +
-				" <div style = \"inline-block\"id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
-				creation + 
-	    "        </div>\n" +
-				"        <div style = \"inline-block\"id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
-							contents + 
-				"        </div>\n" +
-				 " <div style = \"inline-block\"id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
-						mycontent + 
-			    "        </div>\n" +
-				"      </article>\n" +
-				"  </main>\n" +
-				"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
-				"</body>\n" +
-				"\n" +
-				"</html>";
+		body+=   "<!DOCTYPE html>\n" 
+				+"<html lang=\"pt-br\">\n" 
+				+"\n" 
+				+"<head>\n" 
+				+"<title>FOCUS - Educação mais acessível</title>\n" 
+				+"<meta charset=\"utf-8\">\n" 
+				+"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" 
+				+"<script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" 
+				+"<link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" 
+				+"<link rel=\"stylesheet\" href=\"/styles/style-mensagens.css\">\n" 
+				+"\n" 
+				+"</head>\n" 
+				+"\n" 
+				+"<body>\n"
+				+"<script type=\"text/javascript\">"
+				+"function addIdToPath(form_name, base_url){\n" 
+				+"var your_form = document.getElementById(form_name);\n" 
+				+"var id = your_form.elements.namedItem(\"id\").value;\n" 
+				+"action_src = base_url + id;\n"
+				+"your_form.action = action_src;\n" 
+				+"}"
+				+"</script>" 
+				+"<header>\n" 
+				+"<nav class=\"nav-top\">\n" 
+				+"<div>\n" 
+				+"<div class=\"nav-top-expand\">\n" 
+				+"<button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" 
+				+"<input type=\"checkbox\" class=\"none\">\n" 
+				+"</div>\n" 
+				+"<h1 class=\"nav-top-logo\">FOCUS</h1>\n" 
+				+"</div>\n" 
+				+"<div>\n" 
+				+"<input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" 
+				+"<a href=\"/\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" 
+				+"</div>\n" 
+				+"</nav>\n" 
+				+"</header>\n" 
+				+"\n" 
+				+"<main class=\"main\">\n" 
+				+"<aside class=\"aside-bar\">\n" 
+				+"<a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" 
+				+"<a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" 
+				+"<a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" 
+				+"<a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" 
+				+"</aside>\n" 
+				+"<div style=\"position: relative; width: 80%; left: 230px; top: 20px\">" 
+				+"<div id=\"botoes\">\n" 
+				+"<a href=\"http://localhost:4567/message/cre/" + senderid + "\">"
+				+"<button style=\"background: green !important; color: white;\"><i class=\"fa-solid fa-plus\"></i> Nova mensagem</button>"
+				+"</a>"
+				+"</div>\n" 
+				+"<div id=\"mensagensRecebidas\" style=\"width:100%\">" 
+				+"<div class=\"div-title\">"
+                +"<h1 class=\"text-center ex-title\" id=\"titulo\">"
+                +"Mensagens recebidas"
+                +"</h1>"
+                +"</div>"
+				+ contents 
+				+"</div>\n" 
+				+"<div id=\"mensagensEnviadas\" style=\"width:100%\">" 
+				+"<div class=\"div-title\">"
+                +"<h1 class=\"text-center ex-title\" id=\"titulo\">"
+                +"Mensagens enviadas"
+                +"</h1>"
+                +"</div>"
+				+ mycontent 
+				+"</div>\n" 
+				+"</div>\n" 
+				+"</main>\n" 
+				+"<script src=\"js/scriptsAtividade.js\"></script>\n" 
+				+"</body>\n" 
+				+"\n" 
+				+"</html>";
 		response.body(body);
 		return response.body();
 	}
@@ -177,20 +198,31 @@ public class MessageService {
 				}
 			options+="<option value = " +pessoas[v].getId()+">"+nome+"</option>";
 		}
-		String creation="<form action=\"http://localhost:4567/message/ate/"+senderid+"\">\n" +
-				"         <h1 class=\"card-title\">Crie sua mensagem nos campos abaixo:</h1>\n" +
-				" <label for=\"addresee\">Destinatário</label>\n"+
-				"<select name=\"addresee\">"+
-					options+
-				"</select>"+
-				" <label for=\"subject\">Assunto:</label>\n"+
-				 " <input type=\"text\" name=\"subject\">" +
-				"<strong><p class=\"card-text\">" +
-				" <label for=\"body\">Mensagem:</label>"+
-				 "</p></strong>\n" +
-				" <textarea name=\"body\"></textarea>\n" +
-				"<button type=\"submit\" class=\"btn btn-secondary\">Enviar Mensagem</button>\n"+
-				"</form>\n";
+		
+		String creation = "<form id=\"create_form\" action=\"http://localhost:4567/message/ate/"+senderid+"\">\n" 
+						+ "<div class=\"div-title\" style=\"margin: 0px 0px 30px 0px;\">"
+						+ "<h1 class=\"text-center ex-title\">Crie sua mensagem nos campos abaixo</h1>\n" 
+						+ "</div>" 
+						+ "<label for=\"addresee\">Destinatário</label>\n"
+						+ "<div class=\"input-group\">"
+						+ "<select class=\"input\" name=\"addresee\">" 
+						+ "<option value=\"\">Selecione...</option>"
+						+ options 
+						+ "</select>"
+						+ "</div>"
+						+ "<label for=\"subject\">Assunto:</label>\n"
+						+ "<div class=\"input-group\">"
+						+ "<input class=\"input\" type=\"text\" name=\"subject\">"
+						+ "</div>"
+						+ "<label for=\"body\">Mensagem:</label>"
+						+ "<div class=\"input-group\">"
+						+ "<textarea class=\"input\" name=\"body\"></textarea>\n"
+						+ "</div>"
+						+ "<div class=\"input-group\" style=\"display: flex; justify-content: center; align-items: center;\">"
+						+ "<button type=\"submit\" class=\"btn btn-secondary\">Enviar Mensagem</button>\n"
+						+ "</div>"
+						+ "</form>\n";
+		
 		String body="<!DOCTYPE html>\n" +
 				"<html lang=\"pt-br\">\n" +
 				"\n" +
@@ -200,6 +232,7 @@ public class MessageService {
 				"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
 				"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" +
 				"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" +
+				"  <link rel=\"stylesheet\" href=\"/styles/style-mensagem.css\">\n" +
 				"\n" +
 				"</head>\n" +
 				"\n" +
@@ -235,11 +268,11 @@ public class MessageService {
 				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
 				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 				"      </aside>\n" +
-				"      <article id=\"tela\" class=\"content\">\n" +
-				" <div style = \"inline-block\"id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
+				"      <div style=\"position: relative; width: 80%; left: 230px; top: 20px\">\n" +
+				"        <div id=\"mensagemCriacao\" style=\"width:100%\">"  +
 				creation + 
 	    "        </div>\n" +
-				"      </article>\n" +
+				"      </div>\n" +
 				"  </main>\n" +
 				"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
 				"</body>\n" +
@@ -465,26 +498,31 @@ public class MessageService {
 			}else {
 			nome+=pessoa.getFirst_name();
 			}
-		String mycontent = "<form action=\"http://localhost:4567/message/upd/"+id+"\">\n" +
-				"         <h1 class=\"card-title\">Altere sua mensagem nos campos abaixo:</h1>\n" +
-				" <label for=\"subject\">Assunto:</label>\n"+
-				 " <input type=\"text\" name=\"subject\">" +
-				"<strong><p class=\"card-text\">" +
-				" <label for=\"body\">Mensagem:</label>"+
-				 "</p></strong>\n" +
-				" <textarea name=\"body\"></textarea>\n" +
-				"<button type=\"submit\" class=\"btn btn-secondary\">Editar Mensagem</button>\n"+
-				"</form>\n";
-		String contents = "<div class=\"card-ex\">\n" +
-				"      <div class=\"card-title\">\n" +
-				"         <h1 class=\"card-title\">Mensagem sua para : " +nome+"</h1>\n" +
-				"         <h2 class=\"card-title\">Data: " + msg.getDateAsStringDisplay()+"</h2>\n" +
-				"      </div>\n" +
-				"<div class=\"card-body\">\n" +
-				"<strong><p class=\"card-text\"> " +msg.getSubject() + "</p></strong>\n" +
-				"<p class = \"card-text\"> "+msg.getBody() + "</p>\n"+
-				"</div>\n"+
-				"</div>\n";
+		String mycontent = "<form id=\"update_form\" action=\"http://localhost:4567/message/upd/"+id+"\">\n" 
+						 + "<h1 class=\"card-title\">Altere sua mensagem nos campos abaixo:</h1>\n" 
+						 + "<label for=\"subject\">Assunto:</label>\n"
+						 + "<div class=\"input-group\">"
+						 + "<input class=\"input\" type=\"text\" name=\"subject\">" 
+						 + "</div>"
+						 + "<label for=\"body\">Mensagem:</label>"
+						 + "<div class=\"input-group\">"
+						 + "<textarea class=\"input\" name=\"body\" rows=\"20\" cols=\"45\"></textarea>\n" 
+						 + "</div>"
+						 + "<div class=\"input-group\" style=\"display: flex; justify-content: center; align-items: center;\">"
+						 + "<button type=\"submit\" class=\"btn btn-secondary\">Editar Mensagem</button>\n"
+						 + "</div>"
+						 + "</form>\n";
+		
+		String contents = "<div class=\"div-title\">"
+						+ "<h1 class=\"text-center ex-title\" id=\"assunto\">" + msg.getSubject() + "</h1>"
+						+ "</div>"
+						+ "<div class=\"center\">"
+						+ "<p style=\"margin: 15px 0px; color:#212F3D\"><strong>De:</strong> " + nome + "</p>"
+						+ "<p style=\"margin: 0px 0px 15px 0px; color:#212F3D\"><strong>Data:</strong> " + msg.getDateAsStringDisplay() + "</p>"
+						+ "</div>"
+						+ "<div class=\"my-3 mx-3\">"
+						+ "<p class=\"text-center\">" + msg.getBody() + "</p>"
+						+ "</div";
 		String body= "";
 		body+= "<!DOCTYPE html>\n" +
 				"<html lang=\"pt-br\">\n" +
@@ -495,6 +533,7 @@ public class MessageService {
 				"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
 				"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" +
 				"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" +
+				"  <link rel=\"stylesheet\" href=\"/styles/style-mensagem.css\">\n" +
 				"\n" +
 				"</head>\n" +
 				"\n" +
@@ -530,14 +569,14 @@ public class MessageService {
 				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
 				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 				"      </aside>\n" +
-				"      <article id=\"tela\" class=\"content\">\n" +
-				"        <div style = \"inline-block\" id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
+				"      <div style=\"position: relative; width: 80%; left: 230px; top: 20px\">\n" +
+				"        <div id=\"mensagemVizualizacao\" style=\"width:100%\">" +
 							contents + 
 				"        </div>\n" +
-				"        <div style = \"inline-block\" id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
+				"        <div id=\"mensagemAtualizacao\" style=\"width:100%; margin: 30px 0px\">" +
 				        mycontent + 
 	            "        </div>\n" +
-				"      </article>\n" +
+				"      </div>\n" +
 				"  </main>\n" +
 				"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
 				"</body>\n" +
@@ -556,16 +595,16 @@ public class MessageService {
 			}else {
 			nome+=pessoa.getFirst_name();
 			}
-		String contents = "<div class=\"card-ex\">\n" +
-				"      <div class=\"card-title\">\n" +
-				"         <h1 class=\"card-title\">Mensagem de : " +nome+"</h1>\n" +
-				"         <h2 class=\"card-title\">Data: " + msg.getDateAsStringDisplay()+"</h2>\n" +
-				"      </div>\n" +
-				"<div class=\"card-body\">\n" +
-				"<strong><p class=\"card-text\"> " +msg.getSubject() + "</p></strong>\n" +
-				"<p class = \"card-text\"> "+msg.getBody() + "</p>\n"+
-				"</div>\n"+
-				"</div>\n";
+		String contents = "<div class=\"div-title\">"
+						+ "<h1 class=\"text-center ex-title\" id=\"assunto\">" + msg.getSubject() + "</h1>"
+						+ "</div>"
+						+ "<div class=\"center\">"
+						+ "<p style=\"margin: 15px 0px; color:#212F3D\"><strong>De:</strong> " + nome + "</p>"
+						+ "<p style=\"margin: 0px 0px 15px 0px; color:#212F3D\"><strong>Data:</strong> " + msg.getDateAsStringDisplay() + "</p>"
+						+ "</div>"
+						+ "<div class=\"my-3 mx-3\">"
+						+ "<p class=\"text-center\">" + msg.getBody() + "</p>"
+						+ "</div";
 					
 		String body= "";
 		body+= "<!DOCTYPE html>\n" +
@@ -612,11 +651,11 @@ public class MessageService {
 				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
 				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
 				"      </aside>\n" +
-				"      <article id=\"tela\" class=\"content\">\n" +
-				"        <div id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
+				"      <div style=\"position: relative; width: 80%; left: 230px; top: 20px\">\n" +
+				"        <div id=\"mensagemVizualizacao\" style=\"width:100%\">" +
 							contents + 
 				"        </div>\n" +
-				"      </article>\n" +
+				"      </div>\n" +
 				"  </main>\n" +
 				"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
 				"</body>\n" +
@@ -645,98 +684,109 @@ public class MessageService {
 			Person pessoa = (Person) personDAO.get_by_id(msg[v].getSender_id());
 		if(personDAO.is_professor(pessoa.getId())) {
 			nome=pessoa.getSurname();
-			}else {
+		}else {
 			nome=pessoa.getFirst_name();
-			}
-		contents += "<div class=\"card-ex\">\n" +
-				"      <div class=\"card-title\">\n" +
-				"         <h1 class=\"card-title\">Mensagem de : " +nome+"</h1>\n" +
-				"         <h2 class=\"card-title\">Data: " + msg[v].getDateAsStringDisplay()+"</h2>\n" +
-				"      </div>\n" +
-				"      <div class=\"card-body\">\n" +
-				"<strong><p class=\"card-text\"> <a href=\"http://localhost:4567/message/one/"+msg[v].getId() +"\">Clique aqui para ver a mensagem</a></p></strong>\n" +
-				"      </div>\n"+
-				"    </div>\n";
+		}
+		contents += "<a href=\"http://localhost:4567/message/one/" + msg[v].getId() + "\" style=\"text-decoration: none\">" 
+				   +"<div class=\"card-ex\" style=\"width: 100%;height: fit-content;margin: 15px 0px\">\n" 
+				   +"<div class=\"card-title\" style=\"background-color: #3498DB\">\n" 
+				   +"<h1 class=\"card-title\" style=\"color:black; background-color: transparent\">Mensagem de : " +nome+"</h1>\n" 
+				   +"<h2 class=\"card-title\" style=\"color:#F4F6F6; background-color: transparent\">Data: " + msg[v].getDateAsStringDisplay()+"</h2>\n" 
+				   +"</div>\n" 
+				   +"</div>\n"
+				   +"</a>";
 		}
 		
 		for(int v = 0;msg2!=null&&v<msg2.length;v++) {
 			Person pessoaTu = (Person) personDAO.get_by_id(msg2[v].getAddresee_id());
 			if(personDAO.is_professor(pessoaTu.getId())) {
 				nome=pessoaTu.getSurname();
-				}else {
+			}else {
 				nome=pessoaTu.getFirst_name();
-				}
-		         mycontent += "<div class=\"card-ex\">\n" +
-				"      <div class=\"card-title\">\n" +
-				"         <h1 class=\"card-title\">Mensagem sua para : " +nome+"</h1>\n" +
-				"         <h2 class=\"card-title\">Data: " + msg2[v].getDateAsStringDisplay()+"</h2>\n" +
-				"      </div>\n" +
-				"      <div class=\"card-body\">\n" +
-				"<strong><p class=\"card-text\"> <a href=\"http://localhost:4567/message/edit/"+msg2[v].getId() +"\">Clique aqui para ver e/ou editar a mensagem</a></p></strong>\n" +
-				"      </div>\n"+
-				"    </div>\n";
+			}
+	    mycontent += "<a href=\"http://localhost:4567/message/edit/" + msg2[v].getId() + "\" style=\"text-decoration: none\">"  
+    		 	    +"<div class=\"card-ex\" style=\"width: 100%;height: fit-content;margin: 15px 0px\">\n" 
+    		        +"<div class=\"card-title\" style=\"background-color: #3498DB\">\n" 
+    		        +"<h1 class=\"card-title\" style=\"color:black; background-color: transparent\">Mensagem sua para : " +nome+"</h1>\n" 
+    		        +"<h2 class=\"card-title\" style=\"color:#F4F6F6; background-color: transparent\">Data: " + msg2[v].getDateAsStringDisplay()+"</h2>\n" 
+    		        +"</div>\n" 
+    		        +"</div>\n"
+    		        +"</a>";
 		}
 		String body= "";
-		body+= "<!DOCTYPE html>\n" +
-				"<html lang=\"pt-br\">\n" +
-				"\n" +
-				"<head>\n" +
-				"  <title>FOCUS - Educação mais acessível</title>\n" +
-				"  <meta charset=\"utf-8\">\n" +
-				"  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" +
-				"  <script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" +
-				"  <link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" +
-				"\n" +
-				"</head>\n" +
-				"\n" +
-				"<body>\n"
-				+ "<script type=\"text/javascript\">"
-				+ "function addIdToPath(form_name, base_url){\n" +
-				" var your_form = document.getElementById(form_name);\n" +
-				" var id = your_form.elements.namedItem(\"id\").value;\n" +
-				" action_src = base_url + id;\n"+ 
-				" your_form.action = action_src;\n" +
-				" }"
-				+ "</script>" + 
-				"  <header>\n" +
-				"    <nav class=\"nav-top\">\n" +
-				"      <div>\n" +
-				"        <div class=\"nav-top-expand\">\n" +
-				"          <button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" +
-				"          <input type=\"checkbox\" class=\"none\">\n" +
-				"        </div>\n" +
-				"        <h1 class=\"nav-top-logo\">FOCUS</h1>\n" +
-				"      </div>\n" +
-				"      <div>\n" +
-				"        <input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" +
-				"        <a href=\"/\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" +
-				"      </div>\n" +
-				"    </nav>\n" +
-				"  </header>\n" +
-				"\n" +
-				"  <main class=\"main\">\n" +
-				"      <aside class=\"aside-bar\">\n" +
-				"        <a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" +
-				"        <a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" +
-				"        <a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" +
-				"        <a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" +
-				"      </aside>\n" +
-				"      <article id=\"tela\" class=\"content\">\n" +
-				" <div style = \"inline-block\"id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
-				creation + 
-	    "        </div>\n" +
-				"        <div style = \"inline-block\"id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
-							contents + 
-				"        </div>\n" +
-				 " <div style = \"inline-block\"id=\"aparecerAtividadeDiv\" class=\"content center\">\n" +
-						mycontent + 
-			    "        </div>\n" +
-				"      </article>\n" +
-				"  </main>\n" +
-				"  <script src=\"js/scriptsAtividade.js\"></script>\n" +
-				"</body>\n" +
-				"\n" +
-				"</html>";
+		body+=   "<!DOCTYPE html>\n" 
+				+"<html lang=\"pt-br\">\n" 
+				+"\n" 
+				+"<head>\n" 
+				+"<title>FOCUS - Educação mais acessível</title>\n" 
+				+"<meta charset=\"utf-8\">\n" 
+				+"<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n" 
+				+"<script src=\"https://kit.fontawesome.com/37e4898af2.js\" crossorigin=\"anonymous\"></script>\n" 
+				+"<link rel=\"stylesheet\" href=\"/styles/style-main.css\">\n" 
+				+"<link rel=\"stylesheet\" href=\"/styles/style-mensagens.css\">\n" 
+				+"\n" 
+				+"</head>\n" 
+				+"\n" 
+				+"<body>\n"
+				+"<script type=\"text/javascript\">"
+				+"function addIdToPath(form_name, base_url){\n" 
+				+"var your_form = document.getElementById(form_name);\n" 
+				+"var id = your_form.elements.namedItem(\"id\").value;\n" 
+				+"action_src = base_url + id;\n"
+				+"your_form.action = action_src;\n" 
+				+"}"
+				+"</script>" 
+				+"<header>\n" 
+				+"<nav class=\"nav-top\">\n" 
+				+"<div>\n" 
+				+"<div class=\"nav-top-expand\">\n" 
+				+"<button id=\"openSideBar\"><i class=\"fa-solid fa-bars\"></i></button>\n" 
+				+"<input type=\"checkbox\" class=\"none\">\n" 
+				+"</div>\n" 
+				+"<h1 class=\"nav-top-logo\">FOCUS</h1>\n" 
+				+"</div>\n" 
+				+"<div>\n" 
+				+"<input type=\"text\" class=\"nav-top-input\" placeholder=\"Search for a keyword\" id=\"searchInputId\">\n" 
+				+"<a href=\"/\"><i class=\"fa-solid fa-arrow-right-from-bracket icon-l\"></i></a>\n" 
+				+"</div>\n" 
+				+"</nav>\n" 
+				+"</header>\n" 
+				+"\n" 
+				+"<main class=\"main\">\n" 
+				+"<aside class=\"aside-bar\">\n" 
+				+"<a href=\"/main\"><div><i class=\"fa-solid fa-stopwatch icon\"></i><h1 class=\"aside-option\">Pendências</h1></div></a>\n" 
+				+"<a href=\"/content\"><div><i class=\"fa-solid fa-file-alt icon\"></i><h1 class=\"aside-option\">Conteúdos</h1></div></a>\n" 
+				+"<a href=\"/activity\"><div><i class=\"fa-solid fa-pencil-alt icon\"></i><h1 class=\"aside-option\">Atividades</h1></div></a>\n" 
+				+"<a href=\"/message\"><div><i class=\"fa-solid fa-envelope icon\"></i><h1 class=\"aside-option\">Mensagens</h1></div></a>\n" 
+				+"</aside>\n" 
+				+"<div style=\"position: relative; width: 80%; left: 230px; top: 20px\">" 
+				+"<div id=\"botoes\">\n" 
+				+"<a href=\"http://localhost:4567/message/cre/" + addresseid + "\">"
+				+"<button style=\"background: green !important; color: white;\"><i class=\"fa-solid fa-plus\"></i> Nova mensagem</button>"
+				+"</a>"
+				+"</div>\n" 
+				+"<div id=\"mensagensRecebidas\" style=\"width:100%\">" 
+				+"<div class=\"div-title\">"
+                +"<h1 class=\"text-center ex-title\" id=\"titulo\">"
+                +"Mensagens recebidas"
+                +"</h1>"
+                +"</div>"
+				+ contents 
+				+"</div>\n" 
+				+"<div id=\"mensagensEnviadas\" style=\"width:100%\">" 
+				+"<div class=\"div-title\">"
+                +"<h1 class=\"text-center ex-title\" id=\"titulo\">"
+                +"Mensagens enviadas"
+                +"</h1>"
+                +"</div>"
+				+ mycontent 
+				+"</div>\n" 
+				+"</div>\n" 
+				+"</main>\n" 
+				+"<script src=\"js/scriptsAtividade.js\"></script>\n" 
+				+"</body>\n" 
+				+"\n" 
+				+"</html>";
 		response.body(body);
 		return response.body();
 	}
